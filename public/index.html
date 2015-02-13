@@ -1,11 +1,14 @@
-
 <html>
 <head>
-    <title>VBox Layout</title>
+    <title>Cashflow</title>
     <link rel="stylesheet" type="text/css" href="/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="/resources/shared/example.css" />
 
     <script type="text/javascript" src="/resources/bootstrap.js"></script>
+
+
+    <script type="text/javascript" src="/resources/js/model/ExpenseContentConfiguration.js"></script>
+    <script type="text/javascript" src="/resources/js/controller/ExpenseParser.js"></script>
 
     <script type="text/javascript" src="/resources/js/view/CashflowInputText.js"></script>
     <script type="text/javascript" src="/resources/js/view/CashflowGrid.js"></script>
@@ -69,7 +72,7 @@
                             }, {
                                 xtype: 'button',
                                 margins: '5 5 5 5',
-                                text : 'Columns ...'
+                                text : 'Parsing Configuration'
                             }]
                         },
                         cashflowGrid
