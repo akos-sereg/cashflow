@@ -83,3 +83,11 @@ pre.code{
     margin-left: 17px;
     margin-bottom: 4px;
 }
+
+.cashflow-valid-row .x-cell {
+ background-color: #880000;
+}
+
+.cashflow-invalid-row .x-cell {
+ background-color: #008888;
+}

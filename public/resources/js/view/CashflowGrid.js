@@ -2,37 +2,34 @@ Ext.require([
     'Ext.grid.*',
     'Ext.data.*',
     'Ext.util.*',
-    'Ext.state.*'
 ]);
 
 /**
  * Custom function used for column renderer
  * @param {Object} val
  */
- /*
-function change(val) {
-    if (val > 0) {
-        return '<span style="color:green;">' + val + '</span>';
-    } else if (val < 0) {
-        return '<span style="color:red;">' + val + '</span>';
+function change(amount) {
+
+    if (!isNaN(amount.Value)) {
+        return '<span style="color: #000000;">' + amount.Display + '</span>';
+    } else {
+        return '<span style="color: #dd0000;">' + amount.Display + '</span>';
     }
     return val;
-}*/
+}
 
 // create the data store
 var store = Ext.create('Ext.data.JsonStore', {
     fields: [
        {name: 'date'},
        {name: 'Title'},
-       {name: 'Amount'},
+       {name: 'Amount', },
        {name: 'Location'}
     ]
 });
 
 var cashflowGrid = Ext.create('Ext.grid.Panel', {
     store: store,
-    stateful: true,
-    stateId: 'stateGrid',
     margins: '10 10 10 10',
     columns: [
         {
@@ -51,7 +48,7 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             text     : 'Amount',
             width    : 75,
             sortable : true,
-            //renderer : change,
+            renderer : change,
             dataIndex: 'Amount'
         },
         {
@@ -65,6 +62,6 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
     width: 800,
     title: 'Expense List',
     viewConfig: {
-        stripeRows: true
+        stripeRows: false
     }
 });
