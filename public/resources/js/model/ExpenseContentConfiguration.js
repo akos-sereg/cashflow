@@ -16,3 +16,7 @@ function ExpenseContentConfiguration() {
 ExpenseContentConfiguration.prototype.GetMaxIndex = function() {
     return 6;
 }
+
+ExpenseContentConfiguration.prototype.ParseDate = function(dateStr) {
+    return dateStr.substring(0, 10);
+}

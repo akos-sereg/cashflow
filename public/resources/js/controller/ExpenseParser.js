@@ -21,7 +21,21 @@ ExpenseParser.prototype.Parse = function(content) {
         if (columns != null && columns.length > logConfiguration.GetMaxIndex()) {
             var dataItem = {};
 
-            dataItem.date = columns[logConfiguration.DateIndex];
+            dataItem.Date = { };
+
+            try {
+                dataItem.Date.Value = new Date(logConfiguration.ParseDate(columns[logConfiguration.DateIndex]));
+                dataItem.Date.Display = dataItem.Date.Value.toLocaleDateString("en-US");
+
+                if (dataItem.Date.Value == 'Invalid Date') {
+                    throw new Error('Could not parse Date');
+                }
+            }
+            catch (error) {
+                dataItem.Date.Display = columns[logConfiguration.DateIndex];
+                dataItem.Date.Value = null;
+            }
+
             dataItem.Title = columns[logConfiguration.TitleIndex];
             dataItem.Amount = { };
             dataItem.Amount.Value = this.GetClearedAmount(columns[logConfiguration.AmountIndex], logConfiguration, '');

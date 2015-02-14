@@ -4,18 +4,22 @@ Ext.require([
     'Ext.util.*',
 ]);
 
-/**
- * Custom function used for column renderer
- * @param {Object} val
- */
-function change(amount) {
+function renderAmount(amount) {
 
     if (!isNaN(amount.Value)) {
         return '<span style="color: #000000;">' + amount.Display + '</span>';
     } else {
         return '<span style="color: #dd0000;">' + amount.Display + '</span>';
     }
-    return val;
+}
+
+function renderDate(date) {
+
+    if (date.Value != null) {
+        return '<span style="color: #000000;">' + date.Display + '</span>';
+    } else {
+        return '<span style="color: #dd0000;">' + date.Display + '</span>';
+    }
 }
 
 // create the data store
@@ -36,7 +40,8 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             text     : 'Date',
             width    : 75,
             sortable : false,
-            dataIndex: 'date'
+            dataIndex: 'Date',
+            renderer: renderDate
         },
         {
             text     : 'Title',
@@ -48,7 +53,7 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             text     : 'Amount',
             width    : 75,
             sortable : true,
-            renderer : change,
+            renderer : renderAmount,
             dataIndex: 'Amount'
         },
         {
@@ -58,7 +63,7 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             dataIndex: 'Location'
         }
     ],
-    height: 350,
+    height: 650,
     width: 800,
     title: 'Expense List',
     viewConfig: {
