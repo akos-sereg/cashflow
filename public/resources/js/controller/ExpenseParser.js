@@ -47,10 +47,9 @@ ExpenseParser.prototype.Parse = function(content) {
             dataItem.LogConfiguration = logConfiguration;
 
             dataItem.Location = columns[logConfiguration.LocationIndex];
+            dataItem.Valid = this.IsValidRow(dataItem);
 
-            if (this.IsValidRow(dataItem)) {
-                data.push(dataItem);
-            }
+            data.push(dataItem);
         }
     }
 
@@ -59,8 +58,7 @@ ExpenseParser.prototype.Parse = function(content) {
 
 // Checks if row has valid Amount
 ExpenseParser.prototype.IsValidRow = function(row) {
-    return true;
-    //return !isNaN(row.Value);
+    return !isNaN(row.Amount.Value);
 }
 
 ExpenseParser.prototype.GetClearedAmount = function(rawAmount, logConfiguration, newThousandSeparator) {

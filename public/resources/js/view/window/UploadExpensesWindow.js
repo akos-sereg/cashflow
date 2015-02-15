@@ -29,8 +29,10 @@ Ext.define('Cashflow.view.UploadExpensesWindow', {
         var data = [];
 
         for (var i=0; i!=cashflowGrid.store.data.length; i++) {
-            cashflowGrid.store.data.items[i].data.Hash = cashflowGrid.store.data.items[i].data.GetHash().toString();
-            data.push(cashflowGrid.store.data.items[i].data);
+            if (cashflowGrid.store.data.items[i].data.Valid) {
+                cashflowGrid.store.data.items[i].data.Hash = cashflowGrid.store.data.items[i].data.GetHash().toString();
+                data.push(cashflowGrid.store.data.items[i].data);
+            }
         }
 
         $.ajax({
