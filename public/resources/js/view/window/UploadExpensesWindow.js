@@ -1,8 +1,8 @@
 Ext.define('Cashflow.view.UploadExpensesWindow', {
     extend: 'Ext.window.Window',
 
-    height: 334,
-    width: 540,
+    height: 634,
+    width: 840,
     layout: {
         type: 'border'
     },
@@ -26,11 +26,29 @@ Ext.define('Cashflow.view.UploadExpensesWindow', {
         me.callParent(arguments);
 
         // Start Uploading ...
-        var message = '';
+        var data = [];
+
         for (var i=0; i!=cashflowGrid.store.data.length; i++) {
-            message += cashflowGrid.store.data.items[i].data.GetHash() + ' for '+ cashflowGrid.store.data.items[i].data.GetHashBase() +' \r\n';
+            cashflowGrid.store.data.items[i].data.Hash = cashflowGrid.store.data.items[i].data.GetHash().toString();
+            data.push(cashflowGrid.store.data.items[i].data);
         }
 
-        Ext.getCmp('uploadConsole').setValue(message);
+        $.ajax({
+            type: 'POST',
+            url: '/api/storeExpenses',
+            data: JSON.stringify(data),
+            success: function(data) {
+
+                var message = '';
+                for (var i=0; i!=data.length; i++) {
+                    message += data[i] + '\r\n';
+                }
+
+                Ext.getCmp('uploadConsole').setValue(message);
+            },
+            contentType: 'application/json; charset=utf-8'
+        });
+
+        //Ext.getCmp('uploadConsole').setValue(message);
     }
 });

@@ -44,7 +44,6 @@ ExpenseParser.prototype.Parse = function(content) {
             dataItem.Amount.Display = this.GetClearedAmount(columns[logConfiguration.AmountIndex], logConfiguration, ' ');
 
             dataItem.GetHash = ExpenseItem.prototype.GetHash;
-            dataItem.GetHashBase = ExpenseItem.prototype.GetHashBase;
             dataItem.LogConfiguration = logConfiguration;
 
             dataItem.Location = columns[logConfiguration.LocationIndex];
