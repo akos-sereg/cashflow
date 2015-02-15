@@ -78,6 +78,27 @@ function processExpenseItem(expenseItem, callback) {
                 var msg = '';
                 if (rows != null && rows.length == 0) {
                     msg = 'Inserting Record [' + expenseItem.Date.Display + '] ' + expenseItem.Amount.Display + ' @ ' + expenseItem.Location;
+
+                    var post  = {
+                        type: expenseItem.Title,
+                        expense_date: expenseItem.Date.Display,
+                        transactionId: expenseItem.Hash,
+                        expense_value: expenseItem.Amount.Value,
+                        location: expenseItem.Location,
+                        comment: '',
+                        expense_currency: 'HUF',
+                        user_comment: '',
+                        account_id: 1
+                    };
+
+                    connection.query('INSERT INTO cashflow.expense SET insert_date = NOW(), modified_date = NOW(), ?', post, function(err, result) {
+                        if(err) {
+                            console.log(err);
+                        }
+                        else {
+                            console.log('Inserted.');
+                        }
+                    });
                 }
                 else {
                     msg = 'Ignoring [' + expenseItem.Date.Display + '] ' + expenseItem.Amount.Display + ' @ ' + expenseItem.Location;
