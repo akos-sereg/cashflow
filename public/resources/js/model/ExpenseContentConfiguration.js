@@ -6,6 +6,7 @@ function ExpenseContentConfiguration() {
     this.TitleIndex    = 0;
     this.AmountIndex   = 4;
     this.LocationIndex = 6;
+    this.TransactionIdIndex = 3;
 
     this.Separator     = ';';
     this.Currency      = 'HUF';

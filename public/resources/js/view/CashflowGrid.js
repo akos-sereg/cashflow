@@ -7,7 +7,11 @@ Ext.require([
 function renderAmount(amount) {
 
     if (!isNaN(amount.Value)) {
-        return '<span style="color: #000000;">' + amount.Display + '</span>';
+        if (amount.Value > 0) {
+            return '<span style="color: #009900;">' + amount.Display + '</span>';
+        } else {
+            return '<span style="color: #000000;">' + amount.Display + '</span>';
+        }
     } else {
         return '<span style="color: #dd0000;">' + amount.Display + '</span>';
     }

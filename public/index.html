@@ -12,6 +12,7 @@
 
     <script type="text/javascript" src="/resources/js/view/CashflowInputText.js"></script>
     <script type="text/javascript" src="/resources/js/view/CashflowGrid.js"></script>
+    <script type="text/javascript" src="/resources/js/view/window/UploadExpensesWindow.js"></script>
 
     <style type="text/css">
         html, body {
@@ -69,7 +70,12 @@
                             items: [{
                                 xtype: 'button',
                                 margins: '5 5 5 5',
-                                text : 'Send'
+                                text : 'Send',
+                                listeners: {
+                                    click: function () {
+                                        Ext.create('Cashflow.view.UploadExpensesWindow').show();
+                                    }
+                                }
                             }, {
                                 xtype: 'button',
                                 margins: '5 5 5 5',

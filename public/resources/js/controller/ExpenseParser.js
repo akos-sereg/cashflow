@@ -3,7 +3,7 @@ function ExpenseParser() {
 }
 
 // Takes CSV content, produces an array of expense items where each item looks like
-// this: { Date, Title, Amount { Display, Value }, Location }
+// this: { Date, Title, Amount { Display, Value }, Location, TransactionId }
 ExpenseParser.prototype.Parse = function(content) {
 
     var data = [];
@@ -37,6 +37,8 @@ ExpenseParser.prototype.Parse = function(content) {
             }
 
             dataItem.Title = columns[logConfiguration.TitleIndex];
+            dataItem.TransactionId = columns[logConfiguration.TransactionIdIndex];
+
             dataItem.Amount = { };
             dataItem.Amount.Value = this.GetClearedAmount(columns[logConfiguration.AmountIndex], logConfiguration, '');
             dataItem.Amount.Display = this.GetClearedAmount(columns[logConfiguration.AmountIndex], logConfiguration, ' ');
