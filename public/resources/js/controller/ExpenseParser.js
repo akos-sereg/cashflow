@@ -3,7 +3,7 @@ function ExpenseParser() {
 }
 
 // Takes CSV content, produces an array of expense items where each item looks like
-// this: { Date, Title, Amount { Display, Value }, Location, TransactionId }
+// this: { Date { Value, Display }, Title, Amount { Display, Value }, Location, TransactionId }
 ExpenseParser.prototype.Parse = function(content) {
 
     var data = [];
@@ -19,13 +19,13 @@ ExpenseParser.prototype.Parse = function(content) {
         var columns = contentLines[lineNumber].match(splitColumnsRegex);
 
         if (columns != null && columns.length > logConfiguration.GetMaxIndex()) {
-            var dataItem = {};
 
+            var dataItem = new ExpenseItem();
             dataItem.Date = { };
 
             try {
                 dataItem.Date.Value = new Date(logConfiguration.ParseDate(columns[logConfiguration.DateIndex]));
-                dataItem.Date.Display = dataItem.Date.Value.toLocaleDateString("en-US");
+                dataItem.Date.Display = dataItem.Date.Value.toLocaleDateString().replace(/\. /g, '-').replace(/\./, '');
 
                 if (dataItem.Date.Value == 'Invalid Date') {
                     throw new Error('Could not parse Date');
@@ -42,6 +42,10 @@ ExpenseParser.prototype.Parse = function(content) {
             dataItem.Amount = { };
             dataItem.Amount.Value = this.GetClearedAmount(columns[logConfiguration.AmountIndex], logConfiguration, '');
             dataItem.Amount.Display = this.GetClearedAmount(columns[logConfiguration.AmountIndex], logConfiguration, ' ');
+
+            dataItem.GetHash = ExpenseItem.prototype.GetHash;
+            dataItem.GetHashBase = ExpenseItem.prototype.GetHashBase;
+            dataItem.LogConfiguration = logConfiguration;
 
             dataItem.Location = columns[logConfiguration.LocationIndex];
 

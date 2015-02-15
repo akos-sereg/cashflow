@@ -29,7 +29,7 @@ function renderDate(date) {
 // create the data store
 var store = Ext.create('Ext.data.JsonStore', {
     fields: [
-       {name: 'date'},
+       {name: 'Date'},
        {name: 'Title'},
        {name: 'Amount', },
        {name: 'Location'}

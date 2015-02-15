@@ -12,6 +12,8 @@ function ExpenseContentConfiguration() {
     this.Currency      = 'HUF';
     this.DecimalMark   = /,/g;
     this.ThousandSeparator = /\s/g;
+
+    this.RecurringTransactionIds = [ 'CSOPORTOS BESZED' ];
 }
 
 ExpenseContentConfiguration.prototype.GetMaxIndex = function() {
