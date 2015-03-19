@@ -3,10 +3,14 @@
     <title>Cashflow</title>
     <link rel="stylesheet" type="text/css" href="/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="/resources/shared/example.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/graph.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/detail.css" />
 
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/md5.js"></script>
     <script type="text/javascript" src="/resources/bootstrap.js"></script>
+    <script type="text/javascript" src="/resources/d3.v2.js"></script>
+    <script type="text/javascript" src="/resources/rickshaw.js"></script>
 
 
     <script type="text/javascript" src="/resources/js/model/ExpenseItem.js"></script>
@@ -25,6 +29,7 @@
         border: 0 none;
         }
     </style>
+
     <script type="text/javascript">
 
 
@@ -44,7 +49,40 @@
             // -----------------------------------------------------------------------
             var tabs = Ext.create('Ext.tab.Panel', {
                 height: 900,
-                renderTo: document.body,
+                renderTo: document.body,listeners: {
+                    'tabchange': function(tabPanel, tab) {
+                         if (tab.id == 'graphTab') {
+                            // Reload graph
+
+                            new Rickshaw.Graph.Ajax( {
+
+                                element: document.getElementById("chart"),
+                                width: 635,
+                                height: 250,
+                                renderer: 'line',
+                                dataURL: 'data.json',
+                                onData: function(d) { d[0].data[0].y = 80; return d },
+                                onComplete: function(transport) {
+                                    var graph = transport.graph;
+                                    var detail = new Rickshaw.Graph.HoverDetail({ graph: graph });
+                                },
+                                series: [
+                                    {
+                                        name: 'New York',
+                                        color: '#c05020',
+                                    }, {
+                                        name: 'London',
+                                        color: '#30c020',
+                                    }, {
+                                        name: 'Tokyo',
+                                        color: '#6060c0'
+                                    }
+                                ]
+                            } );
+                         }
+                    }
+                },
+
                 items: [
                 {
                     title: 'Input',
@@ -88,71 +126,23 @@
                 },
                 {
                     title: 'Graphs',
-                    html: 'Graphs',
-                    itemId: 'graphs'
-                }
-
-                ]
-            });
-
-            // -----------------------------------------------------------------------
-            // Viewport
-            // -----------------------------------------------------------------------
-            /*var viewport = Ext.create('Ext.Viewport', {
-
-                layout: 'border',
-
-                items: [{
-                    id: 'btns',
-                    region:'west',
-                    baseCls:'x-plain',
-                    split:true,
-                    width:150,
-                    minWidth: 100,
-                    maxWidth: 250,
-                    layout:'fit',
-                    items: {
-                        baseCls: 'x-plain',
-                        html: '<p style="padding:10px;color:#556677;font-size:11px;">Menu to be put here &raquo;</p>'
-                    }
-               }, {
                     region: 'center',
                     layout: 'vbox',
+                    id: 'graphTab',
                     VBoxLayout:{
                         margins: '10 10 10 10'
                     },
-                    items: [
-
-
-                        cashflowInput,
-                        cashflowGrid,
-                        {
-                            layout: {
-                                type: 'hbox',
-                                pack: 'end'
-                            },
-                            width: 800,
-                            align: 'right',
-                            border: false,
-                            items: [{
-                                xtype: 'button',
-                                margins: '5 5 5 5',
-                                text : 'Send',
-                                listeners: {
-                                    click: function () {
-                                        Ext.create('Cashflow.view.UploadExpensesWindow').show();
-                                    }
-                                }
-                            }, {
-                                xtype: 'button',
-                                margins: '5 5 5 5',
-                                text : 'Parsing Configuration'
-                            }]
-                        }
-                    ]
+                    items: [{
+                        xtype: 'panel',
+                        html: '<div id="chart" style="width: 635px; height: 250px;"></div>'
+                    }]
                 }]
-            });*/
+            });
+
         });
+
+
+
     </script>
 </head>
 <body>
