@@ -110,7 +110,7 @@ function processExpenseItem(expenseItem, callback) {
                         account_id: 1
                     };
 
-                    connection.query('INSERT INTO cashflow.expense SET insert_date = NOW(), ?', post, function(err, result) {
+                    connection.query('INSERT INTO cashflow.expense SET insert_date = NOW(), modified_date = NOW(), ?', post, function(err, result) {
                         if(err) {
                             console.log(err);
                         }

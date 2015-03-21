@@ -17,7 +17,8 @@ ExpenseAggregator.prototype.Aggregate = function() {
     for (var dayFromEpoch = firstDay; dayFromEpoch != lastDay; dayFromEpoch++) {
         result[0].data[dayFromEpoch-firstDay] = {
             'x': dayFromEpoch-firstDay,
-            'y': this.GetAggregatedAmount(dayFromEpoch)
+            'y': this.GetAggregatedAmount(dayFromEpoch),
+            title: this.GetAggregatedTitle(dayFromEpoch)
         };
     }
 
@@ -35,6 +36,19 @@ ExpenseAggregator.prototype.GetAggregatedAmount = function(dayFromEpoch) {
     }
 
     return this.currentAmount;
+}
+
+ExpenseAggregator.prototype.GetAggregatedTitle = function(dayFromEpoch) {
+
+    var title = '';
+
+    for (var i=0; i!=this.rows.length; i++) {
+        if (this.rows[i].DAYS_SINCE_EPOCH == dayFromEpoch) {
+            title += this.rows[i].location + ' ('+this.rows[i].expense_value+')<br/>';
+        }
+    }
+
+    return title == '' ? 'No expense at current date' : title;
 }
 
 module.exports = ExpenseAggregator;

@@ -67,8 +67,7 @@
                                     var graph = transport.graph;
                                     var detail = new Rickshaw.Graph.HoverDetail({ graph: graph,
                                         formatter: function(series, x, y) {
-                                            //return series.data[x].object.expense_value;
-                                            return y + ' HUF';
+                                            return series.data[x].title;
                                         } });
                                 },
                                 series: [

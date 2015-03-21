@@ -1,5 +1,5 @@
 function ExpenseItem() {
-    this.AccountId = 1; // Akos Sereg
+    this.AccountId = 1; // Default
 }
 
 // Get hash of expense item. This hash is being used to differentiate expense records stored in database. Should
