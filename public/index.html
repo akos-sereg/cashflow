@@ -57,7 +57,8 @@
 
                                 element: document.getElementById("chart"),
                                 width: 635,
-                                height: 250,
+                                height: 350,
+                                min: 'auto',
                                 renderer: 'line',
                                 dataURL: '/api/getExpenses',
                                 //onData: function(d) { return d },
@@ -65,7 +66,8 @@
                                     var graph = transport.graph;
                                     var detail = new Rickshaw.Graph.HoverDetail({ graph: graph,
                                         formatter: function(series, x, y) {
-                                            return series.data[x].object.expense_value;
+                                            //return series.data[x].object.expense_value;
+                                            return y + ' HUF';
                                         } });
                                 },
                                 series: [
@@ -131,7 +133,7 @@
                     items: [{
                         xtype: 'panel',
                         html: '<span style="padding: 10px;">Expense graph in last 30 days</span>: <br/>'
-                            + '<div id="chart" style="width: 635px; height: 250px;"></div>'
+                            + '<div id="chart" style="width: 635px; height: 350px;"></div>'
                     }]
                 }]
             });

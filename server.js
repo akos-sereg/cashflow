@@ -4,6 +4,7 @@ var app         = express();
 var bodyParser  = require('body-parser');
 var mysql       = require('mysql');
 var async       = require('async');
+var aggregator  = require('./controller/ExpenseAggregator');
 
 // MySQL Connection
 var connection = mysql.createConnection({
@@ -54,27 +55,20 @@ router.route('/storeExpenses')
 router.route('/getExpenses')
 
     .get(function(req, res) {
-        var results = [];
-        results[0] = { type: 'asd', expense_date: '2015-03-01', transactionId: 'asd', expense_value: 22.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
-        results[1] = { type: 'asd', expense_date: '2015-03-05', transactionId: 'asd', expense_value: 19.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
-        results[2] = { type: 'asd', expense_date: '2015-03-12', transactionId: 'asd', expense_value: 21.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
-        results[3] = { type: 'asd', expense_date: '2015-03-14', transactionId: 'asd', expense_value: 5.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
-        results[4] = { type: 'asd', expense_date: '2015-03-18', transactionId: 'asd', expense_value: 45.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
-        results[5] = { type: 'asd', expense_date: '2015-03-27', transactionId: 'asd', expense_value: 12.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
 
-        var result = [
-            {
-                "color": "#c05020",
-                "name": "Expenses",
-                "data": [ ]
-            }
-        ];
+        connection.query('SELECT *,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH FROM cashflow.expense WHERE expense_date > DATE_ADD(NOW(), INTERVAL -30 DAY) ORDER BY expense_date ASC',
+            function(err, rows, fields) {
 
-        for (var i=0; i!=results.length; i++) {
-            result[0].data[i] = { 'x': i, 'y': results[i].expense_value, object: results[i] };
-        }
+                if (err) {
+                    console.log(err);
+                    return;
+                }
 
-        res.send(result);
+                var expenseAggregator = new aggregator(rows);
+                var result = expenseAggregator.Aggregate();
+
+                res.send(result);
+            });
      });
 
 app.use('/api', router);
@@ -116,7 +110,7 @@ function processExpenseItem(expenseItem, callback) {
                         account_id: 1
                     };
 
-                    connection.query('INSERT INTO cashflow.expense SET insert_date = NOW(), modified_date = NOW(), ?', post, function(err, result) {
+                    connection.query('INSERT INTO cashflow.expense SET insert_date = NOW(), ?', post, function(err, result) {
                         if(err) {
                             console.log(err);
                         }
