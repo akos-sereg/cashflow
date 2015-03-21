@@ -52,7 +52,6 @@
                 renderTo: document.body,listeners: {
                     'tabchange': function(tabPanel, tab) {
                          if (tab.id == 'graphTab') {
-                            // Reload graph
 
                             new Rickshaw.Graph.Ajax( {
 
@@ -60,22 +59,19 @@
                                 width: 635,
                                 height: 250,
                                 renderer: 'line',
-                                dataURL: 'data.json',
-                                onData: function(d) { d[0].data[0].y = 80; return d },
+                                dataURL: '/api/getExpenses',
+                                //onData: function(d) { return d },
                                 onComplete: function(transport) {
                                     var graph = transport.graph;
-                                    var detail = new Rickshaw.Graph.HoverDetail({ graph: graph });
+                                    var detail = new Rickshaw.Graph.HoverDetail({ graph: graph,
+                                        formatter: function(series, x, y) {
+                                            return series.data[x].object.expense_value;
+                                        } });
                                 },
                                 series: [
                                     {
-                                        name: 'New York',
+                                        name: 'Expenses',
                                         color: '#c05020',
-                                    }, {
-                                        name: 'London',
-                                        color: '#30c020',
-                                    }, {
-                                        name: 'Tokyo',
-                                        color: '#6060c0'
                                     }
                                 ]
                             } );
@@ -134,7 +130,8 @@
                     },
                     items: [{
                         xtype: 'panel',
-                        html: '<div id="chart" style="width: 635px; height: 250px;"></div>'
+                        html: '<span style="padding: 10px;">Expense graph in last 30 days</span>: <br/>'
+                            + '<div id="chart" style="width: 635px; height: 250px;"></div>'
                     }]
                 }]
             });

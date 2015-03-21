@@ -33,6 +33,7 @@ router.get('/', function(req, res) {
     res.json({ message: 'You can find the API at /api' });
 });
 
+// Store expenses (Input tab)
 router.route('/storeExpenses')
 
     .post(function(req, res) {
@@ -47,9 +48,33 @@ router.route('/storeExpenses')
         async.parallel(calls, function(err, results) {
             res.send(results);
         });
-    })
+    });
+
+// Graph source
+router.route('/getExpenses')
 
     .get(function(req, res) {
+        var results = [];
+        results[0] = { type: 'asd', expense_date: '2015-03-01', transactionId: 'asd', expense_value: 22.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
+        results[1] = { type: 'asd', expense_date: '2015-03-05', transactionId: 'asd', expense_value: 19.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
+        results[2] = { type: 'asd', expense_date: '2015-03-12', transactionId: 'asd', expense_value: 21.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
+        results[3] = { type: 'asd', expense_date: '2015-03-14', transactionId: 'asd', expense_value: 5.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
+        results[4] = { type: 'asd', expense_date: '2015-03-18', transactionId: 'asd', expense_value: 45.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
+        results[5] = { type: 'asd', expense_date: '2015-03-27', transactionId: 'asd', expense_value: 12.0, location: 'Budapest', comment: 'ss', expense_currency: 'HUF', user_comment: 'asd', account_id: 1 };
+
+        var result = [
+            {
+                "color": "#c05020",
+                "name": "Expenses",
+                "data": [ ]
+            }
+        ];
+
+        for (var i=0; i!=results.length; i++) {
+            result[0].data[i] = { 'x': i, 'y': results[i].expense_value, object: results[i] };
+        }
+
+        res.send(result);
      });
 
 app.use('/api', router);
@@ -109,9 +134,6 @@ function processExpenseItem(expenseItem, callback) {
             };
         })(expenseItem));
 }
-
-
-
 
 // ON TERMINATION
 // =============================================================================
