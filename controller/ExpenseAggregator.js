@@ -16,7 +16,7 @@ ExpenseAggregator.prototype.Aggregate = function() {
 
     for (var dayFromEpoch = firstDay; dayFromEpoch != lastDay; dayFromEpoch++) {
         result[0].data[dayFromEpoch-firstDay] = {
-            'x': dayFromEpoch-firstDay,
+            'x': dayFromEpoch * 60 * 60 * 24,
             'y': this.GetAggregatedAmount(dayFromEpoch),
             title: this.GetAggregatedTitle(dayFromEpoch)
         };

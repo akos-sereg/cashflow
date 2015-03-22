@@ -50,7 +50,5 @@ Ext.define('Cashflow.view.UploadExpensesWindow', {
             },
             contentType: 'application/json; charset=utf-8'
         });
-
-        //Ext.getCmp('uploadConsole').setValue(message);
     }
 });
