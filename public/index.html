@@ -21,6 +21,7 @@
     <script type="text/javascript" src="/resources/js/view/CashflowGrid.js"></script>
     <script type="text/javascript" src="/resources/js/view/window/UploadExpensesWindow.js"></script>
     <script type="text/javascript" src="/resources/js/view/ExpenseGraph.js"></script>
+    <script type="text/javascript" src="/resources/js/view/DateRangePicker.js"></script>
 
     <style type="text/css">
         html, body {
@@ -52,9 +53,9 @@
                 height: 900,
                 renderTo: document.body,listeners: {
                     'tabchange': function(tabPanel, tab) {
-                         if (tab.id == 'graphTab') {
+                        if (tab.id == 'graphTab') {
                             cashflowChart.load();
-                         }
+                        }
                     }
                 },
 
@@ -107,7 +108,10 @@
                     VBoxLayout:{
                         margins: '10 10 10 10'
                     },
-                    items: [ cashflowChart ]
+                    items: [
+                        dateRangePicker,
+                        cashflowChart
+                    ]
                 }]
             });
 
