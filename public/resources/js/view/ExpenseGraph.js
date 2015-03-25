@@ -20,7 +20,7 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
     load: function(startDate, endDate) {
 
         this.clear();
-        
+
         // Load expense list from server
         // ---------------------------------------------------------------------------------
 
@@ -62,6 +62,8 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
 
                     return title;
                 } });
+
+                cashflowChart.setTitle('Graph (' + data[0].data.length + ' records)');
 
             },
             contentType: 'application/json; charset=utf-8'
