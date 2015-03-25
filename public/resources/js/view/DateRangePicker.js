@@ -24,7 +24,7 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
         },
         {
             xtype: 'datepicker',
-            minDate: new Date(),
+            id: 'startDateControl',
             handler: function(picker, date) {
               // do something with the selected date
             }
@@ -43,7 +43,7 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
             },
             {
                 xtype: 'datepicker',
-                minDate: new Date(),
+                id: 'endDateControl',
                 handler: function(picker, date) {
                   // do something with the selected date
                 }
@@ -74,7 +74,18 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
          {
             xtype: 'button',
             text: 'Refresh Graph',
-            margins: '5 5 5 5'
+            margins: '5 5 5 5',
+            handler: function () {
+                cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+            }
          }]
-    }]
+    }],
+
+    getStartDate: function() {
+        return Ext.Date.format(Ext.getCmp('startDateControl').getValue(), 'Y-m-d');
+    },
+
+    getEndDate: function() {
+        return Ext.Date.format(Ext.getCmp('endDateControl').getValue(), 'Y-m-d');
+    }
 });

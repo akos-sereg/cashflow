@@ -56,7 +56,12 @@ router.route('/getExpenses')
 
     .get(function(req, res) {
 
-        connection.query('SELECT *,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH FROM cashflow.expense WHERE expense_date > DATE_ADD(NOW(), INTERVAL -30 DAY) ORDER BY expense_date ASC',
+        connection.query('SELECT *,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
+            + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? ORDER BY expense_date ASC',
+            [
+                req.param('startDate'),
+                req.param('endDate')
+            ],
             function(err, rows, fields) {
 
                 if (err) {

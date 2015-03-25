@@ -1,3 +1,7 @@
+Ext.require([
+    'Ext.util.*',
+]);
+
 var cashflowChart = Ext.create('Ext.form.FormPanel', {
     title      : 'Graph',
     width      : 800,
@@ -9,15 +13,20 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
         html: '<div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>'
             + '<div id="chart" style="position: relative; left: 40px; width: 635px; height: 350px;"></div>'
     }],
-    load: function() {
+    clear: function() {
+        $('#y_axis').html('');
+        $('#chart').html('');
+    },
+    load: function(startDate, endDate) {
 
+        this.clear();
+        
         // Load expense list from server
         // ---------------------------------------------------------------------------------
 
         $.ajax({
             type: 'GET',
-            url: '/api/getExpenses',
-            //data: JSON.stringify(data),
+            url: '/api/getExpenses?startDate=' + startDate + '&endDate=' + endDate,
             success: function(data) {
 
                 // Render Graph
