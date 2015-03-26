@@ -22,6 +22,7 @@
     <script type="text/javascript" src="/resources/js/view/window/UploadExpensesWindow.js"></script>
     <script type="text/javascript" src="/resources/js/view/ExpenseGraph.js"></script>
     <script type="text/javascript" src="/resources/js/view/DateRangePicker.js"></script>
+    <script type="text/javascript" src="/resources/js/view/ExpenseDataGrid.js"></script>
 
     <style type="text/css">
         html, body {
@@ -54,7 +55,9 @@
                 renderTo: document.body,listeners: {
                     'tabchange': function(tabPanel, tab) {
                         if (tab.id == 'graphTab') {
-                            // cashflowChart.load();
+                        }
+                        else if (tab.id == 'dataTab') {
+                            expenseDataGrid.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
                         }
                     }
                 },
@@ -96,9 +99,16 @@
                     ]
                 },
                 {
-                    title: 'Data',
-                    html: 'Data',
-                    itemId: 'data',
+                    title: 'Persisted Data',
+                    region: 'center',
+                    layout: 'vbox',
+                    id: 'dataTab',
+                    VBoxLayout:{
+                        margins: '10 10 10 10'
+                    },
+                    items: [
+                        expenseDataGrid
+                    ]
                 },
                 {
                     title: 'Graphs',

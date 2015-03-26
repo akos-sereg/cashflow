@@ -52,11 +52,11 @@ router.route('/storeExpenses')
     });
 
 // Graph source
-router.route('/getExpenses')
+router.route('/getAggregatedExpenses')
 
     .get(function(req, res) {
 
-        connection.query('SELECT *,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
+        connection.query('SELECT * '
             + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? ORDER BY expense_date ASC',
             [
                 req.param('startDate'),
@@ -73,6 +73,32 @@ router.route('/getExpenses')
                 var result = expenseAggregator.Aggregate();
 
                 res.send(result);
+            });
+     });
+
+// Expense Data
+router.route('/getExpenses')
+
+    .get(function(req, res) {
+
+        connection.query('SELECT expense.*,tag.label as tag '
+            + 'FROM cashflow.expense '
+            + '  LEFT JOIN cashflow.expense_tag ON (expense.transactionId = expense_tag.transactionId) '
+            + '  LEFT JOIN cashflow.tag ON (expense_tag.tag_id = tag.id) '
+            + 'WHERE expense_date BETWEEN ? AND ? '
+            + 'ORDER BY expense_date ASC',
+            [
+                req.param('startDate'),
+                req.param('endDate')
+            ],
+            function(err, rows, fields) {
+
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                res.send(rows);
             });
      });
 

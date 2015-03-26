@@ -26,7 +26,7 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
 
         $.ajax({
             type: 'GET',
-            url: '/api/getExpenses?startDate=' + startDate + '&endDate=' + endDate,
+            url: '/api/getAggregatedExpenses?startDate=' + startDate + '&endDate=' + endDate,
             success: function(data) {
 
                 // Render Graph
