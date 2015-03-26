@@ -56,7 +56,7 @@ router.route('/getAggregatedExpenses')
 
     .get(function(req, res) {
 
-        connection.query('SELECT * '
+        connection.query('SELECT expense.*,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
             + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? ORDER BY expense_date ASC',
             [
                 req.param('startDate'),
