@@ -81,7 +81,8 @@ router.route('/getExpenses')
 
     .get(function(req, res) {
 
-        connection.query('SELECT expense.*,tag.label as tag '
+        connection.query('SELECT expense.type, CAST(DATE(expense.expense_date) as CHAR) as expense_date, expense.transactionId, expense.expense_value, expense.location, '
+            + '  expense.comment, expense.expense_currency, expense.insert_date, expense.user_comment, expense.account_id, expense.modified_date, tag.label as tag '
             + 'FROM cashflow.expense '
             + '  LEFT JOIN cashflow.expense_tag ON (expense.transactionId = expense_tag.transactionId) '
             + '  LEFT JOIN cashflow.tag ON (expense_tag.tag_id = tag.id) '
