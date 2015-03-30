@@ -103,6 +103,53 @@ router.route('/getExpenses')
             });
      });
 
+// Tags
+router.route('/getTags')
+
+    .get(function(req, res) {
+
+        connection.query('SELECT tag.id, tag.label FROM cashflow.tag ORDER BY label ASC', [ ],
+            function(err, rows, fields) {
+
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                res.send(rows);
+            });
+     });
+
+router.route('/setTag')
+
+    .post(function(req, res) {
+
+        connection.query('DELETE FROM cashflow.expense_tag WHERE transactionId = ?', [ req.body['transactionId'] ],
+            function(err, rows, fields) {
+
+                //INSERT INTO cashflow.expense_tag (transactionId, tag_id) VALUES(?, (SELECT tag_id FROM cashflow.tag WHERE label = ?))
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                connection.query('INSERT INTO cashflow.expense_tag (transactionId, tag_id) VALUES(?, (SELECT id FROM cashflow.tag WHERE label = ?))',
+                [
+                    req.body['transactionId'],
+                    req.body['tagLabel']
+                ],
+                    function(err, result, fields) {
+
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
+
+                        res.send(result);
+                    });
+            });
+     });
+
 app.use('/api', router);
 
 
