@@ -25,6 +25,7 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
         {
             xtype: 'datepicker',
             id: 'startDateControl',
+            value: Ext.Date.add(new Date(), Ext.Date.DAY, -90),
             handler: function(picker, date) {
               // do something with the selected date
             }
@@ -44,6 +45,7 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
             {
                 xtype: 'datepicker',
                 id: 'endDateControl',
+                value: new Date(),
                 handler: function(picker, date) {
                   // do something with the selected date
                 }
