@@ -199,7 +199,16 @@ function processExpenseItem(expenseItem, callback) {
                     });
                 }
                 else {
-                    msg = 'Ignoring [' + expenseItem.Date.Display + '] ' + expenseItem.Amount.Display + ' @ ' + expenseItem.Location;
+                    connection.query('UPDATE cashflow.expense SET modified_date = NOW(), location = ? WHERE transactionId = ?', [ expenseItem.Location, expenseItem.Hash ], function(err, result) {
+                        if(err) {
+                            console.log(err);
+                        }
+                        else {
+                            console.log('Row updated: TransactionID = ' + expenseItem.Hash);
+                        }
+                    });
+
+                    msg = 'Updating [' + expenseItem.Date.Display + '] ' + expenseItem.Amount.Display + ' @ ' + expenseItem.Location;
                 }
 
                 console.log(msg);
