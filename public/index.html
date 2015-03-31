@@ -55,6 +55,7 @@
                 listeners: {
                     'tabchange': function(tabPanel, tab) {
                         if (tab.id == 'graphTab') {
+                            cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
                         }
                         else if (tab.id == 'dataTab') {
                             expenseDataGrid.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
@@ -135,7 +136,15 @@
                     padding: 5
                 },
                 items: [
-                    dateRangePicker,
+                    {
+                        layout: {
+                            type: 'hbox'
+                        },
+                        width: 400,
+                        align: 'left',
+                        border: false,
+                        items: [ dateRangePicker ]
+                    },
                     tabs
                 ]
             });

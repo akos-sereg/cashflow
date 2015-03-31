@@ -1,4 +1,4 @@
-var dateRangePicker = Ext.create('Ext.form.FormPanel', {
+/*var dateRangePicker = Ext.create('Ext.form.FormPanel', {
     title      : 'Date Range Picker',
     width      : 800,
     height     : 280,
@@ -90,4 +90,38 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
     getEndDate: function() {
         return Ext.Date.format(Ext.getCmp('endDateControl').getValue(), 'Y-m-d');
     }
+});
+*/
+
+var dateRangePicker = Ext.create('Ext.form.FormPanel', {
+    width: 300,
+    bodyPadding: 10,
+    margins: '0 0 5 0',
+    title: 'Dates',
+    items: [{
+        xtype: 'datefield',
+        id: 'startDateControl',
+        anchor: '100%',
+        fieldLabel: 'Start Date',
+        name: 'date',
+        format: 'Y-m-d',
+        value: Ext.Date.add(new Date(), Ext.Date.DAY, -90),
+    }, {
+        xtype: 'datefield',
+        id: 'endDateControl',
+        anchor: '100%',
+        fieldLabel: 'End Date',
+        name: 'date',
+        format: 'Y-m-d',
+        value: new Date(),
+    }],
+
+    getStartDate: function() {
+        return Ext.Date.format(Ext.getCmp('startDateControl').getValue(), 'Y-m-d');
+    },
+
+    getEndDate: function() {
+        return Ext.Date.format(Ext.getCmp('endDateControl').getValue(), 'Y-m-d');
+    }
+
 });
