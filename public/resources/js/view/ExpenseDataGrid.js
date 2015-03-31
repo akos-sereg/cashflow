@@ -111,8 +111,8 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
             dataIndex: 'tag_suggestion'
         }
     ],
-    height: 650,
-    width: 1200,
+    height: 530,
+    width: 1165,
     title: 'Expense List',
     viewConfig: {
         stripeRows: false

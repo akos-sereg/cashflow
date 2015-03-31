@@ -67,8 +67,8 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             dataIndex: 'Location'
         }
     ],
-    height: 650,
-    width: 800,
+    height: 350,
+    width: 1165,
     title: 'Expense List',
     viewConfig: {
         stripeRows: false

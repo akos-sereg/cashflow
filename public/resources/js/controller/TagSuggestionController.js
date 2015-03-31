@@ -2,15 +2,27 @@ function TagSuggestionController() {
 
     this.suggestions = [
         { contains: 'Magyar Telekom Nyrt.', tag: 'Mobile' },
-        { contains: 'CBA KRISZTINA BUDAPEST', tag: 'Bevasarlas' },
+        { contains: 'CBA', tag: 'Bevasarlas' },
         { contains: 'AUCHAN', tag: 'Bevasarlas' },
+        { contains: 'IKEA', tag: 'Bevasarlas' },
+        { contains: 'ROSSMANN', tag: 'Bevasarlas' },
         { contains: 'SPAR', tag: 'Bevasarlas' },
+        { contains: 'LIDL', tag: 'Bevasarlas' },
+        { contains: 'OBI', tag: 'Bevasarlas' },
+        { contains: 'Hachapuri Kft', tag: 'Szorakozas' },
+        { contains: 'ZOLD OLIVA ETTEREM', tag: 'Ebed' },
+        { contains: 'GRINGOS AMIGOS', tag: 'Ebed' },
+        { contains: 'BURGER KING', tag: 'Ebed' },
         { contains: 'CHARLES VOGELE', tag: 'Oltozkodes' },
         { contains: 'C A ARENA', tag: 'Oltozkodes' },
+        { contains: 'C A ALLEE', tag: 'Oltozkodes' },
         { contains: 'DECATHLON', tag: 'Bevasarlas' },
+        { contains: 'TESCO', tag: 'Bevasarlas' },
         { contains: 'UNIQA', tag: 'Savings (LT)' },
         { contains: 'MOL HUNG', tag: 'Auto' },
         { contains: 'OMV', tag: 'Auto' },
+        { contains: 'SHELL', tag: 'Auto' },
+        { contains: 'K H Biztosito', tag: 'Auto' },
     ];
 
     this.configuration = {
@@ -37,7 +49,7 @@ TagSuggestionController.prototype.AttachSuggestions = function(expenseRecords) {
 
             // Running Contains rule
             if (this.suggestions[j].contains != null && this.suggestions[j].contains != '') {
-                if (expenseRecords[i].location.indexOf(this.suggestions[j].contains) > -1) {
+                if (expenseRecords[i].location != null && expenseRecords[i].location.indexOf(this.suggestions[j].contains) > -1) {
                     expenseRecords[i].tag_suggestion = this.suggestions[j].tag;
                     expenseRecords[i].tag_suggestion_descriptor = expenseRecords[i].transactionId + ',' + this.suggestions[j].tag;
                 }

@@ -4,7 +4,7 @@ Ext.require([
 
 var cashflowChart = Ext.create('Ext.form.FormPanel', {
     title      : 'Graph',
-    width      : 800,
+    width      : 1165,
     bodyPadding: 10,
     margins: '10 10 10 10',
     items: [{
@@ -35,7 +35,7 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
                     element: document.getElementById('chart'),
                     renderer: 'line',
                     height: 350,
-                    width: 800,
+                    width: 1165,
                     min: 'auto',
                     interpolation: 'linear',
                     series: [{

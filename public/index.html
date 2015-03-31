@@ -52,7 +52,7 @@
             // -----------------------------------------------------------------------
             var tabs = Ext.create('Ext.tab.Panel', {
                 height: 900,
-                renderTo: document.body,listeners: {
+                listeners: {
                     'tabchange': function(tabPanel, tab) {
                         if (tab.id == 'graphTab') {
                         }
@@ -78,7 +78,7 @@
                                 type: 'hbox',
                                 pack: 'end'
                             },
-                            width: 800,
+                            width: 1165,
                             align: 'right',
                             border: false,
                             items: [{
@@ -119,11 +119,27 @@
                         margins: '10 10 10 10'
                     },
                     items: [
-                        dateRangePicker,
                         cashflowChart
                     ]
                 }]
             });
+
+            var resultsPanel = Ext.create('Ext.panel.Panel', {
+                title: 'Results',
+                width: 1200,
+                height: 900,
+                renderTo: Ext.getBody(), // document.body
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch',
+                    padding: 5
+                },
+                items: [
+                    dateRangePicker,
+                    tabs
+                ]
+            });
+
 
         });
 

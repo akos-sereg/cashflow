@@ -4,7 +4,7 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
     height     : 280,
     collapsible: true,
     bodyPadding: 10,
-    margins: '10 10 10 10',
+    margins: '5 5 5 5',
     layout: 'hbox',
     defaults:{
         margins:'0 5 0 0',

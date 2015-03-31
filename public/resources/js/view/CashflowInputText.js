@@ -1,6 +1,6 @@
 var cashflowInput = Ext.create('Ext.form.FormPanel', {
     title      : 'Paste your expense log here',
-    width      : 800,
+    width      : 1165,
     bodyPadding: 10,
     margins: '10 10 10 10',
     items: [{
