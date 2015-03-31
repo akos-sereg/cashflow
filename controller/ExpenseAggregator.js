@@ -27,8 +27,6 @@ ExpenseAggregator.prototype.Aggregate = function() {
 
 ExpenseAggregator.prototype.GetAggregatedAmount = function(dayFromEpoch) {
 
-    var itemsAtCurrentDate = [ ];
-
     for (var i=0; i!=this.rows.length; i++) {
         if (this.rows[i].DAYS_SINCE_EPOCH == dayFromEpoch) {
             this.currentAmount += this.rows[i].expense_value;
@@ -40,15 +38,17 @@ ExpenseAggregator.prototype.GetAggregatedAmount = function(dayFromEpoch) {
 
 ExpenseAggregator.prototype.GetAggregatedTitle = function(dayFromEpoch) {
 
-    var title = '';
+    var title = this.currentAmount + '<br/><br/>';
+    var expenseAdded = false;
 
     for (var i=0; i!=this.rows.length; i++) {
         if (this.rows[i].DAYS_SINCE_EPOCH == dayFromEpoch) {
+            expenseAdded = true;
             title += this.rows[i].location + ' ('+this.rows[i].expense_value+')<br/>';
         }
     }
 
-    return title == '' ? 'No expense at current date' : title;
+    return !expenseAdded ? title + 'No expense at current date' : title;
 }
 
 module.exports = ExpenseAggregator;
