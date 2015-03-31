@@ -129,6 +129,7 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
                 tagSuggestionController.AttachSuggestions(data)
 
                 expenseDataGrid.store.loadData(data);
+                expenseDataGrid.store.rawData = data;
             },
             contentType: 'application/json; charset=utf-8'
         });
@@ -147,6 +148,17 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
             success: function(data) {
 
                 console.log('Expense tag set successfully. Tag: ' + tagLabel + ', Transaction ID: ' + transactionId);
+
+                // Update corresponding expense record
+                for (var i=0; i!=expenseDataGrid.store.rawData.length; i++) {
+                    if (expenseDataGrid.store.rawData[i].transactionId == transactionId) {
+                        expenseDataGrid.store.rawData[i].tag = tagLabel;
+                        expenseDataGrid.store.rawData[i].tag_suggestion = null;
+                        expenseDataGrid.store.rawData[i].tag_suggestion_descriptor = null;
+                    }
+                }
+
+                expenseDataGrid.store.loadData(expenseDataGrid.store.rawData);
             },
             contentType: 'application/x-www-form-urlencoded'
         });

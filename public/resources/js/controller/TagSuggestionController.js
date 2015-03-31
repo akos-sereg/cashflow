@@ -1,8 +1,21 @@
 function TagSuggestionController() {
+
     this.suggestions = [
         { contains: 'Magyar Telekom Nyrt.', tag: 'Mobile' },
         { contains: 'CBA KRISZTINA BUDAPEST', tag: 'Bevasarlas' },
+        { contains: 'AUCHAN', tag: 'Bevasarlas' },
+        { contains: 'SPAR', tag: 'Bevasarlas' },
+        { contains: 'CHARLES VOGELE', tag: 'Oltozkodes' },
+        { contains: 'C A ARENA', tag: 'Oltozkodes' },
+        { contains: 'DECATHLON', tag: 'Bevasarlas' },
+        { contains: 'UNIQA', tag: 'Savings (LT)' },
+        { contains: 'MOL HUNG', tag: 'Auto' },
+        { contains: 'OMV', tag: 'Auto' },
     ];
+
+    this.configuration = {
+        SuggestAlways : false           // Suggest even if expense record is already tagged
+    };
 }
 
 TagSuggestionController.prototype.AttachSuggestions = function(expenseRecords) {
@@ -13,6 +26,11 @@ TagSuggestionController.prototype.AttachSuggestions = function(expenseRecords) {
 
     // Expense records
     for (var i=0; i!=expenseRecords.length; i++) {
+
+        if (this.configuration.SuggestAlways == false && expenseRecords[i].tag != null && expenseRecords[i].tag.length > 0) {
+            // Ignore suggestion, as record has tag already
+            continue;
+        }
 
         // Rules
         for (var j=0; j!=this.suggestions.length; j++) {
