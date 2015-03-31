@@ -42,7 +42,7 @@ var tagStore = Ext.create('Ext.data.Store', {
 // -------------------------------------------------------------------------------------
 var expenseDataGrid = Ext.create('Ext.grid.Panel', {
     store: expenseDataGridStore,
-    margins: '10 10 10 10',
+    margins: '0 0 0 0',
     plugins: [
         Ext.create('Ext.grid.plugin.CellEditing', {
             clicksToEdit: 1
@@ -111,9 +111,10 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
             dataIndex: 'tag_suggestion'
         }
     ],
-    height: 530,
-    width: 1165,
-    title: 'Expense List',
+    height: 550,
+    width: 1200,
+    //title: 'Expense List',
+    border: false,
     viewConfig: {
         stripeRows: false
     },

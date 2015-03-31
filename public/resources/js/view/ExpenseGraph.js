@@ -3,10 +3,11 @@ Ext.require([
 ]);
 
 var cashflowChart = Ext.create('Ext.form.FormPanel', {
-    title      : 'Graph',
+    //title      : 'Graph',
+    border     : false,
     width      : 1165,
     bodyPadding: 10,
-    margins: '10 10 10 10',
+    margins: '0 0 0 0',
     items: [{
         // Placeholder for Rickshaw Graph
         xtype: 'panel',
@@ -63,7 +64,7 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
                     return title;
                 } });
 
-                cashflowChart.setTitle('Graph (' + data[0].data.length + ' records)');
+                //cashflowChart.setTitle('Graph (' + data[0].data.length + ' records)');
 
             },
             contentType: 'application/json; charset=utf-8'

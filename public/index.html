@@ -48,10 +48,10 @@
             };
 
             // -----------------------------------------------------------------------
-            // Panels
+            // Tab pages
             // -----------------------------------------------------------------------
             var tabs = Ext.create('Ext.tab.Panel', {
-                height: 900,
+                height: 600,
                 listeners: {
                     'tabchange': function(tabPanel, tab) {
                         if (tab.id == 'graphTab') {
@@ -125,36 +125,58 @@
                 }]
             });
 
-            var resultsPanel = Ext.create('Ext.panel.Panel', {
-                title: 'Results',
-                width: 1200,
+            Ext.create('Ext.panel.Panel', {
+                width: 1420,
                 height: 900,
-                renderTo: Ext.getBody(), // document.body
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch',
-                    padding: 5
+                layout: 'border',
+                bodyBorder: false,
+                renderTo: Ext.getBody(),
+                defaults: {
+                    //collapsible: true,
+                    split: true,
+                    bodyPadding: 15
                 },
-                items: [
-                    {
-                        layout: {
-                            type: 'hbox'
+                items: [{
+                    title: 'Footer',
+                    region: 'south',
+                    height: 150,
+                    minHeight: 75,
+                    maxHeight: 250,
+                    html: 'Footer content'
+                },{
+                    title: 'Navigation',
+                    region:'west',
+                    floatable: false,
+                    margins: '5 0 0 0',
+                    width: 175,
+                    minWidth: 100,
+                    maxWidth: 250,
+                    html: 'Secondary content like navigation links could go here'
+                },{
+                    //title: 'Expenses',
+                    collapsible: false,
+                    region: 'center',
+                    margins: '5 0 0 0',
+                    items: [
+                        {
+                            layout: {
+                                type: 'hbox'
+                            },
+                            width: 400,
+                            align: 'left',
+                            border: false,
+                            items: [ dateRangePicker ]
                         },
-                        width: 400,
-                        align: 'left',
-                        border: false,
-                        items: [ dateRangePicker ]
-                    },
-                    tabs
-                ]
+                        tabs
+                    ]
+                }]
             });
-
-
         });
 
 
 
     </script>
+
 </head>
 <body>
 </body>
