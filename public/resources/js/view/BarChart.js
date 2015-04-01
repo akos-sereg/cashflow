@@ -10,7 +10,7 @@ var barChart = Ext.create('Ext.chart.Chart', {
     style: 'background: #fff',
     animate: false,
     shadow: true,
-    width: 1165,
+    width: 700,
     height: 280,
     store: barChartStore,
     axes: [{
@@ -27,7 +27,6 @@ var barChart = Ext.create('Ext.chart.Chart', {
         type: 'Category',
         position: 'bottom',
         fields: ['label'],
-        //title: 'Expense category'
     }],
     series: [{
         type: 'column',
@@ -69,9 +68,5 @@ var barChart = Ext.create('Ext.chart.Chart', {
             },
             contentType: 'application/json; charset=utf-8'
         });
-
-
     }
-
-
 });

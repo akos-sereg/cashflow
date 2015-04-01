@@ -25,6 +25,7 @@
     <script type="text/javascript" src="/resources/js/view/DateRangePicker.js"></script>
     <script type="text/javascript" src="/resources/js/view/ExpenseDataGrid.js"></script>
     <script type="text/javascript" src="/resources/js/view/BarChart.js"></script>
+    <script type="text/javascript" src="/resources/js/view/PieChart.js"></script>
 
     <style type="text/css">
         html, body {
@@ -59,6 +60,7 @@
                         if (tab.id == 'graphTab') {
                             cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
                             barChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+                            pieChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
                         }
                         else if (tab.id == 'dataTab') {
                             expenseDataGrid.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
@@ -124,7 +126,18 @@
                     },
                     items: [
                         cashflowChart,
-                        barChart
+                        {
+                            layout: {
+                                type: 'hbox'
+                            },
+                            width: 1165,
+                            align: 'left',
+                            border: false,
+                            items: [
+                                pieChart,
+                                barChart
+                            ]
+                        }
                     ]
                 }]
             });

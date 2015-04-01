@@ -4,7 +4,6 @@ Ext.require([
 
 var cashflowChartHeight = 280;
 var cashflowChart = Ext.create('Ext.form.FormPanel', {
-    //title      : 'Graph',
     border     : false,
     width      : 1165,
     bodyPadding: 10,
@@ -68,7 +67,5 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
             },
             contentType: 'application/json; charset=utf-8'
         });
-
-
     }
 });

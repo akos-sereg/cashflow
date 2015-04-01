@@ -51,7 +51,7 @@ ExpenseAggregator.prototype.GetAggregatedTitle = function(dayFromEpoch) {
     for (var i=0; i!=this.rows.length; i++) {
         if (this.rows[i].DAYS_SINCE_EPOCH == dayFromEpoch) {
             expenseAdded = true;
-            title += this.rows[i].location + ' ('+this.rows[i].expense_value+')<br/>';
+            title += this.rows[i].location + ' ('+this.FormatAmount(this.rows[i].expense_value)+')<br/>';
         }
     }
 
