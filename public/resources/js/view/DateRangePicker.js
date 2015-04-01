@@ -1,9 +1,7 @@
 var dateRangePicker = Ext.create('Ext.form.FormPanel', {
     bodyPadding: 10,
     margins: '0 0 5 0',
-    //title: 'Dates',
     border: false,
-    //collapsible: true,
     items: [{
         xtype: 'datefield',
         id: 'startDateControl',
@@ -28,6 +26,26 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
 
     getEndDate: function() {
         return Ext.Date.format(Ext.getCmp('endDateControl').getValue(), 'Y-m-d');
+    },
+
+    addMonths: function(months) {
+        Ext.getCmp('startDateControl').setValue(Ext.Date.add(Ext.getCmp('startDateControl').getValue(), Ext.Date.MONTH, months));
+        Ext.getCmp('endDateControl').setValue(Ext.Date.add(Ext.getCmp('endDateControl').getValue(), Ext.Date.MONTH, months));
+
+        this.onRangeChanged();
+    },
+
+    addDays: function(days) {
+        Ext.getCmp('startDateControl').setValue(Ext.Date.add(Ext.getCmp('startDateControl').getValue(), Ext.Date.DAY, days));
+        Ext.getCmp('endDateControl').setValue(Ext.Date.add(Ext.getCmp('endDateControl').getValue(), Ext.Date.DAY, days));
+
+        this.onRangeChanged();
+    },
+
+    onRangeChanged: function() {
+        cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+        barChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+        pieChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
     }
 
 });

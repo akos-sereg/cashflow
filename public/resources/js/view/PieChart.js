@@ -35,9 +35,9 @@ var pieChart = Ext.create('Ext.chart.Chart', {
             field: 'label',
             display: 'rotate',
             contrast: true,
-            font: '12px Tahoma'
+            font: '10px Tahoma'
         },
-        colorSet: ["#ECE093", "#EDA993", "#ED93B5", "#EB93ED", "#B193ED", "#93AEED" ],
+        colorSet: ["#ECE1AF", "#C6B775", "#EDD468", "#EDDB8B", "#FFEB96" ],
     }],
 
     load: function(startDate, endDate) {
@@ -58,8 +58,27 @@ var pieChart = Ext.create('Ext.chart.Chart', {
                     data[i].amount = (Math.abs(data[i].amount) * 100) / sum;
                 }
 
-                pieChart.store.loadData(data);
-                pieChart.refresh();
+                //data.sort(function(a, b){return b.amount - a.amount});
+
+                var displayedData = [];
+                var othersIndex = -1;
+                for (var i=0; i!=data.length; i++) {
+                    if (data[i].amount > 5) {
+                        displayedData.push(data[i]);
+                    }
+                    else {
+                        if (othersIndex == -1) {
+                            displayedData.push({ label: 'Others', amount: data[i].amount });
+                            othersIndex = i;
+                        }
+                        else {
+                            displayedData[othersIndex].amount += data[i].amount;
+                        }
+                    }
+                }
+
+                pieChart.store.loadData(displayedData);
+
             },
             contentType: 'application/json; charset=utf-8'
         });

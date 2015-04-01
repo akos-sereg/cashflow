@@ -58,9 +58,7 @@
                 listeners: {
                     'tabchange': function(tabPanel, tab) {
                         if (tab.id == 'graphTab') {
-                            cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-                            barChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-                            pieChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+                            dateRangePicker.onRangeChanged();
                         }
                         else if (tab.id == 'dataTab') {
                             expenseDataGrid.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
@@ -177,10 +175,72 @@
                             layout: {
                                 type: 'hbox'
                             },
-                            width: 400,
+                            width: 800,
                             align: 'left',
                             border: false,
-                            items: [ dateRangePicker ]
+                            items: [
+                                dateRangePicker,
+                                {
+                                    xtype: 'button',
+                                    margins: '5 5 5 5',
+                                    text : '-1 Month',
+                                    listeners: {
+                                        click: function () {
+                                            dateRangePicker.addDays(-30);
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    margins: '5 5 5 5',
+                                    text : '+1 Month',
+                                    listeners: {
+                                        click: function () {
+                                            dateRangePicker.addDays(+30);
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    margins: '5 5 5 5',
+                                    text : '-1 Quarter',
+                                    listeners: {
+                                        click: function () {
+                                            dateRangePicker.addMonths(-3);
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    margins: '5 5 5 5',
+                                    text : '+1 Quarter',
+                                    listeners: {
+                                        click: function () {
+                                            dateRangePicker.addMonths(+3);
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    margins: '5 5 5 5',
+                                    text : '-1 Half Year',
+                                    listeners: {
+                                        click: function () {
+                                            dateRangePicker.addMonths(-6);
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    margins: '5 5 5 5',
+                                    text : '+1 Half Year',
+                                    listeners: {
+                                        click: function () {
+                                            dateRangePicker.addMonths(+6);
+                                        }
+                                    }
+                                }
+                            ]
                         },
                         tabs
                     ]
