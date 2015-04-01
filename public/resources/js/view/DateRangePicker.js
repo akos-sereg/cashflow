@@ -10,7 +10,13 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
         name: 'date',
         format: 'Y-m-d',
         value: Ext.Date.add(new Date(), Ext.Date.DAY, -90),
-    }, {
+        listeners: {
+            select: function(){
+                dateRangePicker.onRangeChanged();
+            }
+        },
+    },
+    {
         xtype: 'datefield',
         id: 'endDateControl',
         anchor: '100%',
@@ -18,6 +24,11 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
         name: 'date',
         format: 'Y-m-d',
         value: new Date(),
+        listeners: {
+            select: function(){
+                dateRangePicker.onRangeChanged();
+            }
+        },
     }],
 
     getStartDate: function() {
