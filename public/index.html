@@ -57,6 +57,7 @@
                     'tabchange': function(tabPanel, tab) {
                         if (tab.id == 'graphTab') {
                             cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+                            barChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
                         }
                         else if (tab.id == 'dataTab') {
                             expenseDataGrid.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());

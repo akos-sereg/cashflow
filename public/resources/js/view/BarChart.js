@@ -1,35 +1,9 @@
 Ext.require('Ext.chart.*');
 Ext.require(['Ext.Window', 'Ext.layout.container.Fit', 'Ext.fx.target.Sprite', 'Ext.window.MessageBox']);
 
-document.compatMode = "CSS1Compat";
-
-function generateData(n, floor){
-    var data = [],
-        p = (Math.random() *  11) + 1,
-        i;
-
-    floor = (!floor && floor !== 0)? 20 : floor;
-
-    for (i = 0; i < (n || 12); i++) {
-        data.push({
-            name: Ext.Date.monthNames[i % 12],
-            data1: Math.floor(Math.max((Math.random() * 100), floor)),
-            data2: Math.floor(Math.max((Math.random() * 100), floor)),
-            data3: Math.floor(Math.max((Math.random() * 100), floor)),
-            data4: Math.floor(Math.max((Math.random() * 100), floor)),
-            data5: Math.floor(Math.max((Math.random() * 100), floor)),
-            data6: Math.floor(Math.max((Math.random() * 100), floor)),
-            data7: Math.floor(Math.max((Math.random() * 100), floor)),
-            data8: Math.floor(Math.max((Math.random() * 100), floor)),
-            data9: Math.floor(Math.max((Math.random() * 100), floor))
-        });
-    }
-    return data;
-};
-
 var barChartStore = Ext.create('Ext.data.JsonStore', {
-    fields: ['name', 'data1', 'data2', 'data3', 'data4', 'data5', 'data6', 'data7', 'data9', 'data9'],
-    data: generateData()
+    fields: ['label', 'amount'],
+    data: []
 });
 
 var barChart = Ext.create('Ext.chart.Chart', {
@@ -37,23 +11,23 @@ var barChart = Ext.create('Ext.chart.Chart', {
     animate: false,
     shadow: true,
     width: 1165,
-    height: 200,
+    height: 280,
     store: barChartStore,
     axes: [{
         type: 'Numeric',
         position: 'left',
-        fields: ['data1'],
+        fields: ['amount'],
         label: {
             renderer: Ext.util.Format.numberRenderer('0,0')
         },
-        title: 'Number of Hits',
+        title: 'Amount spent',
         grid: true,
-        minimum: 0
+        minimum: 'auto'
     }, {
         type: 'Category',
         position: 'bottom',
-        fields: ['name'],
-        title: 'Month of the Year'
+        fields: ['label'],
+        //title: 'Expense category'
     }],
     series: [{
         type: 'column',
@@ -69,17 +43,35 @@ var barChart = Ext.create('Ext.chart.Chart', {
           width: 140,
           height: 28,
           renderer: function(storeItem, item) {
-            this.setTitle(storeItem.get('name') + ': ' + storeItem.get('data1') + ' $');
+            this.setTitle(storeItem.get('label') + ': ' + storeItem.get('amount'));
           }
         },
         label: {
             display: 'insideEnd', 'text-anchor': 'middle',
-            field: 'data1',
+            field: 'amount',
             renderer: Ext.util.Format.numberRenderer('0'),
             orientation: 'vertical',
             color: '#333'
         },
-        xField: 'name',
-        yField: 'data1'
-    }]
+        xField: 'label',
+        yField: 'amount'
+    }],
+
+    load: function(startDate, endDate) {
+
+        // Load aggregated expense list from server
+        // ---------------------------------------------------------------------------------
+        $.ajax({
+            type: 'GET',
+            url: '/api/getAggregatedExpensesByTags?startDate=' + startDate + '&endDate=' + endDate,
+            success: function(data) {
+                barChart.store.loadData(data);
+            },
+            contentType: 'application/json; charset=utf-8'
+        });
+
+
+    }
+
+
 });
