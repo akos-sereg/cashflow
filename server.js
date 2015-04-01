@@ -127,7 +127,6 @@ router.route('/setTag')
         connection.query('DELETE FROM cashflow.expense_tag WHERE transactionId = ?', [ req.body['transactionId'] ],
             function(err, rows, fields) {
 
-                //INSERT INTO cashflow.expense_tag (transactionId, tag_id) VALUES(?, (SELECT tag_id FROM cashflow.tag WHERE label = ?))
                 if (err) {
                     console.log(err);
                     return;
@@ -160,7 +159,8 @@ router.route('/getAggregatedExpensesByTags')
             + '  JOIN cashflow.expense_tag et ON (et.transactionId = e.transactionId) '
             + '  JOIN cashflow.tag t ON (t.id = et.tag_id) '
             + 'WHERE e.expense_date BETWEEN ? AND ? '
-            + 'GROUP BY t.id',
+            + 'GROUP BY t.id '
+            + 'ORDER BY amount DESC',
             [
                 req.param('startDate'),
                 req.param('endDate')

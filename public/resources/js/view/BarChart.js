@@ -35,15 +35,15 @@ var barChart = Ext.create('Ext.chart.Chart', {
         highlight: false,
         renderer: function(sprite, record, attr, index, store){
            return Ext.apply(attr, {
-              fill: '#DDB880'
+              fill: '#D0D0D0'
            });
         },
         tips: {
           trackMouse: true,
-          width: 140,
+          width: 190,
           height: 28,
           renderer: function(storeItem, item) {
-            this.setTitle(storeItem.get('label') + ': ' + storeItem.get('amount'));
+            this.setTitle(storeItem.get('label') + ': ' + formatAmount(storeItem.get('amount')));
           }
         },
         label: {

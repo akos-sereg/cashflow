@@ -65,8 +65,6 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
                     return title;
                 } });
 
-                //cashflowChart.setTitle('Graph (' + data[0].data.length + ' records)');
-
             },
             contentType: 'application/json; charset=utf-8'
         });

@@ -36,9 +36,16 @@ ExpenseAggregator.prototype.GetAggregatedAmount = function(dayFromEpoch) {
     return this.currentAmount;
 }
 
+ExpenseAggregator.prototype.FormatAmount = function(amount) {
+    var x = Math.ceil(amount);
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return parts.join(".");
+}
+
 ExpenseAggregator.prototype.GetAggregatedTitle = function(dayFromEpoch) {
 
-    var title = this.currentAmount + '<br/><br/>';
+    var title = this.FormatAmount(this.currentAmount) + '<br/><br/>';
     var expenseAdded = false;
 
     for (var i=0; i!=this.rows.length; i++) {
