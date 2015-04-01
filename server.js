@@ -150,6 +150,32 @@ router.route('/setTag')
             });
      });
 
+// Get aggregated expenses by tag (for Bar Chart)
+router.route('/getAggregatedExpensesByTags')
+
+    .get(function(req, res) {
+
+        connection.query('SELECT SUM(e.expense_value) amount, t.label '
+            + 'FROM cashflow.expense e '
+            + '  JOIN cashflow.expense_tag et ON (et.transactionId = e.transactionId) '
+            + '  JOIN cashflow.tag t ON (t.id = et.tag_id) '
+            + 'WHERE e.expense_date BETWEEN ? AND ? '
+            + 'GROUP BY t.id',
+            [
+                req.param('startDate'),
+                req.param('endDate')
+            ],
+            function(err, rows, fields) {
+
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                res.send(rows);
+            });
+     });
+
 app.use('/api', router);
 
 
