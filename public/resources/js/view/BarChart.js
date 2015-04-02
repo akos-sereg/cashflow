@@ -11,7 +11,7 @@ var barChart = Ext.create('Ext.chart.Chart', {
     animate: false,
     shadow: true,
     width: 700,
-    height: 280,
+    height: 240,
     store: barChartStore,
     axes: [{
         type: 'Numeric',
@@ -48,7 +48,9 @@ var barChart = Ext.create('Ext.chart.Chart', {
         label: {
             display: 'insideEnd', 'text-anchor': 'middle',
             field: 'amount',
-            renderer: Ext.util.Format.numberRenderer('0'),
+            renderer: function(value) {
+                return formatAmount(value);
+            },
             orientation: 'vertical',
             color: '#333'
         },

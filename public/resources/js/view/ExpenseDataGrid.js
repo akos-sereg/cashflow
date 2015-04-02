@@ -113,7 +113,6 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
     ],
     height: 550,
     width: 1200,
-    //title: 'Expense List',
     border: false,
     viewConfig: {
         stripeRows: false

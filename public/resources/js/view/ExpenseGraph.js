@@ -2,7 +2,7 @@ Ext.require([
     'Ext.util.*',
 ]);
 
-var cashflowChartHeight = 280;
+var cashflowChartHeight = 220;
 var cashflowChart = Ext.create('Ext.form.FormPanel', {
     border     : false,
     width      : 1165,
@@ -12,7 +12,7 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
         // Placeholder for Rickshaw Graph
         xtype: 'panel',
         html: '<div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>'
-            + '<div id="chart" style="position: relative; left: 40px; width: 635px; height: '+cashflowChartHeight+'px;"></div>'
+            + '<div id="chart" style="position: relative; left: 40px; width: 635px; height: '+(cashflowChartHeight+80)+'px;"></div>'
     }],
     clear: function() {
         $('#y_axis').html('');
@@ -47,7 +47,7 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
 
                 var y_ticks = new Rickshaw.Graph.Axis.Y( {
                     graph: graph,
-                    tickFormat: function(y){return y}
+                    tickFormat: function(y){ return formatAmount(y) }
                 } );
 
                 graph.render();
