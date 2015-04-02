@@ -1,4 +1,4 @@
-var store = Ext.create('Ext.data.JsonStore', {
+var pieChartStore = Ext.create('Ext.data.JsonStore', {
     fields: ['label', 'amount'],
     data: []
 });
@@ -6,39 +6,10 @@ var store = Ext.create('Ext.data.JsonStore', {
 var pieChart = Ext.create('Ext.chart.Chart', {
     width: 300,
     height: 250,
-    animate: true,
-    store: store,
+    animate: false,
+    store: pieChartStore,
     theme: 'Base:gradients',
-    series: [{
-        type: 'pie',
-        angleField: 'amount',
-        showInLegend: false,
-        tips: {
-            trackMouse: true,
-            width: 140,
-            height: 28,
-            renderer: function (storeItem, item) {
-                // calculate and display percentage on hover
-                var total = 0;
-                store.each(function (rec) {
-                    total += rec.get('amount');
-                });
-                this.setTitle(storeItem.get('label') + ': ' + Math.round(storeItem.get('amount') / total * 100) + '%');
-            }
-        },
-        highlight: {
-            segment: {
-                margin: 20
-            }
-        },
-        label: {
-            field: 'label',
-            display: 'rotate',
-            contrast: true,
-            font: '10px Tahoma'
-        },
-        colorSet: ["#ECE1AF", "#C6B775", "#EDD468", "#EDDB8B", "#FFEB96" ],
-    }],
+    series: [ getSeries() ],
 
     load: function(startDate, endDate) {
 
@@ -77,6 +48,9 @@ var pieChart = Ext.create('Ext.chart.Chart', {
                     }
                 }
 
+
+                pieChart.series.removeAll(pieChart.series.items);
+                pieChart.series.addAll([ getSeries() ]);
                 pieChart.store.loadData(displayedData);
 
             },
@@ -84,3 +58,37 @@ var pieChart = Ext.create('Ext.chart.Chart', {
         });
     }
 });
+
+function getSeries() {
+    return {
+        type: 'pie',
+        angleField: 'amount',
+        showInLegend: false,
+        tips: {
+            trackMouse: true,
+            width: 140,
+            height: 28,
+            renderer: function (storeItem, item) {
+                // calculate and display percentage on hover
+                var total = 0;
+                pieChartStore.each(function (rec) {
+                    total += rec.get('amount');
+                });
+                this.setTitle(storeItem.get('label') + ': ' + Math.round(storeItem.get('amount') / total * 100) + '%');
+            }
+        },
+        highlight: {
+            segment: {
+                margin: 2
+            }
+        },
+        label: {
+            visible: false,
+            field: 'label',
+            display: 'rotate',
+            contrast: true,
+            font: '10px Tahoma'
+        },
+        colorSet: ["#ECE1AF", "#C6B775", "#EDD468", "#EDDB8B", "#FFEB96" ],
+    };
+}
