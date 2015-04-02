@@ -83,18 +83,19 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
                 valueField : 'label',
                 store: tagStore,
                 listeners: {
-                    change: function(ele, newValue, oldValue) {
-                        if (newValue != null) {
-
-                            console.log('Tag selected for expense item: ' + newValue);
-
-                            var selectedRows = expenseDataGrid.getSelectionModel().getSelection();
-                            if (selectedRows != null && selectedRows.length == 1) {
-
-                                expenseDataGrid.setTag(selectedRows[0].data.transactionId, newValue);
-                            }
+                    focus: function(field) {
+                        var selectedRows = expenseDataGrid.getSelectionModel().getSelection();
+                        if (selectedRows != null && selectedRows.length == 1) {
+                            this.selectedTransactionId = selectedRows[0].data.transactionId;
+                            console.log('Selected Row (transaction id) : ' + selectedRows[0].data.transactionId);
                         }
                     },
+                    select: function (combobox, record, index) {
+                        console.log('Setting tag "' + record[0].data.label + '" for transaction ' + this.selectedTransactionId);
+                        expenseDataGrid.setTag(this.selectedTransactionId, record[0].data.label);
+
+                        combobox.fireEvent('blur');
+                    }
                 }
             }
         },
