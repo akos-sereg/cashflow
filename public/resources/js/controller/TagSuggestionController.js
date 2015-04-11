@@ -1,29 +1,13 @@
 function TagSuggestionController() {
 
-    this.suggestions = [
-        { contains: 'Magyar Telekom Nyrt.', tag: 'Mobile' },
-        { contains: 'CBA', tag: 'Bevasarlas' },
-        { contains: 'AUCHAN', tag: 'Bevasarlas' },
-        { contains: 'IKEA', tag: 'Bevasarlas' },
-        { contains: 'ROSSMANN', tag: 'Bevasarlas' },
-        { contains: 'SPAR', tag: 'Bevasarlas' },
-        { contains: 'LIDL', tag: 'Bevasarlas' },
-        { contains: 'OBI', tag: 'Bevasarlas' },
-        { contains: 'Hachapuri Kft', tag: 'Szorakozas' },
-        { contains: 'ZOLD OLIVA ETTEREM', tag: 'Ebed' },
-        { contains: 'GRINGOS AMIGOS', tag: 'Ebed' },
-        { contains: 'BURGER KING', tag: 'Ebed' },
-        { contains: 'CHARLES VOGELE', tag: 'Oltozkodes' },
-        { contains: 'C A ARENA', tag: 'Oltozkodes' },
-        { contains: 'C A ALLEE', tag: 'Oltozkodes' },
-        { contains: 'DECATHLON', tag: 'Bevasarlas' },
-        { contains: 'TESCO', tag: 'Bevasarlas' },
-        { contains: 'UNIQA', tag: 'Savings (LT)' },
-        { contains: 'MOL HUNG', tag: 'Auto' },
-        { contains: 'OMV', tag: 'Auto' },
-        { contains: 'SHELL', tag: 'Auto' },
-        { contains: 'K H Biztosito', tag: 'Auto' },
-    ];
+    // Load "suggestions" list from existing tag associations
+    var tagAssociations = tagAssociationsGrid.store.rawData;
+    this.suggestions = [];
+    if (tagAssociations != null && tagAssociations != undefined) {
+        for (var i=0; i!=tagAssociations.length; i++) {
+            this.suggestions.push({contains: tagAssociations[i].pattern, tag: tagAssociations[i].label});
+        }
+    }
 
     this.configuration = {
         SuggestAlways : false           // Suggest even if expense record is already tagged

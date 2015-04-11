@@ -53,6 +53,7 @@ var tagAssociationsGrid = Ext.create('Ext.grid.Panel', {
             success: function(data) {
                 console.log('Tag Association list loaded from server: ' + data.length + ' records.');
                 tagAssociationsGrid.store.loadData(data);
+                tagAssociationsGrid.store.rawData = data;
             },
             contentType: 'application/json; charset=utf-8'
         });
