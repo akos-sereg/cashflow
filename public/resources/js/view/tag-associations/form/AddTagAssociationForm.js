@@ -56,6 +56,7 @@ var addTagAssociationForm = Ext.create('Ext.form.Panel', {
 
                         if (data.isSuccess) {
                             tagAssociationsGrid.load();
+                            addTagAssociationForm.clear();
                         }
                         else {
                             console.log(data.errorMessage);
@@ -65,5 +66,9 @@ var addTagAssociationForm = Ext.create('Ext.form.Panel', {
                 });
             }
         }
-    }]
+    }],
+    clear: function() {
+        addTagAssociationForm.getForm().findField('ruleName').setValue('');
+        addTagAssociationForm.getForm().findField('pattern').setValue('');
+    }
 });
