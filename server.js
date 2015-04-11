@@ -192,6 +192,28 @@ router.route('/addTagAssociation')
              });
       });
 
+router.route('/removeTagAssociation')
+
+     .post(function(req, res) {
+
+         if (req.body['ruleId'].length == 0) {
+            res.send({isSuccess: false, errorMessage: 'Request validation failed'});
+            return;
+         }
+
+         connection.query('DELETE FROM cashflow.tag_rule WHERE rule_id = ?',
+             [ req.body['ruleId'] ],
+             function(err, rows, fields) {
+
+                 if (err) {
+                     console.log(err);
+                     res.send({isSuccess: false, errorMessage: err});
+                     return;
+                 }
+
+                 res.send({isSuccess: true, errorMessage: null});
+             });
+      });
 
 // Get aggregated expenses by tag (for Bar Chart)
 router.route('/getAggregatedExpensesByTags')

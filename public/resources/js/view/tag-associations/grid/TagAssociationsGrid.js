@@ -39,6 +39,12 @@ var tagAssociationsGrid = Ext.create('Ext.grid.Panel', {
             sortable : true,
             dataIndex: 'label'
         },
+        {
+            text     : 'Remove',
+            width    : 60,
+            dataIndex: 'rule_id',
+            renderer : renderDeleteIcon
+        }
     ],
     height: 350,
     width: 1200,
@@ -58,6 +64,30 @@ var tagAssociationsGrid = Ext.create('Ext.grid.Panel', {
             contentType: 'application/json; charset=utf-8'
         });
     },
+    removeTagAssociation: function(ruleId) {
+         $.ajax({
+            type: 'POST',
+            url: '/api/removeTagAssociation',
+            data: { ruleId: ruleId },
+            success: function(data) {
+
+                if (data.isSuccess) {
+                    tagAssociationsGrid.load();
+                    return;
+                }
+
+                console.log(data.errorMessage);
+            },
+            contentType: 'application/x-www-form-urlencoded'
+        });
+    }
 });
+
+function renderDeleteIcon(value) {
+
+    return '<img style="cursor: cursor; cursor: hand;" '
+    + ' onClick=\'tagAssociationsGrid.removeTagAssociation(' + value + ')\''
+    + ' src="resources/images/delete.png">';
+}
 
 tagAssociationsGrid.load();
