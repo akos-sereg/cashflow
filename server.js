@@ -149,6 +149,26 @@ router.route('/setTag')
             });
      });
 
+// Rules (tag associations)
+router.route('/getTagAssociations')
+
+     .get(function(req, res) {
+
+         connection.query('SELECT tr.rule_id, tr.name, tr.pattern, tr.tag_id, t.label '
+         + ' FROM cashflow.tag_rule tr '
+         + ' JOIN cashflow.tag t ON (tr.tag_id = t.id) '
+         + ' ORDER BY name ASC', [ ],
+             function(err, rows, fields) {
+
+                 if (err) {
+                     console.log(err);
+                     return;
+                 }
+
+                 res.send(rows);
+             });
+  });
+
 // Get aggregated expenses by tag (for Bar Chart)
 router.route('/getAggregatedExpensesByTags')
 

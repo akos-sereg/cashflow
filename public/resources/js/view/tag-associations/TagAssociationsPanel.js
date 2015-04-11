@@ -6,18 +6,11 @@ var tagAssociationsPanel = Ext.create('Ext.form.Panel', {
         console.log('Initializing tag associations panel');
     },
     items: [{
-        layout: {
-            type: 'hbox'
-        },
-        width: 800,
+        anchor: '100%',
         align: 'left',
         border: false,
         items: [
-            {
-                xtype: 'button',
-                margins: '5 5 5 5',
-                text : 'asd'
-            },
+            tagAssociationsGrid
        ],
     }]
 });
