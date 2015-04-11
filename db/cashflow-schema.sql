@@ -1,7 +1,7 @@
 -- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------
--- Server version	5.5.40-0ubuntu0.12.04.1
+-- Server version	5.5.41-0ubuntu0.14.04.1
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -58,9 +58,9 @@ CREATE TABLE `expense` (
   `insert_date` date DEFAULT NULL,
   `user_comment` text,
   `account_id` int(11) DEFAULT NULL,
+  `modified_date` date DEFAULT NULL,
   PRIMARY KEY (`transactionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 --
 -- Definition of table `expense_tag`
@@ -85,7 +85,7 @@ CREATE TABLE `tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tag`
@@ -110,8 +110,20 @@ INSERT INTO `tag` (`id`,`label`) VALUES
  (21,'Savings (Short term)'),
  (22,'Transaction fee'),
  (23,'Gifts');
-/*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 
+
+--
+-- Definition of table `tag_rule`
+--
+
+DROP TABLE IF EXISTS `tag_rule`;
+CREATE TABLE `tag_rule` (
+  `rule_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  `pattern` varchar(128) DEFAULT NULL,
+  `tag_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`rule_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 --
 -- Definition of function `count_expenses`
