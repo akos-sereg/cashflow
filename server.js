@@ -169,6 +169,30 @@ router.route('/getTagAssociations')
              });
   });
 
+router.route('/addTagAssociation')
+
+     .post(function(req, res) {
+
+         if (req.body['ruleName'].length == 0 || req.body['pattern'].length == 0 || req.body['tagLabel'].length == 0) {
+            res.send({isSuccess: false, errorMessage: 'Request validation failed'});
+            return;
+         }
+
+         connection.query('INSERT INTO cashflow.tag_rule (rule_id, name, pattern, tag_id) VALUES (DEFAULT, ?, ?, (SELECT id FROM cashflow.tag WHERE label = ?))',
+             [ req.body['ruleName'], req.body['pattern'], req.body['tagLabel'] ],
+             function(err, rows, fields) {
+
+                 if (err) {
+                     console.log(err);
+                     res.send({isSuccess: false, errorMessage: err});
+                     return;
+                 }
+
+                 res.send({isSuccess: true, errorMessage: null});
+             });
+      });
+
+
 // Get aggregated expenses by tag (for Bar Chart)
 router.route('/getAggregatedExpensesByTags')
 

@@ -46,7 +46,7 @@ var tagAssociationsGrid = Ext.create('Ext.grid.Panel', {
     viewConfig: {
         stripeRows: false
     },
-    load: function(startDate) {
+    load: function() {
         $.ajax({
             type: 'GET',
             url: '/api/getTagAssociations',
