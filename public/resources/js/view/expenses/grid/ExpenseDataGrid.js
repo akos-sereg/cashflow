@@ -115,7 +115,9 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
     height: 550,
     width: 1200,
     border: false,
-    viewConfig: {
+    scroll          : false, // using native scrolling, as ExtJS' grid scrolling is buggy in v4
+    viewConfig      : {
+        style: { overflow: 'auto', overflowX: 'hidden' },
         stripeRows: false
     },
     load: function(startDate, endDate) {
