@@ -4,28 +4,6 @@ Ext.require([
     'Ext.util.*',
 ]);
 
-function renderAmount(amount) {
-
-    if (!isNaN(amount.Value)) {
-        if (amount.Value > 0) {
-            return '<span style="color: #009900;">' + amount.Display + '</span>';
-        } else {
-            return '<span style="color: #000000;">' + amount.Display + '</span>';
-        }
-    } else {
-        return '<span style="color: #dd0000;">' + amount.Display + '</span>';
-    }
-}
-
-function renderDate(date) {
-
-    if (date.Value != null) {
-        return '<span style="color: #000000;">' + date.Display + '</span>';
-    } else {
-        return '<span style="color: #dd0000;">' + date.Display + '</span>';
-    }
-}
-
 // create the data store
 var store = Ext.create('Ext.data.JsonStore', {
     fields: [
@@ -45,7 +23,9 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             width    : 75,
             sortable : false,
             dataIndex: 'Date',
-            renderer: renderDate
+            renderer: function(date) {
+                return '<span style="color: #'+(date.Value != null ? '000000' : 'dd0000')+';">' + date.Display + '</span>';
+            }
         },
         {
             text     : 'Title',
@@ -57,7 +37,17 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             text     : 'Amount',
             width    : 75,
             sortable : true,
-            renderer : renderAmount,
+            renderer : function(amount) {
+                if (!isNaN(amount.Value)) {
+                    if (amount.Value > 0) {
+                        return '<span style="color: #009900;">' + amount.Display + '</span>';
+                    } else {
+                        return '<span style="color: #000000;">' + amount.Display + '</span>';
+                    }
+                } else {
+                    return '<span style="color: #dd0000;">' + amount.Display + '</span>';
+                }
+            },
             dataIndex: 'Amount'
         },
         {
@@ -65,7 +55,17 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             flex     : 1,
             sortable : true,
             dataIndex: 'Location'
-        }
+        },
+        {
+            text     : 'Delete',
+            width    : 60,
+            dataIndex: 'Hash',
+            renderer : function(value, meta, record, rowIndex, colIndex, store, view) {
+                return '<img style="cursor: cursor; cursor: hand;" '
+                    + ' onClick=\'cashflowGrid.store.removeAt('+rowIndex+');\''
+                    + ' src="resources/images/delete.png">';
+            }
+        },
     ],
     height: 380,
     width: 1165,
