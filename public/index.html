@@ -51,15 +51,6 @@
 
 
         Ext.onReady(function() {
-            var currentName;
-            var replace = function(config, name) {
-                var btns = Ext.getCmp('btns');
-                if (name && name != currentName) {
-                    currentName = name;
-                    btns.remove(0);
-                    btns.add(Ext.apply(config));
-                }
-            };
 
             Ext.create('Ext.panel.Panel', {
                 width: 1420,
@@ -72,14 +63,6 @@
                     bodyPadding: 15
                 },
                 items: [
-                /*{
-                    title: 'Footer',
-                    region: 'south',
-                    height: 150,
-                    minHeight: 75,
-                    maxHeight: 250,
-                    html: 'Footer content'
-                },*/
                 {
                     title: 'Navigation',
                     region:'west',
@@ -102,7 +85,8 @@
             });
 
             // Hide non-active panels
-            tagAssociationsPanel.getEl().hide();
+            //tagAssociationsPanel.getEl().hide();
+            navigationPanel.navigate('expense');
         });
 
 
