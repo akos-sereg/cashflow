@@ -1,4 +1,4 @@
-Ext.define('Cashflow.view.UploadExpensesWindow', {
+Ext.define('Cashflow.view.expenses.input.popup.UploadExpensesWindow', {
     extend: 'Ext.window.Window',
 
     height: 634,
@@ -10,6 +10,9 @@ Ext.define('Cashflow.view.UploadExpensesWindow', {
     closeable: true,
 
     initComponent: function () {
+
+        var windowController = Ext.create('Cashflow.controller.expenses.input.popup.UploadExpensesWindowController');
+        windowController.setView(this);
 
         // Build Component
         var me = this;
@@ -26,29 +29,6 @@ Ext.define('Cashflow.view.UploadExpensesWindow', {
         me.callParent(arguments);
 
         // Start Uploading ...
-        var data = [];
-
-        for (var i=0; i!=cashflowGrid.store.data.length; i++) {
-            if (cashflowGrid.store.data.items[i].data.Valid) {
-                cashflowGrid.store.data.items[i].data.Hash = cashflowGrid.store.data.items[i].data.GetHash().toString();
-                data.push(cashflowGrid.store.data.items[i].data);
-            }
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: '/api/storeExpenses',
-            data: JSON.stringify(data),
-            success: function(data) {
-
-                var message = '';
-                for (var i=0; i!=data.length; i++) {
-                    message += data[i] + '\r\n';
-                }
-
-                Ext.getCmp('uploadConsole').setValue(message);
-            },
-            contentType: 'application/json; charset=utf-8'
-        });
+        windowController.sendExpenses();
     }
 });

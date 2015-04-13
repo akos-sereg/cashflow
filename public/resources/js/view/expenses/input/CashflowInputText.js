@@ -1,4 +1,3 @@
-//var cashflowInput = Ext.create('Ext.form.FormPanel', {
 Ext.define('Cashflow.view.expenses.input.CashflowInputText', {
     extend     : 'Ext.form.FormPanel',
     title      : 'Paste your expense log here',

@@ -5,8 +5,15 @@ Ext.Loader.setConfig({
     }
 });
 
+//Ext.require([ 'Cashflow.controller.expenses.input.popup.UploadExpensesWindowController' ]);
+
 var cashflowInput = Ext.create('Cashflow.view.expenses.input.CashflowInputText');
 var cashflowInputController = Ext.create('Cashflow.controller.expenses.input.CashflowInputTextController');
+
+var cashflowGrid = Ext.create('Cashflow.view.expenses.input.InputGrid');
+var cashflowGridController = Ext.create('Cashflow.controller.expenses.input.InputGridController');
+
+var expensesPanelController = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
 
 // -----------------------------------------------------------------------
 // Tab pages
@@ -44,7 +51,7 @@ var tabs = Ext.create('Ext.tab.Panel', {
                     text : 'Send',
                     listeners: {
                         click: function () {
-                            Ext.create('Cashflow.view.UploadExpensesWindow').show();
+                            expensesPanelController.onSendClicked();
                         }
                     }
                 }, {

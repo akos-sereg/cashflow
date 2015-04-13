@@ -5,7 +5,7 @@ Ext.require([
 ]);
 
 // create the data store
-var store = Ext.create('Ext.data.JsonStore', {
+var cashflowGridStore = Ext.create('Ext.data.JsonStore', {
     fields: [
        {name: 'Date'},
        {name: 'Title'},
@@ -14,8 +14,9 @@ var store = Ext.create('Ext.data.JsonStore', {
     ]
 });
 
-var cashflowGrid = Ext.create('Ext.grid.Panel', {
-    store: store,
+Ext.define('Cashflow.view.expenses.input.InputGrid', {
+    extend: 'Ext.grid.Panel',
+    store: cashflowGridStore,
     margins: '10 10 10 10',
     columns: [
         {
@@ -62,7 +63,7 @@ var cashflowGrid = Ext.create('Ext.grid.Panel', {
             dataIndex: 'Hash',
             renderer : function(value, meta, record, rowIndex, colIndex, store, view) {
                 return '<img style="cursor: cursor; cursor: hand;" '
-                    + ' onClick=\'cashflowGrid.store.removeAt('+rowIndex+');\''
+                    + ' onClick=\'cashflowGridController.removeItem('+rowIndex+');\''
                     + ' src="resources/images/delete.png">';
             }
         },
