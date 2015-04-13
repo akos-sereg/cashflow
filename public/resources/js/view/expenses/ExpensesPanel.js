@@ -1,3 +1,13 @@
+Ext.Loader.setConfig({
+    enabled : true,
+    paths   : {
+        Cashflow : 'resources/js'
+    }
+});
+
+var cashflowInput = Ext.create('Cashflow.view.expenses.input.CashflowInputText');
+var cashflowInputController = Ext.create('Cashflow.controller.expenses.input.CashflowInputTextController');
+
 // -----------------------------------------------------------------------
 // Tab pages
 // -----------------------------------------------------------------------

@@ -1,4 +1,6 @@
-var cashflowInput = Ext.create('Ext.form.FormPanel', {
+//var cashflowInput = Ext.create('Ext.form.FormPanel', {
+Ext.define('Cashflow.view.expenses.input.CashflowInputText', {
+    extend     : 'Ext.form.FormPanel',
     title      : 'Paste your expense log here',
     width      : 1165,
     bodyPadding: 10,
@@ -10,10 +12,9 @@ var cashflowInput = Ext.create('Ext.form.FormPanel', {
         fieldLabel: 'CSV Content',
         anchor    : '100%',
         listeners : {
-            change: function(logEntry, newValue, oldValue, eOpts ) {
+            change: function(logEntry, newValue, oldValue, eOpts) {
 
-                var expenseParser = new ExpenseParser();
-                cashflowGrid.store.loadData(expenseParser.Parse(newValue));
+                cashflowInputController.onInput(logEntry, newValue, oldValue, eOpts);
             }
         }
     }]
