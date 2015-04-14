@@ -8,6 +8,8 @@ var expenseDataGrid           = Ext.create('Cashflow.view.expenses.grid.ExpenseD
 var expenseDataGridController = Ext.create('Cashflow.controller.expenses.grid.ExpenseDataGridController');
 var dateRangePicker           = Ext.create('Cashflow.view.expenses.navigation.DateRangePicker');
 var dateRangePickerController = Ext.create('Cashflow.controller.expenses.navigation.DateRangePickerController');
+var cashflowChart             = Ext.create('Cashflow.view.expenses.charts.ExpenseGraph');
+var cashflowChartController   = Ext.create('Cashflow.controller.expenses.charts.ExpenseGraphController');
 
 var expensesPanelController = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
 

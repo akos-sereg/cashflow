@@ -2,8 +2,8 @@ Ext.require([
     'Ext.util.*',
 ]);
 
-var cashflowChartHeight = 220;
-var cashflowChart = Ext.create('Ext.form.FormPanel', {
+Ext.define('Cashflow.view.expenses.charts.ExpenseGraph', {
+    extend: 'Ext.form.FormPanel',
     border     : false,
     width      : 1165,
     bodyPadding: 10,
@@ -12,60 +12,13 @@ var cashflowChart = Ext.create('Ext.form.FormPanel', {
         // Placeholder for Rickshaw Graph
         xtype: 'panel',
         html: '<div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>'
-            + '<div id="chart" style="position: relative; left: 40px; width: 635px; height: '+(cashflowChartHeight+80)+'px;"></div>'
+            + '<div id="chart" style="position: relative; left: 40px; width: 635px; height: '+(220 /* preferred height */ + 80)+'px;"></div>'
     }],
     clear: function() {
         $('#y_axis').html('');
         $('#chart').html('');
     },
-    load: function(startDate, endDate) {
-
-        this.clear();
-
-        // Load expense list from server
-        // ---------------------------------------------------------------------------------
-
-        $.ajax({
-            type: 'GET',
-            url: '/api/getAggregatedExpenses?startDate=' + startDate + '&endDate=' + endDate,
-            success: function(data) {
-
-                // Render Graph
-                // ---------------------------------------------------------------------------------
-                var graph = new Rickshaw.Graph( {
-                    element: document.getElementById('chart'),
-                    renderer: 'line',
-                    height: cashflowChartHeight,
-                    width: 1165,
-                    min: 'auto',
-                    interpolation: 'linear',
-                    series: [{
-                            data: data[0].data,
-                            color: "#c05020"
-                    }]
-                } );
-
-                var y_ticks = new Rickshaw.Graph.Axis.Y( {
-                    graph: graph,
-                    tickFormat: function(y){ return formatAmount(y) }
-                } );
-
-                graph.render();
-
-                var detail = new Rickshaw.Graph.HoverDetail({ graph: graph,
-                formatter: function(series, x, y) {
-                    var title = '';
-                    for (var i=0; i!=series.data.length; i++) {
-                        if (series.data[i].x == x) {
-                            title = series.data[i].title;
-                        }
-                    }
-
-                    return title;
-                } });
-
-            },
-            contentType: 'application/json; charset=utf-8'
-        });
+    getPreferredHeight: function() {
+        return 220;
     }
 });
