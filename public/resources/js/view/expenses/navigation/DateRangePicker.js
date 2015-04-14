@@ -1,4 +1,5 @@
-var dateRangePicker = Ext.create('Ext.form.FormPanel', {
+Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
+    extend: 'Ext.form.FormPanel',
     bodyPadding: 10,
     margins: '0 0 5 0',
     border: false,
@@ -53,7 +54,7 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
             Ext.getCmp('startDateControl').setValue(startDate);
             Ext.getCmp('endDateControl').setValue(endDate);
 
-            this.onRangeChanged();
+            dateRangePickerController.onRangeChanged();
             return;
         }
         else if (months == 1 && startDate.getDate() == 1) {
@@ -64,31 +65,21 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
             Ext.getCmp('startDateControl').setValue(startDate);
             Ext.getCmp('endDateControl').setValue(endDate);
 
-            this.onRangeChanged();
+            dateRangePickerController.onRangeChanged();
             return;
         }
 
         Ext.getCmp('startDateControl').setValue(Ext.Date.add(Ext.getCmp('startDateControl').getValue(), Ext.Date.MONTH, months));
         Ext.getCmp('endDateControl').setValue(Ext.Date.add(Ext.getCmp('endDateControl').getValue(), Ext.Date.MONTH, months));
 
-        this.onRangeChanged();
+        dateRangePickerController.onRangeChanged();
     },
 
     addDays: function(days) {
         Ext.getCmp('startDateControl').setValue(Ext.Date.add(Ext.getCmp('startDateControl').getValue(), Ext.Date.DAY, days));
         Ext.getCmp('endDateControl').setValue(Ext.Date.add(Ext.getCmp('endDateControl').getValue(), Ext.Date.DAY, days));
 
-        this.onRangeChanged();
+        dateRangePickerController.onRangeChanged();
     },
-
-    onRangeChanged: function() {
-        // "Persisted Data" tab
-        expenseDataGridController.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-
-        // "Graphs" tab
-        cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-        barChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-        pieChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-    }
 
 });

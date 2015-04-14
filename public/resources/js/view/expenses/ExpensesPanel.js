@@ -1,13 +1,13 @@
 //Ext.require([ 'Cashflow.controller.expenses.input.popup.UploadExpensesWindowController' ]);
 
-var cashflowInput = Ext.create('Cashflow.view.expenses.input.CashflowInputText');
-var cashflowInputController = Ext.create('Cashflow.controller.expenses.input.CashflowInputTextController');
-
-var cashflowGrid = Ext.create('Cashflow.view.expenses.input.InputGrid');
-var cashflowGridController = Ext.create('Cashflow.controller.expenses.input.InputGridController');
-
-var expenseDataGrid = Ext.create('Cashflow.view.expenses.grid.ExpenseDataGrid');
+var cashflowInput             = Ext.create('Cashflow.view.expenses.input.CashflowInputText');
+var cashflowInputController   = Ext.create('Cashflow.controller.expenses.input.CashflowInputTextController');
+var cashflowGrid              = Ext.create('Cashflow.view.expenses.input.InputGrid');
+var cashflowGridController    = Ext.create('Cashflow.controller.expenses.input.InputGridController');
+var expenseDataGrid           = Ext.create('Cashflow.view.expenses.grid.ExpenseDataGrid');
 var expenseDataGridController = Ext.create('Cashflow.controller.expenses.grid.ExpenseDataGridController');
+var dateRangePicker           = Ext.create('Cashflow.view.expenses.navigation.DateRangePicker');
+var dateRangePickerController = Ext.create('Cashflow.controller.expenses.navigation.DateRangePickerController');
 
 var expensesPanelController = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
 
@@ -18,7 +18,7 @@ var tabs = Ext.create('Ext.tab.Panel', {
     height: 600,
     listeners: {
         'tabchange': function(tabPanel, tab) {
-            dateRangePicker.onRangeChanged();
+            dateRangePickerController.onRangeChanged();
         }
     },
 
@@ -95,7 +95,6 @@ var tabs = Ext.create('Ext.tab.Panel', {
         ]
     }]
 });
-
 
 var expensesPanel = Ext.create('Ext.form.Panel', {
     border     : false,
