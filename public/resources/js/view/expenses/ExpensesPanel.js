@@ -10,6 +10,10 @@ var dateRangePicker           = Ext.create('Cashflow.view.expenses.navigation.Da
 var dateRangePickerController = Ext.create('Cashflow.controller.expenses.navigation.DateRangePickerController');
 var cashflowChart             = Ext.create('Cashflow.view.expenses.charts.ExpenseGraph');
 var cashflowChartController   = Ext.create('Cashflow.controller.expenses.charts.ExpenseGraphController');
+var barChart                  = Ext.create('Cashflow.view.expenses.charts.BarChart');
+var barChartController        = Ext.create('Cashflow.controller.expenses.charts.BarChartController');
+var pieChart                  = Ext.create('Cashflow.view.expenses.charts.PieChart');
+var pieChartController        = Ext.create('Cashflow.controller.expenses.charts.PieChartController');
 
 var expensesPanelController = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
 

@@ -6,7 +6,8 @@ var barChartStore = Ext.create('Ext.data.JsonStore', {
     data: []
 });
 
-var barChart = Ext.create('Ext.chart.Chart', {
+Ext.define('Cashflow.view.expenses.charts.BarChart', {
+    extend: 'Ext.chart.Chart',
     style: 'background: #fff',
     animate: false,
     shadow: true,
@@ -58,17 +59,4 @@ var barChart = Ext.create('Ext.chart.Chart', {
         yField: 'amount'
     }],
 
-    load: function(startDate, endDate) {
-
-        // Load aggregated expense list from server
-        // ---------------------------------------------------------------------------------
-        $.ajax({
-            type: 'GET',
-            url: '/api/getAggregatedExpensesByTags?startDate=' + startDate + '&endDate=' + endDate,
-            success: function(data) {
-                barChart.store.loadData(data);
-            },
-            contentType: 'application/json; charset=utf-8'
-        });
-    }
 });

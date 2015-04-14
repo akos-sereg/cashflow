@@ -7,7 +7,7 @@ Ext.define('Cashflow.controller.expenses.navigation.DateRangePickerController', 
 
         // "Graphs" tab
         cashflowChartController.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-        barChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
-        pieChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+        barChartController.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+        pieChartController.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
     }
 });
