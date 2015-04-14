@@ -17,30 +17,11 @@ var expenseDataGridStore = Ext.create('Ext.data.JsonStore', {
     ]
 });
 
-var tagStore = Ext.create('Ext.data.Store', {
-	autoLoad: true,
-	fields: [
-        {name: 'id', type: 'int'},
-        {name: 'label', type: 'string'}
-    ],
-	proxy: {
-        type: 'ajax',
-        url: '/api/getTags',
-        reader: {
-        	type: 'json',
-        	root: 'data'
-        }
-    },
-    listeners: {
-    	load: function(){
-    		console.log('Tag store loaded');
-    	}
-    }
-});
-
 // Components
 // -------------------------------------------------------------------------------------
-var expenseDataGrid = Ext.create('Ext.grid.Panel', {
+//var expenseDataGrid = Ext.create('Ext.grid.Panel', {
+Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
+    extend: 'Ext.grid.Panel',
     store: expenseDataGridStore,
     margins: '0 0 0 0',
     plugins: [
@@ -92,7 +73,7 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
                     },
                     select: function (combobox, record, index) {
                         console.log('Setting tag "' + record[0].data.label + '" for transaction ' + this.selectedTransactionId);
-                        expenseDataGrid.setTag(this.selectedTransactionId, record[0].data.label);
+                        expenseDataGridController.setTag(this.selectedTransactionId, record[0].data.label);
 
                         combobox.fireEvent('blur');
                     }
@@ -103,7 +84,24 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
             text     : 'Accept',
             width    : 60,
             dataIndex: 'tag_suggestion_descriptor', // "<transacrionId>,<suggestedTagLabel>"
-            renderer : renderIcon
+            renderer : function(value) {
+                if (value != null && value != '') {
+                    var args = value.split(',');
+
+                    if (args == null || args.length != 2) {
+                        console.log('Warning: Invalid argument for "Tag suggestion descriptor": ' + value + '. Value should be in form "<transacrionId>,<suggestedTagLabel>"');
+                        console.log('Ignoring suggestion');
+                        return '';
+                    }
+
+                    return '<img style="cursor: cursor; cursor: hand;" '
+                        + ' onClick=\'expenseDataGridController.setTag(\"'+args[0]+'\", \"'+ args[1] +'\")\''
+                        + ' src="resources/images/green_check.png">';
+                }
+                else {
+                   return '';
+                }
+            }
         },
         {
             text     : 'Tag Suggestion',
@@ -120,71 +118,5 @@ var expenseDataGrid = Ext.create('Ext.grid.Panel', {
         style: { overflow: 'auto', overflowX: 'hidden' },
         stripeRows: false
     },
-    load: function(startDate, endDate) {
-        $.ajax({
-            type: 'GET',
-            url: '/api/getExpenses?startDate=' + startDate + '&endDate=' + endDate,
-            success: function(data) {
 
-                console.log('Expense list loaded from server: ' + data.length + ' records.');
-
-                var tagSuggestionController = new TagSuggestionController();
-                tagSuggestionController.AttachSuggestions(data)
-
-                expenseDataGrid.store.loadData(data);
-                expenseDataGrid.store.rawData = data;
-            },
-            contentType: 'application/json; charset=utf-8'
-        });
-    },
-    setTag: function(transactionId, tagLabel) {
-
-        var formData = {
-            tagLabel: tagLabel,
-            transactionId: transactionId
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: '/api/setTag',
-            data: formData,
-            success: function(data) {
-
-                console.log('Expense tag set successfully. Tag: ' + tagLabel + ', Transaction ID: ' + transactionId);
-
-                // Update corresponding expense record
-                for (var i=0; i!=expenseDataGrid.store.rawData.length; i++) {
-                    if (expenseDataGrid.store.rawData[i].transactionId == transactionId) {
-                        expenseDataGrid.store.rawData[i].tag = tagLabel;
-                        expenseDataGrid.store.rawData[i].tag_suggestion = null;
-                        expenseDataGrid.store.rawData[i].tag_suggestion_descriptor = null;
-                    }
-                }
-
-                expenseDataGrid.store.loadData(expenseDataGrid.store.rawData);
-            },
-            contentType: 'application/x-www-form-urlencoded'
-        });
-    }
 });
-
-function renderIcon(value) {
-
-    if (value != null && value != '') {
-
-        var args = value.split(',');
-
-        if (args == null || args.length != 2) {
-            console.log('Warning: Invalid argument for "Tag suggestion descriptor": ' + value + '. Value should be in form "<transacrionId>,<suggestedTagLabel>"');
-            console.log('Ignoring suggestion');
-            return '';
-        }
-
-        return '<img style="cursor: cursor; cursor: hand;" '
-        + ' onClick=\'expenseDataGrid.setTag(\"'+args[0]+'\", \"'+ args[1] +'\")\''
-        + ' src="resources/images/green_check.png">';
-    }
-    else {
-        return '';
-    }
-}

@@ -83,7 +83,7 @@ var dateRangePicker = Ext.create('Ext.form.FormPanel', {
 
     onRangeChanged: function() {
         // "Persisted Data" tab
-        expenseDataGrid.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
+        expenseDataGridController.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());
 
         // "Graphs" tab
         cashflowChart.load(dateRangePicker.getStartDate(), dateRangePicker.getEndDate());

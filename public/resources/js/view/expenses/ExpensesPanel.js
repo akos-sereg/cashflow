@@ -1,3 +1,25 @@
+// Required by multiple components
+var tagStore = Ext.create('Ext.data.Store', {
+	autoLoad: true,
+	fields: [
+        {name: 'id', type: 'int'},
+        {name: 'label', type: 'string'}
+    ],
+	proxy: {
+        type: 'ajax',
+        url: '/api/getTags',
+        reader: {
+        	type: 'json',
+        	root: 'data'
+        }
+    },
+    listeners: {
+    	load: function(){
+    		console.log('Tag store loaded');
+    	}
+    }
+});
+
 Ext.Loader.setConfig({
     enabled : true,
     paths   : {
@@ -12,6 +34,9 @@ var cashflowInputController = Ext.create('Cashflow.controller.expenses.input.Cas
 
 var cashflowGrid = Ext.create('Cashflow.view.expenses.input.InputGrid');
 var cashflowGridController = Ext.create('Cashflow.controller.expenses.input.InputGridController');
+
+var expenseDataGrid = Ext.create('Cashflow.view.expenses.grid.ExpenseDataGrid');
+var expenseDataGridController = Ext.create('Cashflow.controller.expenses.grid.ExpenseDataGridController');
 
 var expensesPanelController = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
 
