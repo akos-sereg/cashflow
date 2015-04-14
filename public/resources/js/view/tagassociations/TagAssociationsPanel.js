@@ -1,5 +1,7 @@
 var addTagAssociationForm = Ext.create('Cashflow.view.tagassociations.form.AddTagAssociationForm');
 var addTagAssociationFormController = Ext.create('Cashflow.controller.tagassociations.form.AddTagAssociationFormController');
+var tagAssociationsGrid = Ext.create('Cashflow.view.tagassociations.grid.TagAssociationsGrid');
+var tagAssociationsGridController = Ext.create('Cashflow.controller.tagassociations.grid.TagAssociationsGridController');
 
 var tagAssociationsPanel = Ext.create('Ext.form.Panel', {
     border     : false,
@@ -12,5 +14,5 @@ var tagAssociationsPanel = Ext.create('Ext.form.Panel', {
             tagAssociationsGrid,
             addTagAssociationForm
        ],
-    }]
+    }],
 });

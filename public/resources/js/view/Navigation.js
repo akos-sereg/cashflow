@@ -47,6 +47,8 @@ var navigationPanel = Ext.create('Ext.form.Panel', {
                 tagAssociationsPanel.getEl().show();
                 Ext.getCmp('tagAssocBtn').setIcon('/resources/images/icon-tags.png');
                 Ext.getCmp('tagAssocBtn').getEl().dom.style.background = '#dddddd';
+
+                tagAssociationsGridController.load();
                 break;
         }
     }

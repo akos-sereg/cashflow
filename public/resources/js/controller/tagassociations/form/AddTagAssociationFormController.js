@@ -16,7 +16,7 @@ Ext.define('Cashflow.controller.tagassociations.form.AddTagAssociationFormContro
             success: function(data) {
 
                 if (data.isSuccess) {
-                    tagAssociationsGrid.load();
+                    tagAssociationsGridController.load();
                     addTagAssociationForm.clear();
                 }
                 else {

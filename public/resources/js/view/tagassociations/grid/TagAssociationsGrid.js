@@ -16,7 +16,8 @@ var tagAssociationsStore = Ext.create('Ext.data.JsonStore', {
 
 // Components
 // -------------------------------------------------------------------------------------
-var tagAssociationsGrid = Ext.create('Ext.grid.Panel', {
+Ext.define('Cashflow.view.tagassociations.grid.TagAssociationsGrid', {
+    extend: 'Ext.grid.Panel',
     store: tagAssociationsStore,
     margins: '0 0 0 0',
     title: 'Existing Associations',
@@ -43,7 +44,11 @@ var tagAssociationsGrid = Ext.create('Ext.grid.Panel', {
             text     : 'Remove',
             width    : 60,
             dataIndex: 'rule_id',
-            renderer : renderDeleteIcon
+            renderer : function(value) {
+               return '<img style="cursor: cursor; cursor: hand;" '
+               + ' onClick=\'tagAssociationsGridController.removeTagAssociation(' + value + ')\''
+               + ' src="resources/images/delete.png">';
+           }
         }
     ],
     height: 350,
@@ -52,42 +57,5 @@ var tagAssociationsGrid = Ext.create('Ext.grid.Panel', {
     viewConfig: {
         stripeRows: false
     },
-    load: function() {
-        $.ajax({
-            type: 'GET',
-            url: '/api/getTagAssociations',
-            success: function(data) {
-                console.log('Tag Association list loaded from server: ' + data.length + ' records.');
-                tagAssociationsGrid.store.loadData(data);
-                tagAssociationsGrid.store.rawData = data;
-            },
-            contentType: 'application/json; charset=utf-8'
-        });
-    },
-    removeTagAssociation: function(ruleId) {
-         $.ajax({
-            type: 'POST',
-            url: '/api/removeTagAssociation',
-            data: { ruleId: ruleId },
-            success: function(data) {
-
-                if (data.isSuccess) {
-                    tagAssociationsGrid.load();
-                    return;
-                }
-
-                console.log(data.errorMessage);
-            },
-            contentType: 'application/x-www-form-urlencoded'
-        });
-    }
 });
 
-function renderDeleteIcon(value) {
-
-    return '<img style="cursor: cursor; cursor: hand;" '
-    + ' onClick=\'tagAssociationsGrid.removeTagAssociation(' + value + ')\''
-    + ' src="resources/images/delete.png">';
-}
-
-tagAssociationsGrid.load();
