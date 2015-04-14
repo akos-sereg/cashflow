@@ -1,5 +1,5 @@
-var addTagAssociationForm = Ext.create('Ext.form.Panel', {
-
+Ext.define('Cashflow.view.tagassociations.form.AddTagAssociationForm', {
+    extend: 'Ext.form.Panel',
     frame: true,
     title: 'Add new tag association',
     width: 550,
@@ -42,28 +42,10 @@ var addTagAssociationForm = Ext.create('Ext.form.Panel', {
         text: 'Save',
         listeners: {
             click: function () {
-                var tagAssociation = {
-                    ruleName  : addTagAssociationForm.getForm().findField('ruleName').getSubmitValue(),
-                    pattern   : addTagAssociationForm.getForm().findField('pattern').getSubmitValue(),
-                    tagLabel  : addTagAssociationForm.getForm().findField('tagLabel').getSubmitValue(),
-                };
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/addTagAssociation',
-                    data: tagAssociation,
-                    success: function(data) {
-
-                        if (data.isSuccess) {
-                            tagAssociationsGrid.load();
-                            addTagAssociationForm.clear();
-                        }
-                        else {
-                            console.log(data.errorMessage);
-                        }
-                    },
-                    contentType: 'application/x-www-form-urlencoded'
-                });
+                addTagAssociationFormController.addTagAssociation(
+                    addTagAssociationForm.getForm().findField('ruleName').getSubmitValue(),
+                    addTagAssociationForm.getForm().findField('pattern').getSubmitValue(),
+                    addTagAssociationForm.getForm().findField('tagLabel').getSubmitValue());
             }
         }
     }],
