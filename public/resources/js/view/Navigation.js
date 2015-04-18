@@ -1,4 +1,5 @@
-var navigationPanel = Ext.create('Ext.form.Panel', {
+Ext.define('Cashflow.view.Navigation', {
+    extend     : 'Ext.form.Panel',
     border     : false,
     anchor     : '100%',
     margins: '0 0 0 0',
@@ -10,7 +11,7 @@ var navigationPanel = Ext.create('Ext.form.Panel', {
         scale: 'medium',
         anchor: '100%',
         handler : function() {
-            navigationPanel.navigate('expense');
+            this.ownerCt.navigate('expense');
         }
     },
     {
@@ -22,11 +23,14 @@ var navigationPanel = Ext.create('Ext.form.Panel', {
         anchor: '100%',
         margin: '10 0 0 0',
         handler : function() {
-            navigationPanel.navigate('tagAssociations');
+            this.ownerCt.navigate('tagAssociations');
         }
     }],
 
     navigate: function(tabName) {
+
+        var expensesPanel = Ext.getCmp('expenses-panel');
+        var tagAssociationsPanel = Ext.getCmp('tag-associations-panel');
 
         // Hide all
         expensesPanel.getEl().hide();
@@ -48,7 +52,7 @@ var navigationPanel = Ext.create('Ext.form.Panel', {
                 Ext.getCmp('tagAssocBtn').setIcon('/resources/images/icon-tags.png');
                 Ext.getCmp('tagAssocBtn').getEl().dom.style.background = '#dddddd';
 
-                tagAssociationsGridController.load();
+                Ext.getCmp('tag-associations-grid').controller.load();
                 break;
         }
     }

@@ -7,8 +7,8 @@ Ext.define('Cashflow.controller.tagassociations.grid.TagAssociationsGridControll
             url: '/api/getTagAssociations',
             success: function(data) {
                 console.log('Tag Association list loaded from server: ' + data.length + ' records.');
-                tagAssociationsGrid.store.loadData(data);
-                tagAssociationsGrid.store.rawData = data;
+                Ext.getCmp('tag-associations-grid').store.loadData(data);
+                Ext.getCmp('tag-associations-grid').store.rawData = data;
             },
             contentType: 'application/json; charset=utf-8'
         });
@@ -21,7 +21,7 @@ Ext.define('Cashflow.controller.tagassociations.grid.TagAssociationsGridControll
             success: function(data) {
 
                 if (data.isSuccess) {
-                    tagAssociationsGridController.load();
+                    Ext.getCmp('tag-associations-grid').controller.load();
                     return;
                 }
 

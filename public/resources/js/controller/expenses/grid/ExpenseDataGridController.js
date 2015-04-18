@@ -9,6 +9,7 @@ Ext.define('Cashflow.controller.expenses.grid.ExpenseDataGridController', {
             success: function(data) {
 
                 console.log('Expense list loaded from server: ' + data.length + ' records.');
+                var expenseDataGrid = Ext.getCmp('cashflow-expense-grid');
 
                 var tagSuggestionController = new TagSuggestionController();
                 tagSuggestionController.AttachSuggestions(data)
@@ -35,6 +36,7 @@ Ext.define('Cashflow.controller.expenses.grid.ExpenseDataGridController', {
             success: function(data) {
 
                 console.log('Expense tag set successfully. Tag: ' + tagLabel + ', Transaction ID: ' + transactionId);
+                var expenseDataGrid = Ext.getCmp('cashflow-expense-grid');
 
                 // Update corresponding expense record
                 for (var i=0; i!=expenseDataGrid.store.rawData.length; i++) {
@@ -49,5 +51,6 @@ Ext.define('Cashflow.controller.expenses.grid.ExpenseDataGridController', {
             },
             contentType: 'application/x-www-form-urlencoded'
         });
-    }
+    },
+
 });

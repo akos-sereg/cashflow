@@ -9,7 +9,7 @@ Ext.define('Cashflow.controller.expenses.charts.BarChartController', {
             type: 'GET',
             url: '/api/getAggregatedExpensesByTags?startDate=' + startDate + '&endDate=' + endDate,
             success: function(data) {
-                barChart.store.loadData(data);
+                Ext.getCmp('cashflow-bar-chart').store.loadData(data);
             },
             contentType: 'application/json; charset=utf-8'
         });

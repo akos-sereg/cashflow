@@ -42,15 +42,21 @@ Ext.define('Cashflow.view.tagassociations.form.AddTagAssociationForm', {
         text: 'Save',
         listeners: {
             click: function () {
-                addTagAssociationFormController.addTagAssociation(
-                    addTagAssociationForm.getForm().findField('ruleName').getSubmitValue(),
-                    addTagAssociationForm.getForm().findField('pattern').getSubmitValue(),
-                    addTagAssociationForm.getForm().findField('tagLabel').getSubmitValue());
+                Ext.getCmp('tag-associations-form').controller.addTagAssociation(
+                    Ext.getCmp('tag-associations-form').getForm().findField('ruleName').getSubmitValue(),
+                    Ext.getCmp('tag-associations-form').getForm().findField('pattern').getSubmitValue(),
+                    Ext.getCmp('tag-associations-form').getForm().findField('tagLabel').getSubmitValue());
             }
         }
     }],
+
     clear: function() {
-        addTagAssociationForm.getForm().findField('ruleName').setValue('');
-        addTagAssociationForm.getForm().findField('pattern').setValue('');
+        Ext.getCmp('tag-associations-form').getForm().findField('ruleName').setValue('');
+        Ext.getCmp('tag-associations-form').getForm().findField('pattern').setValue('');
+    },
+
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.tagassociations.form.AddTagAssociationFormController');
     }
 });

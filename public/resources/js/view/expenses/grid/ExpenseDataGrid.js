@@ -65,7 +65,7 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
                 store: tagStore,
                 listeners: {
                     focus: function(field) {
-                        var selectedRows = expenseDataGrid.getSelectionModel().getSelection();
+                        var selectedRows = Ext.getCmp('cashflow-expense-grid').getSelectionModel().getSelection();
                         if (selectedRows != null && selectedRows.length == 1) {
                             this.selectedTransactionId = selectedRows[0].data.transactionId;
                             console.log('Selected Row (transaction id) : ' + selectedRows[0].data.transactionId);
@@ -73,7 +73,7 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
                     },
                     select: function (combobox, record, index) {
                         console.log('Setting tag "' + record[0].data.label + '" for transaction ' + this.selectedTransactionId);
-                        expenseDataGridController.setTag(this.selectedTransactionId, record[0].data.label);
+                        Ext.getCmp('cashflow-expense-grid').controller.setTag(this.selectedTransactionId, record[0].data.label);
 
                         combobox.fireEvent('blur');
                     }
@@ -95,7 +95,7 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
                     }
 
                     return '<img style="cursor: cursor; cursor: hand;" '
-                        + ' onClick=\'expenseDataGridController.setTag(\"'+args[0]+'\", \"'+ args[1] +'\")\''
+                        + ' onClick=\'this.getCmp("cashflow-expense-grid").controller.setTag(\"'+args[0]+'\", \"'+ args[1] +'\")\''
                         + ' src="resources/images/green_check.png">';
                 }
                 else {
@@ -119,4 +119,8 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
         stripeRows: false
     },
 
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.grid.ExpenseDataGridController');
+    }
 });

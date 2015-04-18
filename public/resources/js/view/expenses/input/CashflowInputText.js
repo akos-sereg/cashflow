@@ -12,9 +12,13 @@ Ext.define('Cashflow.view.expenses.input.CashflowInputText', {
         anchor    : '100%',
         listeners : {
             change: function(logEntry, newValue, oldValue, eOpts) {
-
-                cashflowInputController.onInput(logEntry, newValue, oldValue, eOpts);
+                this.ownerCt.controller.onInput(logEntry, newValue, oldValue, eOpts);
             }
         }
-    }]
+    }],
+
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.input.CashflowInputTextController');
+    }
 });

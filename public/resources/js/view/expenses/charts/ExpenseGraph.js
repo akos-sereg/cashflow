@@ -20,5 +20,10 @@ Ext.define('Cashflow.view.expenses.charts.ExpenseGraph', {
     },
     getPreferredHeight: function() {
         return 220;
+    },
+
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.charts.ExpenseGraphController');
     }
 });

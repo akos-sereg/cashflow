@@ -63,7 +63,7 @@ Ext.define('Cashflow.view.expenses.input.InputGrid', {
             dataIndex: 'Hash',
             renderer : function(value, meta, record, rowIndex, colIndex, store, view) {
                 return '<img style="cursor: cursor; cursor: hand;" '
-                    + ' onClick=\'cashflowGridController.removeItem('+rowIndex+');\''
+                    + ' onClick=\'Ext.getCmp("cashflow-grid").controller.removeItem('+rowIndex+');\''
                     + ' src="resources/images/delete.png">';
             }
         },
@@ -73,5 +73,10 @@ Ext.define('Cashflow.view.expenses.input.InputGrid', {
     title: 'Expense List',
     viewConfig: {
         stripeRows: false
+    },
+
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.input.InputGridController');
     }
 });

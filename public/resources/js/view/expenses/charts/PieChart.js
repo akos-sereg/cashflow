@@ -45,5 +45,10 @@ Ext.define('Cashflow.view.expenses.charts.PieChart', {
     store: pieChartStore,
     theme: 'Base:gradients',
     series: [ getSeries() ],
-    createSeries: getSeries
+    createSeries: getSeries,
+
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.charts.PieChartController');
+    }
 });

@@ -1,30 +1,12 @@
-//Ext.require([ 'Cashflow.controller.expenses.input.popup.UploadExpensesWindowController' ]);
-
-var cashflowInput             = Ext.create('Cashflow.view.expenses.input.CashflowInputText');
-var cashflowInputController   = Ext.create('Cashflow.controller.expenses.input.CashflowInputTextController');
-var cashflowGrid              = Ext.create('Cashflow.view.expenses.input.InputGrid');
-var cashflowGridController    = Ext.create('Cashflow.controller.expenses.input.InputGridController');
-var expenseDataGrid           = Ext.create('Cashflow.view.expenses.grid.ExpenseDataGrid');
-var expenseDataGridController = Ext.create('Cashflow.controller.expenses.grid.ExpenseDataGridController');
-var dateRangePicker           = Ext.create('Cashflow.view.expenses.navigation.DateRangePicker');
-var dateRangePickerController = Ext.create('Cashflow.controller.expenses.navigation.DateRangePickerController');
-var cashflowChart             = Ext.create('Cashflow.view.expenses.charts.ExpenseGraph');
-var cashflowChartController   = Ext.create('Cashflow.controller.expenses.charts.ExpenseGraphController');
-var barChart                  = Ext.create('Cashflow.view.expenses.charts.BarChart');
-var barChartController        = Ext.create('Cashflow.controller.expenses.charts.BarChartController');
-var pieChart                  = Ext.create('Cashflow.view.expenses.charts.PieChart');
-var pieChartController        = Ext.create('Cashflow.controller.expenses.charts.PieChartController');
-
-var expensesPanelController = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
-
 // -----------------------------------------------------------------------
 // Tab pages
 // -----------------------------------------------------------------------
 var tabs = Ext.create('Ext.tab.Panel', {
+
     height: 600,
     listeners: {
         'tabchange': function(tabPanel, tab) {
-            dateRangePickerController.onRangeChanged();
+            Ext.getCmp('cashflow-date-picker').controller.onRangeChanged();
         }
     },
 
@@ -37,8 +19,8 @@ var tabs = Ext.create('Ext.tab.Panel', {
             margins: '10 10 10 10'
         },
         items: [
-            cashflowInput,
-            cashflowGrid,
+            Ext.create('Cashflow.view.expenses.input.CashflowInputText', { id: 'cashflow-input' }),
+            Ext.create('Cashflow.view.expenses.input.InputGrid', { id: 'cashflow-grid' }),
             {
                 layout: {
                     type: 'hbox',
@@ -53,7 +35,7 @@ var tabs = Ext.create('Ext.tab.Panel', {
                     text : 'Send',
                     listeners: {
                         click: function () {
-                            expensesPanelController.onSendClicked();
+                            Ext.getCmp('expense-panel').controller.onSendClicked();
                         }
                     }
                 }, {
@@ -73,7 +55,7 @@ var tabs = Ext.create('Ext.tab.Panel', {
             margins: '10 10 10 10'
         },
         items: [
-            expenseDataGrid
+            Ext.create('Cashflow.view.expenses.grid.ExpenseDataGrid', { id: 'cashflow-expense-grid' })
         ]
     },
     {
@@ -85,7 +67,7 @@ var tabs = Ext.create('Ext.tab.Panel', {
             margins: '10 10 10 10'
         },
         items: [
-            cashflowChart,
+            Ext.create('Cashflow.view.expenses.charts.ExpenseGraph', { id: 'cashflow-chart' }),
             {
                 layout: {
                     type: 'hbox'
@@ -94,15 +76,16 @@ var tabs = Ext.create('Ext.tab.Panel', {
                 align: 'left',
                 border: false,
                 items: [
-                    pieChart,
-                    barChart
+                    Ext.create('Cashflow.view.expenses.charts.PieChart', { id: 'cashflow-pie-chart' }),
+                    Ext.create('Cashflow.view.expenses.charts.BarChart', { id: 'cashflow-bar-chart' })
                 ]
             }
         ]
     }]
 });
 
-var expensesPanel = Ext.create('Ext.form.Panel', {
+Ext.define('Cashflow.view.expenses.ExpensesPanel', {
+    extend     :'Ext.form.Panel',
     border     : false,
     anchor     : '100%',
     margins: '0 0 0 0',
@@ -113,15 +96,19 @@ var expensesPanel = Ext.create('Ext.form.Panel', {
         width: 800,
         align: 'left',
         border: false,
+        constructor: function(config) {
+            this.callParent(arguments);
+            this.controller = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
+        },
         items: [
-            dateRangePicker,
+            Ext.create('Cashflow.view.expenses.navigation.DateRangePicker', { id: 'cashflow-date-picker' }),
             {
                 xtype: 'button',
                 margins: '5 5 5 5',
                 text : '-1 Month',
                 listeners: {
                     click: function () {
-                        dateRangePicker.addMonths(-1);
+                        Ext.getCmp('cashflow-date-picker').addMonths(-1);
                     }
                 }
             },
@@ -131,7 +118,7 @@ var expensesPanel = Ext.create('Ext.form.Panel', {
                 text : '+1 Month',
                 listeners: {
                     click: function () {
-                        dateRangePicker.addMonths(1);
+                        Ext.getCmp('cashflow-date-picker').addMonths(1);
                     }
                 }
             },
@@ -141,7 +128,7 @@ var expensesPanel = Ext.create('Ext.form.Panel', {
                 text : '-1 Quarter',
                 listeners: {
                     click: function () {
-                        dateRangePicker.addMonths(-3);
+                        Ext.getCmp('cashflow-date-picker').addMonths(-3);
                     }
                 }
             },
@@ -151,7 +138,7 @@ var expensesPanel = Ext.create('Ext.form.Panel', {
                 text : '+1 Quarter',
                 listeners: {
                     click: function () {
-                        dateRangePicker.addMonths(3);
+                        Ext.getCmp('cashflow-date-picker').addMonths(3);
                     }
                 }
             },
@@ -161,7 +148,7 @@ var expensesPanel = Ext.create('Ext.form.Panel', {
                 text : '-1 Half Year',
                 listeners: {
                     click: function () {
-                        dateRangePicker.addMonths(-6);
+                        Ext.getCmp('cashflow-date-picker').addMonths(-6);
                     }
                 }
             },
@@ -171,7 +158,7 @@ var expensesPanel = Ext.create('Ext.form.Panel', {
                 text : '+1 Half Year',
                 listeners: {
                     click: function () {
-                        dateRangePicker.addMonths(6);
+                        Ext.getCmp('cashflow-date-picker').addMonths(6);
                     }
                 }
             }

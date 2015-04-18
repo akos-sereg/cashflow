@@ -1,7 +1,7 @@
 function TagSuggestionController() {
 
     // Load "suggestions" list from existing tag associations
-    var tagAssociations = tagAssociationsGrid.store.rawData;
+    var tagAssociations = Ext.getCmp('tag-associations-grid').store.rawData;
     this.suggestions = [];
     if (tagAssociations != null && tagAssociations != undefined) {
         for (var i=0; i!=tagAssociations.length; i++) {

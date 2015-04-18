@@ -13,7 +13,7 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
         value: Ext.Date.add(new Date(), Ext.Date.DAY, -90),
         listeners: {
             select: function(){
-                dateRangePickerController.onRangeChanged();
+                this.ownerCt.onRangeChanged();
             }
         },
     },
@@ -27,7 +27,7 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
         value: new Date(),
         listeners: {
             select: function(){
-                dateRangePickerController.onRangeChanged();
+                this.ownerCt.onRangeChanged();
             }
         },
     }],
@@ -54,7 +54,7 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
             Ext.getCmp('startDateControl').setValue(startDate);
             Ext.getCmp('endDateControl').setValue(endDate);
 
-            dateRangePickerController.onRangeChanged();
+            this.controller.onRangeChanged();
             return;
         }
         else if (months == 1 && startDate.getDate() == 1) {
@@ -65,21 +65,25 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
             Ext.getCmp('startDateControl').setValue(startDate);
             Ext.getCmp('endDateControl').setValue(endDate);
 
-            dateRangePickerController.onRangeChanged();
+            this.controller.onRangeChanged();
             return;
         }
 
         Ext.getCmp('startDateControl').setValue(Ext.Date.add(Ext.getCmp('startDateControl').getValue(), Ext.Date.MONTH, months));
         Ext.getCmp('endDateControl').setValue(Ext.Date.add(Ext.getCmp('endDateControl').getValue(), Ext.Date.MONTH, months));
 
-        dateRangePickerController.onRangeChanged();
+        this.controller.onRangeChanged();
     },
 
     addDays: function(days) {
         Ext.getCmp('startDateControl').setValue(Ext.Date.add(Ext.getCmp('startDateControl').getValue(), Ext.Date.DAY, days));
         Ext.getCmp('endDateControl').setValue(Ext.Date.add(Ext.getCmp('endDateControl').getValue(), Ext.Date.DAY, days));
 
-        dateRangePickerController.onRangeChanged();
+        this.controller.onRangeChanged();
     },
 
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.navigation.DateRangePickerController');
+    }
 });

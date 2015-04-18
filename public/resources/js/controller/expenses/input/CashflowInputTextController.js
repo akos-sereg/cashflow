@@ -3,6 +3,6 @@ Ext.define('Cashflow.controller.expenses.input.CashflowInputTextController', {
 
     onInput: function(logEntry, newValue, oldValue, eOpts) {
         var expenseParser = new ExpenseParser();
-        cashflowGrid.store.loadData(expenseParser.Parse(newValue));
+        Ext.getCmp('cashflow-grid').store.loadData(expenseParser.Parse(newValue));
     },
 });

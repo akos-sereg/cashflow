@@ -8,6 +8,8 @@ Ext.define('Cashflow.controller.expenses.input.popup.UploadExpensesWindowControl
     sendExpenses: function() {
         var data = [];
 
+        var cashflowGrid = Ext.getCmp('cashflow-grid');
+
         for (var i=0; i!=cashflowGrid.store.data.length; i++) {
             if (cashflowGrid.store.data.items[i].data.Valid) {
                 cashflowGrid.store.data.items[i].data.Hash = cashflowGrid.store.data.items[i].data.GetHash().toString();

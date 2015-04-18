@@ -36,6 +36,8 @@ Ext.define('Cashflow.controller.expenses.charts.PieChartController', {
                     }
                 }
 
+                var pieChart = Ext.getCmp('cashflow-pie-chart');
+
                 pieChart.series.removeAll(pieChart.series.items);
                 pieChart.series.addAll([ pieChart.createSeries() ]);
                 pieChart.store.loadData(displayedData);

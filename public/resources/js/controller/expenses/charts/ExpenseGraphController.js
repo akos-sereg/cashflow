@@ -3,6 +3,8 @@ Ext.define('Cashflow.controller.expenses.charts.ExpenseGraphController', {
 
     load: function(startDate, endDate) {
 
+        var cashflowChart = Ext.getCmp('cashflow-chart');
+
         cashflowChart.clear();
 
         // Load expense list from server

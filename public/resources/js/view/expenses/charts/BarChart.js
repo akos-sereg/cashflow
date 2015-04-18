@@ -59,4 +59,8 @@ Ext.define('Cashflow.view.expenses.charts.BarChart', {
         yField: 'amount'
     }],
 
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.charts.BarChartController');
+    }
 });

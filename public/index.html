@@ -21,11 +21,6 @@
     <script type="text/javascript" src="/resources/js/controller/ExpenseParser.js"></script>
     <script type="text/javascript" src="/resources/js/controller/TagSuggestionController.js"></script>
 
-    <!-- Navigation -->
-    <script type="text/javascript" src="/resources/js/view/Navigation.js"></script>
-    <script type="text/javascript" src="/resources/js/view/expenses/ExpensesPanel.js"></script>
-    <script type="text/javascript" src="/resources/js/view/tagassociations/TagAssociationsPanel.js"></script>
-
     <style type="text/css">
         html, body {
         font: normal 12px verdana;
@@ -60,20 +55,20 @@
                     minWidth: 100,
                     maxWidth: 250,
                     items: [
-                        navigationPanel
+                         Ext.create('Cashflow.view.Navigation', { id: 'navigation-panel' })
                     ]
                 },{
                     collapsible: false,
                     region: 'center',
                     items: [
-                        expensesPanel,
-                        tagAssociationsPanel
+                        Ext.create('Cashflow.view.expenses.ExpensesPanel', { id: 'expenses-panel' }),
+                        Ext.create('Cashflow.view.tagassociations.TagAssociationsPanel', { id: 'tag-associations-panel' })
                     ]
                 }]
             });
 
             // Hide non-active panels
-            navigationPanel.navigate('expense');
+            Ext.getCmp('navigation-panel').navigate('expense');
         });
 
 
