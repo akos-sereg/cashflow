@@ -113,9 +113,9 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
             text     : 'Delete',
             width    : 60,
             dataIndex: 'transactionId',
-            renderer : function(value) {
+            renderer : function(transactionId) {
                 return '<img style="cursor: cursor; cursor: hand;" '
-                    + ' onClick=\'Ext.getCmp("cashflow-expense-grid").controller.removeTransaction("' + value + '")\''
+                    + ' onClick=\'Ext.getCmp("cashflow-expense-grid").showDeleteTransactionDialog("' + transactionId + '")\''
                     + ' src="resources/images/delete.png">';
             }
         },
@@ -132,5 +132,14 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
     constructor: function(config) {
         this.callParent(arguments);
         this.controller = Ext.create('Cashflow.controller.expenses.grid.ExpenseDataGridController');
+    },
+
+    showDeleteTransactionDialog: function(transactionId) {
+        var me = this;
+        Ext.MessageBox.confirm('Delete', 'Are you sure?', function(btn){
+            if(btn === 'yes'){
+                me.controller.removeTransaction(transactionId);
+            }
+        });
     }
 });

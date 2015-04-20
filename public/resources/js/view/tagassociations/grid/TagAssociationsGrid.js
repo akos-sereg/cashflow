@@ -44,9 +44,9 @@ Ext.define('Cashflow.view.tagassociations.grid.TagAssociationsGrid', {
             text     : 'Remove',
             width    : 60,
             dataIndex: 'rule_id',
-            renderer : function(value) {
+            renderer : function(ruleId) {
                return '<img style="cursor: cursor; cursor: hand;" '
-               + ' onClick=\'Ext.getCmp("tag-associations-grid").controller.removeTagAssociation(' + value + ')\''
+               + ' onClick=\'Ext.getCmp("tag-associations-grid").showRemoveTagDialog(' + ruleId + ')\''
                + ' src="resources/images/delete.png">';
            }
         }
@@ -54,8 +54,18 @@ Ext.define('Cashflow.view.tagassociations.grid.TagAssociationsGrid', {
     height: 350,
     width: 1200,
     border: true,
+
     viewConfig: {
         stripeRows: false
+    },
+
+    showRemoveTagDialog: function(ruleId) {
+        var me = this;
+        Ext.MessageBox.confirm('Delete', 'Are you sure?', function(btn){
+            if(btn === 'yes'){
+                me.controller.removeTagAssociation(ruleId);
+            }
+        });
     },
 
     constructor: function(config) {
