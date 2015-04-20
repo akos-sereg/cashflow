@@ -13,7 +13,7 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
         value: Ext.Date.add(new Date(), Ext.Date.DAY, -90),
         listeners: {
             select: function(){
-                this.ownerCt.onRangeChanged();
+                this.ownerCt.controller.onRangeChanged();
             }
         },
     },
@@ -27,7 +27,7 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
         value: new Date(),
         listeners: {
             select: function(){
-                this.ownerCt.onRangeChanged();
+                this.ownerCt.controller.onRangeChanged();
             }
         },
     }],
