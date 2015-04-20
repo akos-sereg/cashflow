@@ -103,6 +103,41 @@ router.route('/getExpenses')
             });
      });
 
+router.route('/removeTransaction')
+
+     .post(function(req, res) {
+
+         // Delete expense tag for record (if any)
+         connection.query('DELETE FROM cashflow.expense_tag WHERE transactionId = ?',
+             [
+                 req.body['transactionId'],
+             ],
+             function(err, rows, fields) {
+
+                 if (err) {
+                     console.log(err);
+                     return;
+                 }
+
+                 // Delete expense record as well
+                 connection.query('DELETE FROM cashflow.expense WHERE transactionId = ?',
+                 [
+                    req.body['transactionId'],
+                 ],
+                 function(err, rows, fields) {
+
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+
+                    res.send(rows);
+                 });
+
+                 res.send(rows);
+             });
+      });
+
 // Tags
 router.route('/getTags')
 

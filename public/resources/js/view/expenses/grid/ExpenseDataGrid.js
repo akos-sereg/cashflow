@@ -108,7 +108,17 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
             flex     : 1,
             sortable : true,
             dataIndex: 'tag_suggestion'
-        }
+        },
+        {
+            text     : 'Delete',
+            width    : 60,
+            dataIndex: 'transactionId',
+            renderer : function(value) {
+                return '<img style="cursor: cursor; cursor: hand;" '
+                    + ' onClick=\'Ext.getCmp("cashflow-expense-grid").controller.removeTransaction("' + value + '")\''
+                    + ' src="resources/images/delete.png">';
+            }
+        },
     ],
     height: 550,
     width: 1200,
