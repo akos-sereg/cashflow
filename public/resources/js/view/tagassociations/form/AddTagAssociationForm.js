@@ -27,7 +27,7 @@ Ext.define('Cashflow.view.tagassociations.form.AddTagAssociationForm', {
         displayField : 'label',
         valueField : 'label',
         name: 'tagLabel',
-        store: tagStore,
+        store: 'tagStore',
         listeners: {
             focus: function(field) {
 

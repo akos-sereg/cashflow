@@ -62,7 +62,7 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
                 xtype: 'combobox',
                 displayField : 'label',
                 valueField : 'label',
-                store: tagStore,
+                store: 'tagStore',
                 listeners: {
                     focus: function(field) {
                         var selectedRows = Ext.getCmp('cashflow-expense-grid').getSelectionModel().getSelection();
