@@ -35,7 +35,7 @@ var tabs = Ext.create('Ext.tab.Panel', {
                     text : 'Send',
                     listeners: {
                         click: function () {
-                            Ext.getCmp('expense-panel').controller.onSendClicked();
+                            Ext.getCmp('expenses-panel').controller.onSendClicked();
                         }
                     }
                 }, {
@@ -89,6 +89,10 @@ Ext.define('Cashflow.view.expenses.ExpensesPanel', {
     border     : false,
     anchor     : '100%',
     margins: '0 0 0 0',
+    constructor: function(config) {
+        this.callParent(arguments);
+        this.controller = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
+    },
     items: [{
         layout: {
             type: 'hbox'
@@ -96,10 +100,6 @@ Ext.define('Cashflow.view.expenses.ExpensesPanel', {
         width: 800,
         align: 'left',
         border: false,
-        constructor: function(config) {
-            this.callParent(arguments);
-            this.controller = Ext.create('Cashflow.controller.expenses.ExpensesPanelController');
-        },
         items: [
             Ext.create('Cashflow.view.expenses.navigation.DateRangePicker', { id: 'cashflow-date-picker' }),
             {
