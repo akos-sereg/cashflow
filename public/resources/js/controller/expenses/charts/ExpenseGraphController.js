@@ -21,7 +21,7 @@ Ext.define('Cashflow.controller.expenses.charts.ExpenseGraphController', {
                     element: document.getElementById('chart'),
                     renderer: 'line',
                     height: cashflowChart.getPreferredHeight(),
-                    width: 1165,
+                    width: 1150,
                     min: 'auto',
                     interpolation: 'linear',
                     series: [{
