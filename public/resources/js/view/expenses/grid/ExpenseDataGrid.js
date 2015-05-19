@@ -95,7 +95,7 @@ Ext.define('Cashflow.view.expenses.grid.ExpenseDataGrid', {
                     }
 
                     return '<img style="cursor: cursor; cursor: hand;" '
-                        + ' onClick=\'this.getCmp("cashflow-expense-grid").controller.setTag(\"'+args[0]+'\", \"'+ args[1] +'\")\''
+                        + ' onClick=\'Ext.getCmp("cashflow-expense-grid").controller.setTag(\"'+args[0]+'\", \"'+ args[1] +'\")\''
                         + ' src="resources/images/green_check.png">';
                 }
                 else {
