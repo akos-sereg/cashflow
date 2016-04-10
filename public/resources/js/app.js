@@ -10,7 +10,8 @@ Ext.define('Cashflow.Application', {
     name: 'Cashflow',
     extend: 'Ext.app.Application',
     stores: [
-        Ext.create('Cashflow.store.TagStore', { id: 'tagStore'} )
+        Ext.create('Cashflow.store.TagStore', { id: 'tagStore'} ),
+        Ext.create('Cashflow.store.ExpectedExpenseTypeStore', { id: 'expectedExpenseTypeStore'} ),
     ],
 
     views: [

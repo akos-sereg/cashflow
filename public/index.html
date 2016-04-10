@@ -24,10 +24,16 @@
 
     <style type="text/css">
         html, body {
-        font: normal 12px verdana;
-        margin: 0;
-        padding: 0;
-        border: 0 none;
+            font: normal 12px verdana;
+            margin: 0;
+            padding: 0;
+            border: 0 none;
+        }
+
+        .expected-expense-row .x-grid-cell { 
+            height: 40px;
+            border-right: solid 1px #777777;
+            border-bottom: solid 1px #777777;
         }
     </style>
 
@@ -63,7 +69,8 @@
                     region: 'center',
                     items: [
                         Ext.create('Cashflow.view.expenses.ExpensesPanel', { id: 'expenses-panel' }),
-                        Ext.create('Cashflow.view.tagassociations.TagAssociationsPanel', { id: 'tag-associations-panel' })
+                        Ext.create('Cashflow.view.tagassociations.TagAssociationsPanel', { id: 'tag-associations-panel' }),
+                        Ext.create('Cashflow.view.expected.ExpectedExpensesPanel', { id: 'expected-expenses-panel' }),
                     ]
                 }]
             });
