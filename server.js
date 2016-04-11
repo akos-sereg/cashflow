@@ -155,6 +155,56 @@ router.route('/getTags')
             });
      });
 
+router.route('/getExpectedExpenseTypes')
+
+    .get(function(req, res) {
+
+        connection.query('SELECT expected_expense_type.id, expected_expense_type.name FROM cashflow.expected_expense_type ORDER BY name ASC', [ ],
+            function(err, rows, fields) {
+
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                res.send(rows);
+            });
+     });
+
+router.route('/getExpectedExpenses')
+
+    .get(function(req, res) {
+
+        connection.query('SELECT ee.id, eet.id as type_id, eet.name as type, ee.name, ee.amount, ee.effective_date, ee.paid '
+            + 'FROM cashflow.expected_expense ee '
+            + '  JOIN cashflow.expected_expense_type eet ON (eet.id = ee.expected_expense_type_id) '
+            + 'WHERE ee.effective_date > DATE_ADD(NOW(), INTERVAL -3 MONTH) '
+            + '  AND ee.effective_date < DATE_ADD(NOW(), INTERVAL 12 MONTH) ',
+            [ ],
+            function(err, rows, fields) {
+
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                var data = [];
+                for (var i=0; i!=rows.length; i++) {
+                    var row = {};
+                    row['effective_date'] = rows[i].effective_date;
+                    row['expected_id_' + rows[i].type_id] = rows[i].name;
+                    row['column_id'] = 'expected_id_' + rows[i].type_id;
+                    row['name'] = rows[i].name;
+                    row['amount'] = rows[i].amount;
+                    row['paid'] = rows[i].paid;
+                    data.push(row);
+                }
+
+                res.send(data);
+            });
+     });
+
+
 router.route('/setTag')
 
     .post(function(req, res) {

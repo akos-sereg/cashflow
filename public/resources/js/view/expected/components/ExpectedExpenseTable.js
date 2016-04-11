@@ -8,22 +8,22 @@ Ext.require([
 // -------------------------------------------------------------------------------------
 var expectedExpenseDataGridStore = Ext.create('Ext.data.JsonStore', {
     fields: [
-       {name: 'Date'},
-       {name: 'Title'},
-       {name: 'Amount', },
-       {name: 'Location'},
-       {name: 'Tag'},
-       {name: 'TagSuggestion'},
+       {name: 'effective_date'},
+       {name: 'expected_id_1'},
+       {name: 'expected_id_2'},
+       {name: 'expected_id_3'},
+       {name: 'expected_id_4'},
     ],
-    proxy: {
-        type: 'memory',
-        reader: 'json',
-        data: [
-            {id: 1, key1: 'Foo'},
-            {id: 2, key2: 'Bar'},
-            {id: 3, key2: 'Baz'}
-        ]
-    }
+    /*proxy: {
+        type: 'rest',
+        url: '/api/getExpectedExpenses',
+        reader: {
+            type: 'json'
+        },
+        writer: {
+            type: 'json'
+        }
+    }*/
 });
 
 // Components
@@ -33,11 +33,6 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
     extend: 'Ext.grid.Panel',
     store: expectedExpenseDataGridStore,
     margins: '1 1 1 1',
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ],
     columns: [],
     height: 550,
     width: 1200,
@@ -51,14 +46,50 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
     },
 
     configureTable: function(items) {
-        this.columns = [];
+        this.columns = [ { header: 'Effective Date', dataIndex: 'effective_date', width: 200 } ];
 
         for(var i=0; i!=items.length; i++) {
-            console.log('Adding column: ' + items[i].data.name);
+            var dataIndex = 'expected_id_' + items[i].data.id;
             this.columns.push( {
                 header: items[i].data.name,
-                dataIndex: 'key' + i,
+                dataIndex: dataIndex,
                 width: 200,
+                renderer: function(val) {
+                    if (val.length == 0) {
+                        return '';
+                    }
+                    
+                    var itemsHtml = '';
+                    for (var j=0; j!=val.length; j++) {
+
+                        var bg = '#EAEAEA';
+                        var fontColor = '#000000';
+
+                        var effectiveDate = Date.parse(val[j].effective_date);
+                        if (val[j].paid == 1) {
+                            // paid already
+                            bg = '#07A800';
+                            fontColor = '#ffffff';
+                        }
+                        else if (effectiveDate < (new Date().getTime())) {
+                            // overdue
+                            bg = '#CE000A';
+                            fontColor = '#ffffff';
+                        }
+                        else if ((effectiveDate - (30 * 24 * 60 * 60 * 1000)) < (new Date().getTime())) {
+                            // due in 30 days
+                            bg = '#FF9800';
+                            fontColor = '#ffffff';
+                        }
+                        
+                        itemsHtml += '<span style="color: '+fontColor+'; border-radius: 50px; padding-top: 5px; padding-bottom: 5px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + val[j].name + ': ' + val[j].amount + ' ft</span>';
+                        if (j != val.length-1) {
+                            itemsHtml += '<br/><br/>';
+                        }
+                    }
+
+                    return itemsHtml;
+                }
             });
         }
 
