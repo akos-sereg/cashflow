@@ -197,12 +197,24 @@ router.route('/getExpectedExpenses')
                     row['name'] = rows[i].name;
                     row['amount'] = rows[i].amount;
                     row['paid'] = rows[i].paid;
+                    row['id'] = rows[i].id;
                     data.push(row);
                 }
 
                 res.send(data);
             });
      });
+
+router.route('/setExpectedExpenseStatus')
+
+    .post(function(req, res) {
+
+        connection.query('UPDATE cashflow.expected_expense SET paid = ? WHERE id = ?', [ req.body['status'], req.body['itemId'] ],
+            function(err, rows, fields) {
+                res.send([ err, rows, fields ]);
+            }
+        );
+    });
 
 
 router.route('/setTag')

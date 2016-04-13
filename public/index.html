@@ -1,12 +1,14 @@
 <html>
 <head>
     <title>Cashflow</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="/resources/shared/example.css" />
     <link rel="stylesheet" type="text/css" href="/resources/css/graph.css" />
     <link rel="stylesheet" type="text/css" href="/resources/css/detail.css" />
 
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/md5.js"></script>
     <script type="text/javascript" src="/resources/bootstrap.js"></script>
     <script type="text/javascript" src="/resources/d3.v2.js"></script>
@@ -35,13 +37,23 @@
             border-right: solid 1px #EEEEEE;
             border-bottom: solid 1px #EEEEEE;
         }
+
+        .ui-tooltip-content {
+            font-size:10pt;
+            font-family:Calibri;
+        }
+
     </style>
 
     <script type="text/javascript">
 
+        $(function() {
+            $(document).tooltip();
+        });
 
         Ext.onReady(function() {
 
+     
             Ext.create('Ext.panel.Panel', {
                 width: 1420,
                 height: 900,

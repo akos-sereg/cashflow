@@ -81,8 +81,9 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
                             bg = '#FF9800';
                             fontColor = '#ffffff';
                         }
-                        
-                        itemsHtml += '<span style="color: '+fontColor+'; border-radius: 50px; padding-top: 5px; padding-bottom: 5px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + val[j].name + ': ' + val[j].amount + ' ft</span>';
+
+                        val[j].amount
+                        itemsHtml += '<span onClick="Ext.getCmp(\'expected-expenses-panel\').controller.toggleExpectedExpenseStatus('+val[j].id+', '+(val[j].paid === 1 ? 0 : 1)+')" title="Amount: '+val[j].amount+', Effective: '+new Date(effectiveDate).toISOString().substring(0, 10)+'" style="cursor: pointer; color: '+fontColor+'; border-radius: 50px; padding-top: 5px; padding-bottom: 5px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + val[j].name + '</span>';
                         if (j != val.length-1) {
                             itemsHtml += '<br/><br/>';
                         }

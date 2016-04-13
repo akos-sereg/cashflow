@@ -6,7 +6,6 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
 
     onFocus: function() {
         Ext.getCmp('expected-expense-table').reconfigure(undefined, Ext.getCmp('expected-expense-table').columns);
-		//Ext.getCmp('expected-expense-table').getStore().load();
 
 		var me = this;
 
@@ -19,6 +18,26 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
             },
             contentType: 'application/json; charset=utf-8'
         });
+    },
+
+    toggleExpectedExpenseStatus: function(id, status) {
+        
+        var me = this;
+        Ext.MessageBox.confirm('Change Status', 'Are you sure you want to change status?', function(btn){
+            if(btn === 'yes'){
+                var request = { itemId: id, status: status };
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/setExpectedExpenseStatus',
+                    data: JSON.stringify(request),
+                    dataType: 'json',
+                    success: function(rawData) {
+                        me.onFocus();
+                    },
+                    contentType: 'application/json; charset=utf-8'
+                });
+            }
+         });
     },
 
     getMonthlyExpectedExpenses: function(rawData) {
