@@ -36,7 +36,10 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
         stripeRows: false
     },
 
+    thresholdInDays: 15,
+
     configureTable: function(items) {
+        var self = this;
         this.columns = [ { header: 'Effective Date', dataIndex: 'effective_date', width: 200 } ];
 
         for(var i=0; i!=items.length; i++) {
@@ -73,8 +76,8 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
                             bg = '#CE000A';
                             fontColor = '#ffffff';
                         }
-                        else if ((effectiveDateDaysFromEpoch - 30) < nowDaysFromEpoch) {
-                            // due in 30 days
+                        else if ((effectiveDateDaysFromEpoch - self.thresholdInDays) < nowDaysFromEpoch) {
+                            // due in <thresholdInDays> days
                             bg = '#FF9800';
                             fontColor = '#ffffff';
                             label += ' (' + Math.ceil(Math.abs(nowDaysFromEpoch-effectiveDateDaysFromEpoch)) + ' days)';
