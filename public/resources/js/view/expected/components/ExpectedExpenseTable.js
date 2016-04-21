@@ -13,17 +13,8 @@ var expectedExpenseDataGridStore = Ext.create('Ext.data.JsonStore', {
        {name: 'expected_id_2'},
        {name: 'expected_id_3'},
        {name: 'expected_id_4'},
+       {name: 'expected_id_5'},
     ],
-    /*proxy: {
-        type: 'rest',
-        url: '/api/getExpectedExpenses',
-        reader: {
-            type: 'json'
-        },
-        writer: {
-            type: 'json'
-        }
-    }*/
 });
 
 // Components
@@ -34,7 +25,7 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
     store: expectedExpenseDataGridStore,
     margins: '1 1 1 1',
     columns: [],
-    height: 550,
+    height: 850,
     width: 1200,
     border: false,
     scroll: false, // using native scrolling, as ExtJS' grid scrolling is buggy in v4
@@ -55,17 +46,23 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
                 dataIndex: dataIndex,
                 width: 200,
                 renderer: function(val) {
-                    if (val.length == 0) {
+
+                    if (val == undefined || val.length == 0) {
                         return '';
                     }
                     
-                    var itemsHtml = '';
+                    var itemsHtml = '<div style="position: float;">';
                     for (var j=0; j!=val.length; j++) {
 
                         var bg = '#EAEAEA';
                         var fontColor = '#000000';
+                        var label = val[j].name;
 
                         var effectiveDate = Date.parse(val[j].effective_date);
+                        var effectiveDateObj = new Date(effectiveDate);
+                        var effectiveDateDaysFromEpoch = epochDays(effectiveDate);
+                        var nowDaysFromEpoch = epochDays(new Date().getTime());
+
                         if (val[j].paid == 1) {
                             // paid already
                             bg = '#07A800';
@@ -76,18 +73,20 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
                             bg = '#CE000A';
                             fontColor = '#ffffff';
                         }
-                        else if ((effectiveDate - (30 * 24 * 60 * 60 * 1000)) < (new Date().getTime())) {
+                        else if ((effectiveDateDaysFromEpoch - 30) < nowDaysFromEpoch) {
                             // due in 30 days
                             bg = '#FF9800';
                             fontColor = '#ffffff';
+                            label += ' (' + Math.ceil(Math.abs(nowDaysFromEpoch-effectiveDateDaysFromEpoch)) + ' days)';
                         }
-
-                        val[j].amount
-                        itemsHtml += '<span onClick="Ext.getCmp(\'expected-expenses-panel\').controller.toggleExpectedExpenseStatus('+val[j].id+', '+(val[j].paid === 1 ? 0 : 1)+')" title="Amount: '+val[j].amount+', Effective: '+new Date(effectiveDate).toISOString().substring(0, 10)+'" style="cursor: pointer; color: '+fontColor+'; border-radius: 50px; padding-top: 5px; padding-bottom: 5px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + val[j].name + '</span>';
+                        
+                        itemsHtml += '<span onClick="Ext.getCmp(\'expected-expenses-panel\').controller.toggleExpectedExpenseStatus('+val[j].id+', '+(val[j].paid === 1 ? 0 : 1)+')" title="Amount: '+formatAmount(val[j].amount)+' Ft, Effective: '+new Date(effectiveDate).toISOString().substring(0, 10)+'" style="float: left; margin: 3px; cursor: pointer; color: '+fontColor+'; border-radius: 50px; padding-top: 2px; padding-bottom: 2px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + label + '</span>';
                         if (j != val.length-1) {
-                            itemsHtml += '<br/><br/>';
+                            // spacer
+                            //itemsHtml += '<span style="height: 40px; padding-top: 50px;">asdf</span><br/><br/>';
                         }
                     }
+                    itemsHtml += '</div>';
 
                     return itemsHtml;
                 }

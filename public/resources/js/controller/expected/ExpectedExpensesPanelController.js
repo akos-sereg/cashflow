@@ -1,6 +1,8 @@
 Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
     extend: 'Ext.app.Controller',
 
+    expenseTypeIds: [ 1, 2, 3, 4, 5 ],
+
     onLaunch: function(application) {
     },
 
@@ -46,20 +48,23 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
     	date.setDate(1);
 
     	var data = [];
-    	for (var i=0; i!=9; i++) {
+        // Table skeleton, with dates
+    	for (var i=0; i!=12; i++) {
     		var row = {};
     		date.setMonth(date.getMonth() + 1);
-    		row['effective_date'] = date.toLocaleString('en-US', { month: "long" });
+    		row['effective_date'] = date.toLocaleString('en-US', { month: 'long' });
     		row['year'] = date.getFullYear();
     		row['month'] = date.getMonth();
-    		row['expected_id_1'] = [];
-    		row['expected_id_2'] = [];
-    		row['expected_id_3'] = [];
-    		row['expected_id_4'] = [];
+            row['total'] = 0;
 
+            for (var j=0; j!=this.expenseTypeIds.length; j++) {
+                row['expected_id_' + this.expenseTypeIds[j]] = [];
+            }
+    		
     		data.push(row);
     	}
 
+        // Add items to cells in table (expected expenses)
     	for (var i=0; i!=rawData.length; i++) {
 
     		var itemDate = new Date(Date.parse(rawData[i].effective_date));
@@ -79,7 +84,29 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
     		row[rawData[i].column_id].push(rawData[i]);
     	}
 
+        // Calculate total, rewrite dates to include total amount for month
+        for (var i=0; i!=data.length; i++) {
+            for (var j=0; j!=this.expenseTypeIds.length; j++) {
+                data[i].total += this.getTotalForCell(data[i]['expected_id_' + this.expenseTypeIds[j]]);
+            }
+
+            data[i].effective_date += '<br/><br/><span style="float: right;">' + formatAmount(data[i].total) + ' Ft</span>';
+        }
+
     	return data;
+    },
+
+    getTotalForCell: function(itemsInCell) {
+        var total = 0;
+        if (itemsInCell == undefined || itemsInCell == null) {
+            return total;
+        }
+
+        for (var i=0; i!=itemsInCell.length; i++) {
+            total += itemsInCell[i].amount;
+        }
+
+        return total;
     }
 });
 
