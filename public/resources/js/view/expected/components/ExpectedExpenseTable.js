@@ -4,25 +4,23 @@ Ext.require([
     'Ext.util.*',
 ]);
 
-// Initialize stores
-// -------------------------------------------------------------------------------------
-var expectedExpenseDataGridStore = Ext.create('Ext.data.JsonStore', {
-    fields: [
-       {name: 'effective_date'},
-       {name: 'expected_id_1'},
-       {name: 'expected_id_2'},
-       {name: 'expected_id_3'},
-       {name: 'expected_id_4'},
-       {name: 'expected_id_5'},
-    ],
-});
+function createStore() {
+
+    var fields = [{ name: 'effective_date' } ];
+    
+    for (var i=0; i!=expenseTypeIds.length; i++) {
+        fields.push({ name: 'expected_id_' + expenseTypeIds[i] });
+    }
+
+    return Ext.create('Ext.data.JsonStore', { fields: fields });
+}
 
 // Components
 // -------------------------------------------------------------------------------------
 //var expenseDataGrid = Ext.create('Ext.grid.Panel', {
 Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
     extend: 'Ext.grid.Panel',
-    store: expectedExpenseDataGridStore,
+    store: createStore(),
     margins: '1 1 1 1',
     columns: [],
     height: 850,
@@ -40,6 +38,7 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
 
     configureTable: function(items) {
         var self = this;
+
         this.columns = [ { header: 'Effective Date', dataIndex: 'effective_date', width: 200 } ];
 
         for(var i=0; i!=items.length; i++) {
@@ -84,10 +83,6 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
                         }
                         
                         itemsHtml += '<span onClick="Ext.getCmp(\'expected-expenses-panel\').controller.toggleExpectedExpenseStatus('+val[j].id+', '+(val[j].paid === 1 ? 0 : 1)+')" title="Amount: '+formatAmount(val[j].amount)+' Ft, Effective: '+new Date(effectiveDate).toISOString().substring(0, 10)+'" style="float: left; margin: 3px; cursor: pointer; color: '+fontColor+'; border-radius: 50px; padding-top: 2px; padding-bottom: 2px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + label + '</span>';
-                        if (j != val.length-1) {
-                            // spacer
-                            //itemsHtml += '<span style="height: 40px; padding-top: 50px;">asdf</span><br/><br/>';
-                        }
                     }
                     itemsHtml += '</div>';
 

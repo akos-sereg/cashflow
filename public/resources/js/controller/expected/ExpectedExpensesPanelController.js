@@ -1,7 +1,9 @@
 Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
     extend: 'Ext.app.Controller',
 
-    expenseTypeIds: [ 1, 2, 3, 4, 5 ],
+    // Hardcoded values, represents ids from expencted_expense_type - defined in utils.js
+    // TODO: to be requested from service
+    expenseTypeIds: expenseTypeIds,
 
     onLaunch: function(application) {
     },

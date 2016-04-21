@@ -8,3 +8,5 @@ function formatAmount(amount) {
 function epochDays(date) {
 	return date / 1000 / 60 / 60 / 24;
 }
+
+var expenseTypeIds = [ 1, 2, 3, 4, 5 ];
