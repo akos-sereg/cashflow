@@ -5,17 +5,24 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
     // TODO: to be requested from service
     expenseTypeIds: expenseTypeIds,
 
+    currentDate: new Date(),
+
     onLaunch: function(application) {
     },
 
     onFocus: function() {
-        Ext.getCmp('expected-expense-table').reconfigure(undefined, Ext.getCmp('expected-expense-table').columns);
+        var table = Ext.getCmp('expected-expense-table');
+        table.reconfigure(undefined, table.columns);
 
-		var me = this;
+		this.refresh();
+    },
 
-		$.ajax({
+    refresh: function() {
+        var me = this;
+
+        $.ajax({
             type: 'GET',
-            url: '/api/getExpectedExpenses',
+            url: '/api/getExpectedExpenses?date=' + formatDate(me.currentDate),
             success: function(rawData) {
 
                 Ext.getCmp('expected-expense-table').store.loadData(me.getMonthlyExpectedExpenses(rawData));
@@ -46,7 +53,7 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
 
     getMonthlyExpectedExpenses: function(rawData) {
 
-    	var date = new Date(new Date().getTime() + ((-3 * 30)*24*60*60*1000));
+    	var date = new Date(this.currentDate.getTime() + ((-3 * 30)*24*60*60*1000));
     	date.setDate(1);
 
     	var data = [];

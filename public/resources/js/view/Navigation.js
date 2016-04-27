@@ -29,7 +29,7 @@ Ext.define('Cashflow.view.Navigation', {
     {
         xtype: 'button',
         id: 'expectedExpensesBtn',
-        icon: '/resources/images/icon-tags.png',
+        icon: '/resources/images/page-icon.png',
         text: 'Expected expenses',
         scale: 'medium',
         anchor: '100%',
@@ -55,7 +55,7 @@ Ext.define('Cashflow.view.Navigation', {
         Ext.getCmp('tagAssocBtn').getEl().dom.style.background = '#eeeeee';
 
         expectedExpensesPanel.getEl().hide();
-        Ext.getCmp('expectedExpensesBtn').setIcon('/resources/images/icon-tags_off.png');
+        Ext.getCmp('expectedExpensesBtn').setIcon('/resources/images/page-icon.png');
         Ext.getCmp('expectedExpensesBtn').getEl().dom.style.background = '#eeeeee';
 
         switch(tabName) {
@@ -74,7 +74,7 @@ Ext.define('Cashflow.view.Navigation', {
 
             case 'expectedExpenses':
                 expectedExpensesPanel.getEl().show();
-                Ext.getCmp('expectedExpensesBtn').setIcon('/resources/images/bar_chart.png');
+                Ext.getCmp('expectedExpensesBtn').setIcon('/resources/images/page-icon.png');
                 Ext.getCmp('expectedExpensesBtn').getEl().dom.style.background = '#dddddd';
                 expectedExpensesPanel.controller.onFocus();
                 break;

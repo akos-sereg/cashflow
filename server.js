@@ -178,9 +178,9 @@ router.route('/getExpectedExpenses')
         connection.query('SELECT ee.id, eet.id as type_id, eet.name as type, ee.name, ee.amount, ee.effective_date, ee.paid '
             + 'FROM cashflow.expected_expense ee '
             + '  JOIN cashflow.expected_expense_type eet ON (eet.id = ee.expected_expense_type_id) '
-            + 'WHERE ee.effective_date > DATE_ADD(NOW(), INTERVAL -3 MONTH) '
-            + '  AND ee.effective_date < DATE_ADD(NOW(), INTERVAL 12 MONTH) ',
-            [ ],
+            + 'WHERE ee.effective_date > DATE_ADD(?, INTERVAL -3 MONTH) '
+            + '  AND ee.effective_date < DATE_ADD(?, INTERVAL 12 MONTH) ',
+            [ req.param('date') ],
             function(err, rows, fields) {
 
                 if (err) {

@@ -23,7 +23,7 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
     store: createStore(),
     margins: '1 1 1 1',
     columns: [],
-    height: 850,
+    height: 810,
     width: 1200,
     border: false,
     scroll: false, // using native scrolling, as ExtJS' grid scrolling is buggy in v4

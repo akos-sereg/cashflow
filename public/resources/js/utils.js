@@ -9,4 +9,15 @@ function epochDays(date) {
 	return date / 1000 / 60 / 60 / 24;
 }
 
+function formatDate(date) {
+	return $.datepicker.formatDate( "yy-mm-d", new Date(date));
+}
+
+Date.prototype.addDays = function(days)
+{
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+}
+
 var expenseTypeIds = [ 1, 2, 3, 4, 5 ];
