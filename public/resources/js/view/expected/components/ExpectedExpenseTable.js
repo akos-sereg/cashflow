@@ -39,7 +39,7 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
     configureTable: function(items) {
         var self = this;
 
-        this.columns = [ { header: 'Effective Date', dataIndex: 'effective_date', width: 200 } ];
+        this.columns = [ { header: 'Effective Date', dataIndex: 'effective_date', width: 200, sortable: false } ];
 
         for(var i=0; i!=items.length; i++) {
             var dataIndex = 'expected_id_' + items[i].data.id;
@@ -47,6 +47,7 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
                 header: items[i].data.name,
                 dataIndex: dataIndex,
                 width: 200,
+                sortable: false,
                 renderer: function(val) {
 
                     if (val == undefined || val.length == 0) {
