@@ -7,8 +7,7 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
 
     currentDate: new Date(),
 
-    onLaunch: function(application) {
-    },
+    onLaunch: function(application) { },
 
     onFocus: function() {
         var table = Ext.getCmp('expected-expense-table');
@@ -26,6 +25,20 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
             success: function(rawData) {
 
                 Ext.getCmp('expected-expense-table').store.loadData(me.getMonthlyExpectedExpenses(rawData));
+            },
+            contentType: 'application/json; charset=utf-8'
+        });
+    },
+
+    createExpectedExpense: function(item) {
+        var me = this;
+        $.ajax({
+            type: 'POST',
+            url: '/api/createExpectedExpense',
+            data: JSON.stringify(item),
+            dataType: 'json',
+            success: function(rawData) {
+                me.refresh();
             },
             contentType: 'application/json; charset=utf-8'
         });

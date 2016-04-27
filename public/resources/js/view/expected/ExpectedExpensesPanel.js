@@ -32,6 +32,16 @@ Ext.define('Cashflow.view.expected.ExpectedExpensesPanel', {
                         controller.currentDate = controller.currentDate.addDays(30);
                         controller.refresh();
                     }
+                },
+                {
+                    xtype: 'button',
+                    text: 'Add',
+                    padding: 5,
+                    margin: 3,
+                    handler : function(){
+                        var popup = Ext.create('Cashflow.view.expected.components.CreateExpectedExpensePopup');
+                        popup.show();
+                    }
                 }]
             },
             Ext.create('Cashflow.view.expected.components.ExpectedExpenseTable', { id: 'expected-expense-table' })

@@ -180,7 +180,10 @@ router.route('/getExpectedExpenses')
             + '  JOIN cashflow.expected_expense_type eet ON (eet.id = ee.expected_expense_type_id) '
             + 'WHERE ee.effective_date > DATE_ADD(?, INTERVAL -3 MONTH) '
             + '  AND ee.effective_date < DATE_ADD(?, INTERVAL 12 MONTH) ',
-            [ req.param('date') ],
+            [ 
+                req.param('date'), 
+                req.param('date') 
+            ],
             function(err, rows, fields) {
 
                 if (err) {
@@ -204,6 +207,23 @@ router.route('/getExpectedExpenses')
                 res.send(data);
             });
      });
+
+router.route('/createExpectedExpense')
+
+     .post(function(req, res) {
+
+         connection.query('INSERT INTO cashflow.expected_expense (id, expected_expense_type_id, name, amount, effective_date, paid) VALUES (default, ?, ?, ?, ?, 0) ',
+             [
+                 req.body['typeId'],
+                 req.body['name'],
+                 req.body['amount'],
+                 req.body['effectiveDate']
+             ],
+             function(err, result, fields) {
+
+                 res.send([err, result, fields]);
+             });
+      });
 
 router.route('/setExpectedExpenseStatus')
 
