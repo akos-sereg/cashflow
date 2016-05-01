@@ -10,7 +10,7 @@ var aggregator  = require('./controller/ExpenseAggregator');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : '******'
+  password : 'lofasz'
 });
 
 connection.connect();

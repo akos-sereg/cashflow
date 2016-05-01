@@ -50,22 +50,21 @@ Ext.define('Cashflow.view.expected.components.CreateExpectedExpensePopup', {
 			allowBlank: false
 		},
 		{
-                xtype: 'button',
-                text: 'Create',
-                padding: 5,
-                margin: 3,
-                handler : function() {
-                    var model = { 
-                    	name: Ext.getCmp('expected-expense.name').getValue(),
-                    	typeId: Ext.getCmp('expected-expense.typeId').getValue(),
-                    	effectiveDate: formatDate(Ext.getCmp('expected-expense.effectiveDate').getValue()),
-                    	amount: Ext.getCmp('expected-expense.amount').getValue(),
-                    };
+            xtype: 'button',
+            text: 'Create',
+            padding: 5,
+            margin: 3,
+            handler : function() {
+                var model = { 
+                	name: Ext.getCmp('expected-expense.name').getValue(),
+                	typeId: Ext.getCmp('expected-expense.typeId').getValue(),
+                	effectiveDate: formatDate(Ext.getCmp('expected-expense.effectiveDate').getValue()),
+                	amount: Ext.getCmp('expected-expense.amount').getValue(),
+                };
 
-                    Ext.getCmp('expected-expenses-panel').controller.createExpectedExpense(model);
-                    this.up('window').destroy();
-                }
+                Ext.getCmp('expected-expenses-panel').controller.createExpectedExpense(model);
+                this.up('window').destroy();
             }
-		]
+        }]
 	}],
 });

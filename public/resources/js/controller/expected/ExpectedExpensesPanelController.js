@@ -44,24 +44,11 @@ Ext.define('Cashflow.controller.expected.ExpectedExpensesPanelController', {
         });
     },
 
-    toggleExpectedExpenseStatus: function(id, status) {
+    editExpectedExpense: function(id, status, name, effectiveDate, amount) {
         
-        var me = this;
-        Ext.MessageBox.confirm('Change Status', 'Are you sure you want to change status?', function(btn){
-            if(btn === 'yes'){
-                var request = { itemId: id, status: status };
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/setExpectedExpenseStatus',
-                    data: JSON.stringify(request),
-                    dataType: 'json',
-                    success: function(rawData) {
-                        me.onFocus();
-                    },
-                    contentType: 'application/json; charset=utf-8'
-                });
-            }
-         });
+        var popup = Ext.create('Cashflow.view.expected.components.EditExpectedExpensePopup');
+        popup.populate(id, status, name, effectiveDate, amount);
+        popup.show();
     },
 
     getMonthlyExpectedExpenses: function(rawData) {

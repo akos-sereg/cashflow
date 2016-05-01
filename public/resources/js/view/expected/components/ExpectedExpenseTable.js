@@ -83,7 +83,7 @@ Ext.define('Cashflow.view.expected.components.ExpectedExpenseTable', {
                             label += ' (' + Math.ceil(Math.abs(nowDaysFromEpoch-effectiveDateDaysFromEpoch)) + ' days)';
                         }
                         
-                        itemsHtml += '<span onClick="Ext.getCmp(\'expected-expenses-panel\').controller.toggleExpectedExpenseStatus('+val[j].id+', '+(val[j].paid === 1 ? 0 : 1)+')" title="Amount: '+formatAmount(val[j].amount)+' Ft, Effective: '+new Date(effectiveDate).toISOString().substring(0, 10)+'" style="float: left; margin: 3px; cursor: pointer; color: '+fontColor+'; border-radius: 50px; padding-top: 2px; padding-bottom: 2px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + label + '</span>';
+                        itemsHtml += '<span onClick="Ext.getCmp(\'expected-expenses-panel\').controller.editExpectedExpense('+val[j].id+', '+(val[j].paid === 1 ? 0 : 1)+', \'' + val[j].name + '\', \'' + val[j].effective_date + '\', \'' + val[j].amount + '\')" title="Amount: '+formatAmount(val[j].amount)+' Ft, Effective: '+new Date(effectiveDate).toISOString().substring(0, 10)+'" style="float: left; margin: 3px; cursor: pointer; color: '+fontColor+'; border-radius: 50px; padding-top: 2px; padding-bottom: 2px; padding-right: 15px; padding-left: 15px; background-color: '+bg+';">' + label + '</span>';
                     }
                     itemsHtml += '</div>';
 
