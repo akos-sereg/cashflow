@@ -103,7 +103,27 @@ Ext.define('Cashflow.view.expected.components.EditExpectedExpensePopup', {
 	            padding: 5,
 	            margin: 3,
 	            handler : function() {
-	                this.up('window').destroy();
+
+					var parentComponent = Ext.ComponentQuery.query('edit-expected-expense-window')[0];
+					var me = this;
+	            	
+	            	Ext.MessageBox.confirm('Delete Expected Expense', 'Are you sure you want to delete?', function(btn){
+			            if(btn === 'yes'){
+			            	var request = { id: parentComponent.data.id };
+
+			                $.ajax({
+			                    type: 'POST',
+			                    url: '/api/deleteExpectedExpense',
+			                    data: JSON.stringify(request),
+			                    dataType: 'json',
+			                    contentType: 'application/json; charset=utf-8',
+			                    success: function(rawData) {
+			                        Ext.getCmp('expected-expenses-panel').controller.refresh();
+			                        me.up('window').destroy();
+			                    }
+			                });
+			            }
+			        });
 	            }
 	        }]
 		}]

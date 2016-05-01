@@ -10,7 +10,7 @@ var aggregator  = require('./controller/ExpenseAggregator');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : 'lofasz'
+  password : '******'
 });
 
 connection.connect();
@@ -221,6 +221,17 @@ router.route('/createExpectedExpense')
              ],
              function(err, result, fields) {
 
+                 res.send([err, result, fields]);
+             });
+      });
+
+router.route('/deleteExpectedExpense')
+
+     .post(function(req, res) {
+
+         connection.query('DELETE FROM cashflow.expected_expense WHERE id = ?',
+             [ req.body['id'] ],
+             function(err, result, fields) {
                  res.send([err, result, fields]);
              });
       });
