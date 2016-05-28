@@ -34,6 +34,8 @@ Ext.define('Cashflow.controller.expenses.charts.ExpenseGraphController', {
                     }]
                 } );
 
+                var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );  
+
                 var y_ticks = new Rickshaw.Graph.Axis.Y( {
                     graph: graph,
                     tickFormat: function(y){ return formatAmount(y) }

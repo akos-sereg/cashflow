@@ -12,7 +12,7 @@ Ext.define('Cashflow.view.expenses.charts.ExpenseGraph', {
         // Placeholder for Rickshaw Graph
         xtype: 'panel',
         html: '<div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>'
-            + '<div id="chart" style="position: relative; left: 40px; width: 635px; height: '+(220 /* preferred height */ + 80)+'px;"></div>'
+            + '<div id="chart" style="position: relative; left: 5px; width: 635px; height: '+(220 /* preferred height */ + 80)+'px;"></div>'
     }],
 
     clear: function() {
