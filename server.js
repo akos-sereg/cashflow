@@ -6,6 +6,9 @@ var mysql       = require('mysql');
 var async       = require('async');
 var aggregator  = require('./controller/ExpenseAggregator');
 
+var ACCOUNT_ID_FOR_EXPENSES = 1;
+var ACCOUNT_ID_FOR_SAVINGS = 3;
+
 // MySQL Connection
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -56,24 +59,69 @@ router.route('/getAggregatedExpenses')
 
     .get(function(req, res) {
 
-        connection.query('SELECT expense.*,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
-            + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? ORDER BY expense_date ASC',
-            [
-                req.param('startDate'),
-                req.param('endDate')
-            ],
-            function(err, rows, fields) {
+        var calls = [];
+        var expenseResults = null;
+        var savingsResults = null;
 
-                if (err) {
-                    console.log(err);
-                    return;
-                }
+        // Declare function for Expense fetching
+        var fetchExpenses = function(callback) {
+            connection.query('SELECT expense.*,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
+                + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? AND account_id = ? ORDER BY expense_date ASC',
+                [
+                    req.param('startDate'),
+                    req.param('endDate'),
+                    ACCOUNT_ID_FOR_EXPENSES
+                ],
+                function(err, rows, fields) {
 
-                var expenseAggregator = new aggregator(rows);
-                var result = expenseAggregator.Aggregate();
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
 
-                res.send(result);
-            });
+                    var expenseAggregator = new aggregator(rows);
+                    var result = expenseAggregator.Aggregate('#c05020', 'Expenses');
+
+                    expenseResults = result;
+                    callback();
+                });
+        }
+
+        // Declare function for Savings fetching
+        var fetchSavings = function(callback) {
+            connection.query('SELECT expense.*,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
+                + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? AND account_id = ? ORDER BY expense_date ASC',
+                [
+                    req.param('startDate'),
+                    req.param('endDate'),
+                    ACCOUNT_ID_FOR_SAVINGS
+                ],
+                function(err, rows, fields) {
+
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+
+                    var savingsAggregator = new aggregator(rows);
+                    var result = savingsAggregator.Aggregate('#BBE0FF', 'Savings');
+
+                    if (rows.length == 0) {
+                        result = { color: '#BBE0FF', data: [], name: 'Savings' };
+                    }
+
+                    savingsResults = result;
+                    callback();
+                });
+        }
+
+        calls.push(fetchExpenses);
+        calls.push(fetchSavings);
+
+        async.parallel(calls, function(){
+            res.send([expenseResults, savingsResults]);
+        });
+
      });
 
 // Expense Data

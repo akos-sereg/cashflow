@@ -26,7 +26,11 @@ Ext.define('Cashflow.controller.expenses.charts.ExpenseGraphController', {
                     interpolation: 'linear',
                     series: [{
                             data: data[0].data,
-                            color: "#c05020"
+                            color: data[0].color
+                    },
+                    {
+                            data: data[1].data,
+                            color: data[1].color
                     }]
                 } );
 

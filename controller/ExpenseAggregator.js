@@ -3,19 +3,19 @@ function ExpenseAggregator(rows) {
     this.currentAmount = 0;
 }
 
-ExpenseAggregator.prototype.Aggregate = function() {
+ExpenseAggregator.prototype.Aggregate = function(color, name) {
     var result = [];
 
     if (this.rows == null || this.rows.length == 0) {
         return result;
     }
 
-    var result = [ { 'color': '#c05020', 'name': 'Expenses', 'data': [ ] }];
+    var result = { 'color': color, 'name': name, 'data': [ ] };
     var firstDay = this.rows[0].DAYS_SINCE_EPOCH;
     var lastDay = this.rows[this.rows.length-1].DAYS_SINCE_EPOCH;
 
     for (var dayFromEpoch = firstDay; dayFromEpoch != lastDay; dayFromEpoch++) {
-        result[0].data[dayFromEpoch-firstDay] = {
+        result.data[dayFromEpoch-firstDay] = {
             'x': dayFromEpoch * 60 * 60 * 24,
             'y': this.GetAggregatedAmount(dayFromEpoch),
             title: this.GetAggregatedTitle(dayFromEpoch)
