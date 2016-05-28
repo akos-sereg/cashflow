@@ -135,10 +135,12 @@ router.route('/getExpenses')
             + '  LEFT JOIN cashflow.expense_tag ON (expense.transactionId = expense_tag.transactionId) '
             + '  LEFT JOIN cashflow.tag ON (expense_tag.tag_id = tag.id) '
             + 'WHERE expense_date BETWEEN ? AND ? '
+            + '  AND account_id = ? '
             + 'ORDER BY expense_date ASC',
             [
                 req.param('startDate'),
-                req.param('endDate')
+                req.param('endDate'),
+                ACCOUNT_ID_FOR_EXPENSES
             ],
             function(err, rows, fields) {
 
@@ -401,11 +403,13 @@ router.route('/getAggregatedExpensesByTags')
             + '  JOIN cashflow.expense_tag et ON (et.transactionId = e.transactionId) '
             + '  JOIN cashflow.tag t ON (t.id = et.tag_id) '
             + 'WHERE e.expense_date BETWEEN ? AND ? '
+            + '  AND account_id = ? '
             + 'GROUP BY t.id '
             + 'ORDER BY amount DESC',
             [
                 req.param('startDate'),
-                req.param('endDate')
+                req.param('endDate'),
+                ACCOUNT_ID_FOR_EXPENSES
             ],
             function(err, rows, fields) {
 
