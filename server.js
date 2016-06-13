@@ -6,8 +6,11 @@ var mysql       = require('mysql');
 var async       = require('async');
 var aggregator  = require('./controller/ExpenseAggregator');
 
+// configuration
 var ACCOUNT_ID_FOR_EXPENSES = 1;
 var ACCOUNT_ID_FOR_SAVINGS = 3;
+//var allowedIpRange = '192.168.1.';
+var allowedIpRange = null;
 
 // MySQL Connection
 var connection = mysql.createConnection({
@@ -20,6 +23,17 @@ connection.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(function(request, response, next) {
+    console.log('Authorizing request from ' + request.connection.remoteAddress + ' for ' + request.method + ' ' + request.originalUrl);
+    if (allowedIpRange != null && request.connection.remoteAddress.indexOf(allowedIpRange) == -1) {
+        console.log('Deny request from ' + request.connection.remoteAddress);
+        response.status(403).send();
+        response.end();
+    }
+    else {
+        next();
+    }
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 var port = process.env.PORT || 3009;

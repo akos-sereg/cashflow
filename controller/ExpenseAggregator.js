@@ -14,7 +14,7 @@ ExpenseAggregator.prototype.Aggregate = function(color, name) {
     var firstDay = this.rows[0].DAYS_SINCE_EPOCH;
     var lastDay = this.rows[this.rows.length-1].DAYS_SINCE_EPOCH;
 
-    for (var dayFromEpoch = firstDay; dayFromEpoch != lastDay; dayFromEpoch++) {
+    for (var dayFromEpoch = firstDay; dayFromEpoch <= lastDay; dayFromEpoch++) {
         result.data[dayFromEpoch-firstDay] = {
             'x': dayFromEpoch * 60 * 60 * 24,
             'y': this.GetAggregatedAmount(dayFromEpoch),
