@@ -4,6 +4,7 @@ var app         = express();
 var bodyParser  = require('body-parser');
 var mysql       = require('mysql');
 var async       = require('async');
+var chalk       = require('chalk');
 var aggregator  = require('./controller/ExpenseAggregator');
 var config      = require('./config');
 
@@ -16,13 +17,14 @@ connection.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(function(request, response, next) {
-    console.log('Authorizing request from ' + request.connection.remoteAddress + ' for ' + request.method + ' ' + request.originalUrl);
+    
     if (config.allowedIpRange != null && request.connection.remoteAddress.indexOf(config.allowedIpRange) == -1) {
-        console.log('Deny request from ' + request.connection.remoteAddress);
+        console.log(chalk.red('Deny') + ' request from ' + request.connection.remoteAddress);
         response.status(403).send();
         response.end();
     }
     else {
+        console.log(chalk.green('Authorized') + ' request from ' + request.connection.remoteAddress + ' for ' + request.method + ' ' + request.originalUrl);
         next();
     }
 });
