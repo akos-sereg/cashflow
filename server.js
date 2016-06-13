@@ -5,27 +5,19 @@ var bodyParser  = require('body-parser');
 var mysql       = require('mysql');
 var async       = require('async');
 var aggregator  = require('./controller/ExpenseAggregator');
+var config      = require('./config');
 
-// configuration
 var ACCOUNT_ID_FOR_EXPENSES = 1;
 var ACCOUNT_ID_FOR_SAVINGS = 3;
-//var allowedIpRange = '192.168.1.';
-var allowedIpRange = null;
 
-// MySQL Connection
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '******'
-});
-
+var connection = mysql.createConnection(config.mysql);
 connection.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(function(request, response, next) {
     console.log('Authorizing request from ' + request.connection.remoteAddress + ' for ' + request.method + ' ' + request.originalUrl);
-    if (allowedIpRange != null && request.connection.remoteAddress.indexOf(allowedIpRange) == -1) {
+    if (config.allowedIpRange != null && request.connection.remoteAddress.indexOf(config.allowedIpRange) == -1) {
         console.log('Deny request from ' + request.connection.remoteAddress);
         response.status(403).send();
         response.end();
