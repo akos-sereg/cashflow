@@ -5,6 +5,9 @@ var bodyParser  = require('body-parser');
 var mysql       = require('mysql');
 var async       = require('async');
 var chalk       = require('chalk');
+var untrustedFilter = require('express-defend');
+var blacklist   = require('express-blacklist');
+
 var aggregator  = require('./controller/ExpenseAggregator');
 var config      = require('./config');
 
@@ -16,8 +19,22 @@ connection.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(blacklist.blockRequests('blacklist.txt'));
+app.use(untrustedFilter.protect({ 
+    maxAttempts: 5, 
+    dropSuspiciousRequest: true, 
+    logFile: 'suspicious.log', 
+    onMaxAttemptsReached: function(ipAddress){
+        blacklist.addAddress(ipAddress);
+    } 
+}));
 app.use(function(request, response, next) {
     
+    if (config.allowedIpRange == null) {
+        next();
+        return;
+    }
+
     if (config.allowedIpRange != null && request.connection.remoteAddress.indexOf(config.allowedIpRange) == -1) {
         console.log(chalk.red('Deny') + ' request from ' + request.connection.remoteAddress);
         response.status(403).send();
@@ -511,3 +528,9 @@ process.on('SIGINT', function() {
 // =============================================================================
 app.listen(port);
 console.log('Cashflow server listening on port ' + port);
+if (config.allowedIpRange != null) {
+    console.log('Allowed IP Range: ' + config.allowedIpRange);
+}
+else {
+    console.log('IP filtering is switched OFF!');
+}

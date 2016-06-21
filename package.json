@@ -1,9 +1,15 @@
 {
   "name": "cashflow",
   "main": "server.js",
+  "repository": "akos-sereg/cashflow",
+  "license": "MIT",
   "dependencies": {
     "express": "~4.0.0",
     "body-parser": "~1.0.1",
-    "chalk": "~1.1.3"
+    "chalk": "~1.1.3",
+    "express-defend": "~1.0.2",
+    "express-blacklist": "~1.0.0",
+    "mysql": "~2.11.1",
+    "async": "~2.0.0-rc.6"
   }
 }
