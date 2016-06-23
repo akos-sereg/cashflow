@@ -23,8 +23,9 @@ app.use(blacklist.blockRequests('blacklist.txt'));
 app.use(untrustedFilter.protect({ 
     maxAttempts: 5, 
     dropSuspiciousRequest: true, 
+    consoleLogging: true,
     logFile: 'suspicious.log', 
-    onMaxAttemptsReached: function(ipAddress){
+    onMaxAttemptsReached: function(ipAddress, url){
         blacklist.addAddress(ipAddress);
     } 
 }));
