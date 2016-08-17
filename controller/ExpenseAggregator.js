@@ -1,3 +1,6 @@
+var moment      = require('moment');
+var chartDataProvider = require('chart-data-provider');
+
 function ExpenseAggregator(rows) {
     this.rows = rows; // array of cashflow.expense items (from database), plus DAYS_SINCE_EPOCH field
     this.currentAmount = 0;
@@ -11,17 +14,40 @@ ExpenseAggregator.prototype.Aggregate = function(color, name) {
     }
 
     var result = { 'color': color, 'name': name, 'data': [ ] };
-    var firstDay = this.rows[0].DAYS_SINCE_EPOCH;
-    var lastDay = this.rows[this.rows.length-1].DAYS_SINCE_EPOCH;
+    var self = this;
 
-    for (var dayFromEpoch = firstDay; dayFromEpoch <= lastDay; dayFromEpoch++) {
-        result.data[dayFromEpoch-firstDay] = {
-            'x': dayFromEpoch * 60 * 60 * 24,
-            'y': this.GetAggregatedAmount(dayFromEpoch),
-            title: this.GetAggregatedTitle(dayFromEpoch)
-        };
-    }
+    var data = chartDataProvider
+        .range(this.rows[0].expense_date, moment(this.rows[this.rows.length-1].expense_date).format('YYYY-MM-DD'))
+        .axis({ 
+            x: { 
+                input: { fieldName: 'expense_date' },
+                output: { 
+                    fieldName: 'x',        // Name of output property
+                    type: 'EPOCH',         // EPOCH|EPOCH_IN_MS|YYYY-MM-DD
+                    index: true            // Whether or not we want to have an index property (named 'index')
+                }
+            }, 
+            y: { 
+                input: { fieldName: 'expense_value' },
+                output: { 
+                    fieldName: 'y',
+                    calculation: chartDataProvider.SUM_UP_TO_CURRENT_DATE
+                }
+            } 
+        })
+        .data(this.rows, { 
+            itemRenderer: function(recordsOnDate, chartItem) {
+                var title = self.FormatAmount(chartItem.y) + ' Ft<br/>';
+                recordsOnDate.forEach(function(x) {
+                    title += x.location + ' ('+self.FormatAmount(x.expense_value)+')<br/>';
+                });
 
+                chartItem.title = title;
+            }
+        });
+
+    result.data = data;
+    
     return result;
 }
 

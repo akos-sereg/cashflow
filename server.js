@@ -5,8 +5,10 @@ var bodyParser  = require('body-parser');
 var mysql       = require('mysql');
 var async       = require('async');
 var chalk       = require('chalk');
+var moment      = require('moment');
 var untrustedFilter = require('express-defend');
 var blacklist   = require('express-blacklist');
+var ip          = require('ip');
 
 var aggregator  = require('./controller/ExpenseAggregator');
 var config      = require('./config');
@@ -529,6 +531,7 @@ process.on('SIGINT', function() {
 // =============================================================================
 app.listen(port);
 console.log('Cashflow server listening on port ' + port);
+console.log('Started at ' + ip.address());
 if (config.allowedIpRange != null) {
     console.log('Allowed IP Range: ' + config.allowedIpRange);
 }

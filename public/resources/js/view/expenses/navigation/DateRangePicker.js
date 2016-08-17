@@ -33,6 +33,7 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
     }],
 
     getStartDate: function() {
+        Ext.util.Cookies.set('cashflow_StartDate', Ext.Date.format(Ext.getCmp('startDateControl').getValue(), 'Y-m-d'));
         return Ext.Date.format(Ext.getCmp('startDateControl').getValue(), 'Y-m-d');
     },
 
@@ -82,8 +83,17 @@ Ext.define('Cashflow.view.expenses.navigation.DateRangePicker', {
         this.controller.onRangeChanged();
     },
 
+    restoreStartDateFromCookie: function() {
+        var startDateCookie = Ext.util.Cookies.get('cashflow_StartDate');
+        if (startDateCookie) {
+            Ext.getCmp('startDateControl').setValue(startDateCookie);
+        }
+    },
+
     constructor: function(config) {
         this.callParent(arguments);
         this.controller = Ext.create('Cashflow.controller.expenses.navigation.DateRangePickerController');
+
+        this.restoreStartDateFromCookie();
     }
 });
