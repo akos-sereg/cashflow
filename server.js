@@ -5,7 +5,6 @@ var bodyParser  = require('body-parser');
 var mysql       = require('mysql');
 var async       = require('async');
 var chalk       = require('chalk');
-var moment      = require('moment');
 var untrustedFilter = require('express-defend');
 var blacklist   = require('express-blacklist');
 var ip          = require('ip');
