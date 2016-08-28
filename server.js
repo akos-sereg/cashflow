@@ -8,6 +8,7 @@ var chalk       = require('chalk');
 var untrustedFilter = require('express-defend');
 var blacklist   = require('express-blacklist');
 var ip          = require('ip');
+var ipFilter    = require('express-ip-filter')
 
 var aggregator  = require('./controller/ExpenseAggregator');
 var config      = require('./config');
@@ -30,23 +31,19 @@ app.use(untrustedFilter.protect({
         blacklist.addAddress(ipAddress);
     } 
 }));
-app.use(function(request, response, next) {
-    
-    if (config.allowedIpRange == null) {
-        next();
-        return;
-    }
 
-    if (config.allowedIpRange != null && request.connection.remoteAddress.indexOf(config.allowedIpRange) == -1) {
-        console.log(chalk.red('Deny') + ' request from ' + request.connection.remoteAddress);
-        response.status(403).send();
-        response.end();
-    }
-    else {
-        console.log(chalk.green('Authorized') + ' request from ' + request.connection.remoteAddress + ' for ' + request.method + ' ' + request.originalUrl);
-        next();
-    }
+app.use(function(request, response, next) {
+    console.log(chalk.green('Request') + ' from ' + request.connection.remoteAddress + ' for ' + request.method + ' ' + request.originalUrl);
+    next();
 });
+
+if (config.allowedIpRange != null) {
+    app.use(ipFilter({
+      forbidden: '403: Forbidden',
+      filter: [ config.allowedIpRange ]
+    }));
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 var port = process.env.PORT || 3009;
