@@ -12,12 +12,17 @@ var ipFilter    = require('express-ip-filter')
 
 var aggregator  = require('./controller/ExpenseAggregator');
 var config      = require('./config');
+var sqlTemplate = require('./controller/SqlTemplate.js');
+var sqlTemplateList = require('./sql-template-list.js');
+//var expenseDao = require('./dao/ExpenseDao.js');
 
 var ACCOUNT_ID_FOR_EXPENSES = 1;
 var ACCOUNT_ID_FOR_SAVINGS = 3;
 
 var connection = mysql.createConnection(config.mysql);
 connection.connect();
+sqlTemplate.use(connection);
+sqlTemplateList.load(sqlTemplate);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -89,14 +94,11 @@ router.route('/getAggregatedExpenses')
 
         // Declare function for Expense fetching
         var fetchExpenses = function(callback) {
-            connection.query('SELECT expense.*,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
-                + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? AND account_id = ? ORDER BY expense_date ASC',
-                [
-                    req.param('startDate'),
-                    req.param('endDate'),
-                    ACCOUNT_ID_FOR_EXPENSES
-                ],
-                function(err, rows, fields) {
+
+            sqlTemplate
+                .getTemplate('FetchExpenses')
+                .fill([req.param('startDate'), req.param('endDate'), ACCOUNT_ID_FOR_EXPENSES])
+                .execute(function(err, rows, fields) {
 
                     if (err) {
                         console.log(err);
@@ -113,14 +115,11 @@ router.route('/getAggregatedExpenses')
 
         // Declare function for Savings fetching
         var fetchSavings = function(callback) {
-            connection.query('SELECT expense.*,ceil(UNIX_TIMESTAMP(expense_date)/60/60/24) as DAYS_SINCE_EPOCH '
-                + 'FROM cashflow.expense WHERE expense_date BETWEEN ? AND ? AND account_id = ? ORDER BY expense_date ASC',
-                [
-                    req.param('startDate'),
-                    req.param('endDate'),
-                    ACCOUNT_ID_FOR_SAVINGS
-                ],
-                function(err, rows, fields) {
+
+            sqlTemplate
+                .getTemplate('FetchSavings')
+                .fill([req.param('startDate'), req.param('endDate'), ACCOUNT_ID_FOR_SAVINGS])
+                .execute(function(err, rows, fields) {
 
                     if (err) {
                         console.log(err);
@@ -153,20 +152,10 @@ router.route('/getExpenses')
 
     .get(function(req, res) {
 
-        connection.query('SELECT expense.type, CAST(DATE(expense.expense_date) as CHAR) as expense_date, expense.transactionId, expense.expense_value, expense.location, '
-            + '  expense.comment, expense.expense_currency, expense.insert_date, expense.user_comment, expense.account_id, expense.modified_date, tag.label as tag '
-            + 'FROM cashflow.expense '
-            + '  LEFT JOIN cashflow.expense_tag ON (expense.transactionId = expense_tag.transactionId) '
-            + '  LEFT JOIN cashflow.tag ON (expense_tag.tag_id = tag.id) '
-            + 'WHERE expense_date BETWEEN ? AND ? '
-            + '  AND account_id = ? '
-            + 'ORDER BY expense_date ASC',
-            [
-                req.param('startDate'),
-                req.param('endDate'),
-                ACCOUNT_ID_FOR_EXPENSES
-            ],
-            function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('GetExpenses')
+            .fill([req.param('startDate'), req.param('endDate'), ACCOUNT_ID_FOR_EXPENSES])
+            .execute(function(err, rows, fields) {
 
                 if (err) {
                     console.log(err);
@@ -249,16 +238,10 @@ router.route('/getExpectedExpenses')
 
     .get(function(req, res) {
 
-        connection.query('SELECT ee.id, eet.id as type_id, eet.name as type, ee.name, ee.amount, ee.effective_date, ee.paid '
-            + 'FROM cashflow.expected_expense ee '
-            + '  JOIN cashflow.expected_expense_type eet ON (eet.id = ee.expected_expense_type_id) '
-            + 'WHERE ee.effective_date > DATE_ADD(?, INTERVAL -3 MONTH) '
-            + '  AND ee.effective_date < DATE_ADD(?, INTERVAL 12 MONTH) ',
-            [ 
-                req.param('date'), 
-                req.param('date') 
-            ],
-            function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('GetExpectedExpenses')
+            .fill([req.param('date'), req.param('date')])
+            .execute(function(err, rows, fields) {
 
                 if (err) {
                     console.log(err);
@@ -356,11 +339,9 @@ router.route('/getTagAssociations')
 
      .get(function(req, res) {
 
-         connection.query('SELECT tr.rule_id, tr.name, tr.pattern, tr.tag_id, t.label '
-         + ' FROM cashflow.tag_rule tr '
-         + ' JOIN cashflow.tag t ON (tr.tag_id = t.id) '
-         + ' ORDER BY name ASC', [ ],
-             function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('GetTagAssociations').fill([])
+            .execute(function(err, rows, fields) {
 
                  if (err) {
                      console.log(err);
@@ -422,20 +403,10 @@ router.route('/getAggregatedExpensesByTags')
 
     .get(function(req, res) {
 
-        connection.query('SELECT SUM(e.expense_value) amount, t.label '
-            + 'FROM cashflow.expense e '
-            + '  JOIN cashflow.expense_tag et ON (et.transactionId = e.transactionId) '
-            + '  JOIN cashflow.tag t ON (t.id = et.tag_id) '
-            + 'WHERE e.expense_date BETWEEN ? AND ? '
-            + '  AND account_id = ? '
-            + 'GROUP BY t.id '
-            + 'ORDER BY amount DESC',
-            [
-                req.param('startDate'),
-                req.param('endDate'),
-                ACCOUNT_ID_FOR_EXPENSES
-            ],
-            function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('GetAggregatedExpensesByTags')
+            .fill([req.param('startDate'), req.param('endDate'), ACCOUNT_ID_FOR_EXPENSES])
+            .execute(function(err, rows, fields) {
 
                 if (err) {
                     console.log(err);

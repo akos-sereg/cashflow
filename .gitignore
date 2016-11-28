@@ -1,3 +1,4 @@
 node_modules/
 /.idea/workspace.xml
 /config.js
+public/with-vue/bower_components

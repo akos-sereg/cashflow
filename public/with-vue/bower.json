@@ -1,0 +1,22 @@
+{
+  "name": "cashflow-with-vue",
+  "homepage": "https://github.com/akos-sereg/cashflow",
+  "description": "Cashflow frontent with Bootstrap and Vue",
+  "main": "",
+  "authors": [
+    "Akos Sereg"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "vue": "^2.1.3"
+  }
+}
