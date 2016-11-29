@@ -1,3 +1,19 @@
+div.ui-datepicker{
+  font-size:10px;
+}
+
+.cashflow-date-picker {
+  font-size: 10pt;
+}
+
+.cashflow-label {
+  font-size: 10pt; 
+}
+
+.cashflow-table td {
+  padding: 3;
+}
+
 /*
  * Base structure
  */

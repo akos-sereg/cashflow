@@ -7,10 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<script src="bower_components/vue/dist/vue.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script src="bower_components/d3/d3.min.js"></script>
+	<script src="bower_components/rickshaw/rickshaw.min.js"></script>
 	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+	<link href="bower_components/rickshaw/rickshaw.min.css" rel="stylesheet">
 
 	<link href="css/dashboard.css" rel="stylesheet">
+	<script src="js/utils.js"></script>
 	<script src="js/navigation.js"></script>
+	<script src="js/expenses-page.js"></script>
 </head>
 <body>
 	<div id="app">
@@ -50,17 +58,37 @@
 	          </ul>
 	        </div>
 
-	        <div v-if="navigation.currentPage == Navigation.ExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	        <div v-show="navigation.currentPage == Navigation.ExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	          <h1 class="page-header">Expenses</h1>
+
+			  <div class="panel panel-default">
+	          <table class="cashflow-table" style="margin: 10px;">
+	          	<tr>
+	          		<td class="cashflow-label">Start Date: </td>
+	          		<td><input type="text" id="startDate" class="cashflow-date-picker"></td>
+	          		<td width="20">&nbsp;</td>
+	          		<td class="cashflow-label">End Date: </td>
+	          		<td><input type="text" id="endDate" class="cashflow-date-picker"></td>
+	          		<td width="20">&nbsp;</td>
+	          		<td><button class="cashflow-label" v-on:click="loadGraph">Refresh</button></td>
+	          	</tr>
+	          </table>
+	          </div>
+	          
+	          <h2>Burndown chart</h2>
+	          <div>
+		          <div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>
+		          <div id="chart" style="position: relative; left: 5px; width: 635px; height: 280px;"></div>
+	      	  </div>
 
 	        </div>
 
-			<div v-if="navigation.currentPage == Navigation.TagsPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<div v-show="navigation.currentPage == Navigation.TagsPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	          <h1 class="page-header">Tags</h1>
 
 	        </div>
 
-	        <div v-if="navigation.currentPage == Navigation.UpcomingExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	        <div v-show="navigation.currentPage == Navigation.UpcomingExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	          <h1 class="page-header">Upcoming Expenses</h1>
 
 	        </div>
@@ -72,7 +100,6 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     
-	<script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="js/app.js"></script>
 </body>

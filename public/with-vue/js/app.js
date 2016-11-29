@@ -7,7 +7,16 @@ var app = new Vue({
   },
   methods: {
     changePage: function (newPage) {
+      	
       	this.navigation.currentPage = newPage;
+      	
+    },
+
+    loadGraph: function() {
+    	ExpensesPage.loadGraph();
     }
   }
 });
+
+ExpensesPage.initialize();
+
