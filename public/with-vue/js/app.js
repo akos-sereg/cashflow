@@ -1,6 +1,7 @@
 var app = new Vue({
   el: '#app',
   data: {
+    expenseGraphData: null,
     navigation: {
     	currentPage: Navigation.ExpensesPage
     }

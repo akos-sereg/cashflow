@@ -62,17 +62,17 @@
 	          <h1 class="page-header">Expenses</h1>
 
 			  <div class="panel panel-default">
-	          <table class="cashflow-table" style="margin: 10px;">
-	          	<tr>
-	          		<td class="cashflow-label">Start Date: </td>
-	          		<td><input type="text" id="startDate" class="cashflow-date-picker"></td>
-	          		<td width="20">&nbsp;</td>
-	          		<td class="cashflow-label">End Date: </td>
-	          		<td><input type="text" id="endDate" class="cashflow-date-picker"></td>
-	          		<td width="20">&nbsp;</td>
-	          		<td><button class="cashflow-label" v-on:click="loadGraph">Refresh</button></td>
-	          	</tr>
-	          </table>
+			  	<div class="cashflow-panel">
+				  	<span>Start Date: </span>
+				  	<input type="text" id="startDate" class="cashflow-date-picker">
+
+				  	<span>End Date: </span>
+				  	<input type="text" id="endDate" class="cashflow-date-picker">
+
+				  	<button class="btn btn-default btn-sm" v-on:click="loadGraph">Refresh</button>
+
+				  	<button class="btn btn-primary btn-sm cashflow-float-right" v-on:click="loadGraph">Record Savings</button>
+				 </div>
 	          </div>
 	          
 	          <h2>Burndown chart</h2>

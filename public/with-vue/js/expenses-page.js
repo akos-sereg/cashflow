@@ -3,17 +3,30 @@ var ExpensesPage = {
 	initialize: function() {
 		$('#startDate').datepicker({ dateFormat: 'yy-mm-dd' });
 		$('#endDate').datepicker({ dateFormat: 'yy-mm-dd' });
+        
+        this.restoreDateRangeState();
+        this.loadGraph();
 	},
 
 	loadGraph: function() {
 
 		$('#y_axis').html('');
         $('#chart').html('');
+
+        this.persistDateRangeState();
         
 		$.ajax({
             type: 'GET',
             url: '/api/getAggregatedExpenses?startDate=' + $('#startDate').val() + '&endDate=' + $('#endDate').val(),
+            contentType: 'application/json; charset=utf-8',
             success: function(data) {
+
+                app.expenseGraphData = data;
+
+                // Clear Graph
+                // ---------------------------------------------------------------------------------
+                $('#y_axis').html('');
+                $('#chart').html('');
 
                 // Render Graph
                 // ---------------------------------------------------------------------------------
@@ -34,8 +47,7 @@ var ExpensesPage = {
                     }]
                 } );
 
-                var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );  
-
+                var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );
                 var y_ticks = new Rickshaw.Graph.Axis.Y( {
                     graph: graph,
                     tickFormat: function(y){ return Utils.formatAmount(y) }
@@ -55,8 +67,28 @@ var ExpensesPage = {
                     return title;
                 } });
 
-            },
-            contentType: 'application/json; charset=utf-8'
+            }
         });
-	}
+	},
+
+    persistDateRangeState: function() {
+        Utils.setCookie('cashflow_StartDate', $('#startDate').val(), 365);
+    },
+
+    restoreDateRangeState: function() {
+        var startDate = Utils.getCookie('cashflow_StartDate');
+        var endDate = Utils.getCookie('cashflow_EndDate');
+
+        if (startDate != null) {
+            $('#startDate').val(startDate);
+        }
+        else {
+            var dateOffset = (24*60*60*1000) * 30; // 30 days
+            var myDate = new Date();
+            myDate.setTime(myDate.getTime() - dateOffset);
+            $('#startDate').datepicker("setDate", myDate);
+        }
+
+        $('#endDate').datepicker("setDate", new Date());
+    }
 }

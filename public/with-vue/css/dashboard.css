@@ -12,6 +12,19 @@ div.ui-datepicker{
 
 .cashflow-table td {
   padding: 3;
+  width: 100%;
+}
+
+.cashflow-panel {
+  padding: 8px;
+}
+
+.cashflow-float-left {
+  position: left;
+}
+
+.cashflow-float-right {
+  float: right;
 }
 
 /*
