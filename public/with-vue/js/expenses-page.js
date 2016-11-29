@@ -1,19 +1,43 @@
 var ExpensesPage = {
 
+    components: null,
+
 	initialize: function() {
-		$('#startDate').datepicker({ dateFormat: 'yy-mm-dd' });
-		$('#endDate').datepicker({ dateFormat: 'yy-mm-dd' });
+
+        this.readComponents();
+
+		this.components.dateRangeSelector.startDate.datepicker({ dateFormat: 'yy-mm-dd' });
+		this.components.dateRangeSelector.endDate.datepicker({ dateFormat: 'yy-mm-dd' });
         
         this.restoreDateRangeState();
         this.loadGraph();
+        this.loadPieChart();
 	},
 
+    readComponents: function() {
+        this.components = {
+            dateRangeSelector: {
+                startDate: $('#startDate'),
+                endDate: $('#endDate'),
+            },
+            expenseGraph: {
+                yAxis: $('#y_axis'),
+                chart: $('#chart')
+            },
+            pieChart: $('#expenseDistributionChart')
+        };
+    },
+
+    /********************************************************************************
+      Expense Burndown Graph
+    ********************************************************************************/
 	loadGraph: function() {
 
-		$('#y_axis').html('');
-        $('#chart').html('');
+		this.components.expenseGraph.yAxis.html('');
+        this.components.expenseGraph.chart.html('');
 
         this.persistDateRangeState();
+        var self = this;
         
 		$.ajax({
             type: 'GET',
@@ -25,8 +49,8 @@ var ExpensesPage = {
 
                 // Clear Graph
                 // ---------------------------------------------------------------------------------
-                $('#y_axis').html('');
-                $('#chart').html('');
+                self.components.expenseGraph.yAxis.html('');
+                self.components.expenseGraph.chart.html('');
 
                 // Render Graph
                 // ---------------------------------------------------------------------------------
@@ -72,7 +96,7 @@ var ExpensesPage = {
 	},
 
     persistDateRangeState: function() {
-        Utils.setCookie('cashflow_StartDate', $('#startDate').val(), 365);
+        Utils.setCookie('cashflow_StartDate', this.components.dateRangeSelector.startDate.val(), 365);
     },
 
     restoreDateRangeState: function() {
@@ -80,15 +104,90 @@ var ExpensesPage = {
         var endDate = Utils.getCookie('cashflow_EndDate');
 
         if (startDate != null) {
-            $('#startDate').val(startDate);
+            this.components.dateRangeSelector.startDate.val(startDate);
         }
         else {
             var dateOffset = (24*60*60*1000) * 30; // 30 days
             var myDate = new Date();
             myDate.setTime(myDate.getTime() - dateOffset);
-            $('#startDate').datepicker("setDate", myDate);
+
+            this.components.dateRangeSelector.startDate.datepicker("setDate", myDate);
         }
 
-        $('#endDate').datepicker("setDate", new Date());
+        this.components.dateRangeSelector.endDate.datepicker("setDate", new Date());
+    },
+
+    /********************************************************************************
+      Expense Distribution PieChart
+    ********************************************************************************/
+
+    loadPieChart: function() {
+
+        var self = this;
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/getAggregatedExpensesByTags?startDate=' + this.components.dateRangeSelector.startDate.val() + '&endDate=' + this.components.dateRangeSelector.endDate.val(),
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+
+                // Aggregate
+                var sum = 0;
+                for (var i=0; i!=data.length; i++) {
+                    sum += Math.abs(data[i].amount);
+                }
+
+                for (var i=0; i!=data.length; i++) {
+                    data[i].amount = (Math.abs(data[i].amount) * 100) / sum;
+                }
+
+                var displayedData = [];
+                var othersIndex = -1;
+                for (var i=0; i!=data.length; i++) {
+                    if (data[i].amount > 5) {
+                        displayedData.push(data[i]);
+                    }
+                    else {
+                        if (othersIndex == -1) {
+                            displayedData.push({ label: 'Others', amount: data[i].amount });
+                            othersIndex = i;
+                        }
+                        else {
+                            displayedData[othersIndex].amount += data[i].amount;
+                        }
+                    }
+                }
+
+                var pieAvailableColors = [ '#E3FF75', '#FFBF75', '#FF7583', '#FF75CE', '#BB75FF', '#7589FF', '#75E8FF', '#75FFAC', '#B6FF75' ];
+                var pieLabels = [];
+                var pieData = [];
+                var pieColors = [];
+
+                var index = 0;
+                displayedData.forEach(function(item) {
+                    pieLabels.push(item.label);
+                    pieData.push(Utils.formatAmount(item.amount));
+                    pieColors.push(pieAvailableColors[index % pieAvailableColors.length]);
+                    index++;
+                });
+
+                // Populate PieChart
+                var myPieChart = new Chart(self.components.pieChart, {
+                    type: 'pie',
+                    data: {
+                        labels: pieLabels,
+                        datasets: [
+                            {
+                                data: pieData,
+                                backgroundColor: pieColors,
+                                hoverBackgroundColor: pieColors
+                            }]
+                    },
+                    options: null
+                });
+            }
+        });
+
+
     }
 }

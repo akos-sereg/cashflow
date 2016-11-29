@@ -27,6 +27,11 @@ div.ui-datepicker{
   float: right;
 }
 
+.cashflow-pie-chart {
+  width: 320px;
+  height: 320px;
+}
+
 /*
  * Base structure
  */
