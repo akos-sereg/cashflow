@@ -2,6 +2,8 @@ var ExpensesPage = {
 
     components: null,
 
+    chartColors: [ '#FFD475', '#F7BA36', '#B77F05', '#FFB570', '#F99334', '#D66700', '#FFB093', '#FF723F', '#FF4300' ],
+
 	initialize: function() {
 
         this.readComponents();
@@ -10,8 +12,10 @@ var ExpensesPage = {
 		this.components.dateRangeSelector.endDate.datepicker({ dateFormat: 'yy-mm-dd' });
         
         this.restoreDateRangeState();
+        
         this.loadGraph();
         this.loadPieChart();
+        this.loadBarChart();
 	},
 
     readComponents: function() {
@@ -24,7 +28,8 @@ var ExpensesPage = {
                 yAxis: $('#y_axis'),
                 chart: $('#chart')
             },
-            pieChart: $('#expenseDistributionChart')
+            pieChart: $('#expenseDistributionPieChart'),
+            barChart: $('#expenseDistributionBarChart'),
         };
     },
 
@@ -158,7 +163,6 @@ var ExpensesPage = {
                     }
                 }
 
-                var pieAvailableColors = [ '#E3FF75', '#FFBF75', '#FF7583', '#FF75CE', '#BB75FF', '#7589FF', '#75E8FF', '#75FFAC', '#B6FF75' ];
                 var pieLabels = [];
                 var pieData = [];
                 var pieColors = [];
@@ -167,7 +171,7 @@ var ExpensesPage = {
                 displayedData.forEach(function(item) {
                     pieLabels.push(item.label);
                     pieData.push(Utils.formatAmount(item.amount));
-                    pieColors.push(pieAvailableColors[index % pieAvailableColors.length]);
+                    pieColors.push(self.chartColors[index % self.chartColors.length]);
                     index++;
                 });
 
@@ -187,7 +191,48 @@ var ExpensesPage = {
                 });
             }
         });
+    },
 
+    /********************************************************************************
+      Expense Distribution BarChart
+    ********************************************************************************/
 
+    loadBarChart: function() {
+        var self = this;
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/getAggregatedExpensesByTags?startDate=' + this.components.dateRangeSelector.startDate.val() + '&endDate=' + this.components.dateRangeSelector.endDate.val(),
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+
+                var pieData = [];
+                var pieColors = [];
+                var pieLabels = [];
+                var index = 0;
+                data.forEach(function(item) {
+                    pieLabels.push(item.label);
+                    pieData.push(item.amount);
+                    pieColors.push(self.chartColors[index % self.chartColors.length]);
+                    index++;
+                });
+
+                var myBarChart = new Chart(self.components.barChart, {
+                    type: 'bar',
+                    data: {
+                        labels: pieLabels,
+                        datasets: [
+                            {
+                                label: 'amount spent',
+                                borderWidth: 1,
+                                data: pieData,
+                                borderColor: pieColors,
+                                backgroundColor: pieColors
+                            }]
+                    },
+                    options: null
+                });
+            }
+        });
     }
 }

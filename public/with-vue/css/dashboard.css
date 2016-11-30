@@ -20,7 +20,8 @@ div.ui-datepicker{
 }
 
 .cashflow-float-left {
-  position: left;
+  float: left;
+  width: 100%;
 }
 
 .cashflow-float-right {
@@ -30,6 +31,15 @@ div.ui-datepicker{
 .cashflow-pie-chart {
   width: 320px;
   height: 320px;
+}
+
+.cashflow-bar-chart {
+  width: 820px;
+  height: 420px;
+}
+
+.cashflow-left-padding-80 {
+  padding-left: 80px;
 }
 
 /*

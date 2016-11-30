@@ -11,7 +11,7 @@
 	<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script src="bower_components/d3/d3.min.js"></script>
 	<script src="bower_components/rickshaw/rickshaw.min.js"></script>
-	<script src="bower_components/chart.js/dist/Chart.min.js"></script>
+	<script src="bower_components/chart.js/dist/Chart.js"></script>
 	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
 	<link href="bower_components/rickshaw/rickshaw.min.css" rel="stylesheet">
@@ -83,9 +83,14 @@
 	      	  </div>
 	      	  <div>
 	      	  	  <!-- PIE CHART -->
-	      	  	  <h3>Distribution</h3>
-	      	  	  <div class="cashflow-pie-chart">
-	      	  	  	<canvas id="expenseDistributionChart"></canvas>
+	      	  	  <div class="cashflow-pie-chart cashflow-float-left">
+	      	  	  	<h3>Distribution</h3>
+	      	  	  	<canvas id="expenseDistributionPieChart"></canvas>
+	      	  	  </div>
+
+	      	  	  <div class="cashflow-bar-chart cashflow-float-left cashflow-left-padding-80">
+	      	  	  	<h3>Amount Spent</h3>
+	      	  	  	<canvas id="expenseDistributionBarChart"></canvas>
 	      	  	  </div>
 	      	  </div>
 
