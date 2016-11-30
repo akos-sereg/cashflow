@@ -15,6 +15,8 @@ var app = new Vue({
 
     loadGraph: function() {
     	ExpensesPage.loadGraph();
+      ExpensesPage.loadPieChart();
+      ExpensesPage.loadBarChart();
     }
   }
 });

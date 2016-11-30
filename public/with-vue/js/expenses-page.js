@@ -125,8 +125,13 @@ var ExpensesPage = {
     /********************************************************************************
       Expense Distribution PieChart
     ********************************************************************************/
+    pieChart: null,
 
     loadPieChart: function() {
+
+        if (this.pieChart != null) {
+            this.pieChart.destroy();
+        }
 
         var self = this;
 
@@ -176,7 +181,7 @@ var ExpensesPage = {
                 });
 
                 // Populate PieChart
-                var myPieChart = new Chart(self.components.pieChart, {
+                self.pieChart = new Chart(self.components.pieChart, {
                     type: 'pie',
                     data: {
                         labels: pieLabels,
@@ -196,8 +201,14 @@ var ExpensesPage = {
     /********************************************************************************
       Expense Distribution BarChart
     ********************************************************************************/
+    barChart: null,
 
     loadBarChart: function() {
+
+        if (this.barChart != null) {
+            this.barChart.destroy();
+        }
+
         var self = this;
 
         $.ajax({
@@ -217,7 +228,7 @@ var ExpensesPage = {
                     index++;
                 });
 
-                var myBarChart = new Chart(self.components.barChart, {
+                self.barChart = new Chart(self.components.barChart, {
                     type: 'bar',
                     data: {
                         labels: pieLabels,
