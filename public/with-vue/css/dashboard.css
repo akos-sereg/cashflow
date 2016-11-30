@@ -10,9 +10,15 @@ div.ui-datepicker{
   font-size: 10pt; 
 }
 
-.cashflow-table td {
+.cashflow-table {
   padding: 3;
   width: 100%;
+}
+
+.cashflow-table td {
+  font-size: 9pt;
+  font-family: Tahoma;
+  padding: 3px;
 }
 
 .cashflow-panel {
@@ -40,6 +46,11 @@ div.ui-datepicker{
 
 .cashflow-left-padding-80 {
   padding-left: 80px;
+}
+
+.cashflow-recorded-expenses-table {
+  width: 900px;
+  font-size: 8pt;
 }
 
 /*

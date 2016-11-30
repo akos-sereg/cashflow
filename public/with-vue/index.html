@@ -20,6 +20,7 @@
 	<script src="js/utils.js"></script>
 	<script src="js/navigation.js"></script>
 	<script src="js/expenses-page.js"></script>
+	<script src="js/recorded-expenses-page.js"></script>
 </head>
 <body>
 	<div id="app">
@@ -53,16 +54,17 @@
 	        <div class="col-sm-3 col-md-2 sidebar">
 
 	          <ul class="nav nav-sidebar">
-	            <li v-bind:class="{ active: navigation.currentPage == Navigation.ExpensesPage }"><a href="#" v-on:click="changePage(Navigation.ExpensesPage)">Expenses</a></li>
+	            <li v-bind:class="{ active: navigation.currentPage == Navigation.ExpensesPage }"><a href="#" v-on:click="changePage(Navigation.ExpensesPage)">Summary</a></li>
+	            <li v-bind:class="{ active: navigation.currentPage == Navigation.RecordedExpensesPage }">
+	            	<a href="#" v-on:click="changePage(Navigation.RecordedExpensesPage)">Recorded Expenses</a>
+	            </li>
 	            <li v-bind:class="{ active: navigation.currentPage == Navigation.TagsPage }"><a href="#" v-on:click="changePage(Navigation.TagsPage)">Tags</a></li>
 	            <li v-bind:class="{ active: navigation.currentPage == Navigation.UpcomingExpensesPage }"><a href="#" v-on:click="changePage(Navigation.UpcomingExpensesPage)">Upcoming Expenses</a></li>
 	          </ul>
 	        </div>
 
-	        <div v-show="navigation.currentPage == Navigation.ExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	          <h1 class="page-header">Expenses</h1>
-
-			  <div class="panel panel-default">
+        
+			<div v-show="navigation.currentPage == Navigation.ExpensesPage || navigation.currentPage == Navigation.RecordedExpensesPage" class="panel panel-default" style="position: relative; left: 350px; top: 20px;">
 			  	<div class="cashflow-panel">
 				  	<span>Start Date: </span>
 				  	<input type="text" id="startDate" class="cashflow-date-picker">
@@ -70,11 +72,12 @@
 				  	<span>End Date: </span>
 				  	<input type="text" id="endDate" class="cashflow-date-picker">
 
-				  	<button class="btn btn-default btn-sm" v-on:click="loadGraph">Refresh</button>
-
-				  	<button class="btn btn-primary btn-sm cashflow-float-right" v-on:click="loadGraph">Record Savings</button>
+				  	<button class="btn btn-default btn-sm" v-on:click="refresh">Refresh</button>
 				 </div>
-	          </div>
+	        </div>
+	        
+
+	        <div v-show="navigation.currentPage == Navigation.ExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	          
 	          <h3>Burndown chart</h3>
 	          <div>
@@ -82,7 +85,6 @@
 		          <div id="chart" style="position: relative; left: 5px; width: 635px; height: 280px;"></div>
 	      	  </div>
 	      	  <div>
-	      	  	  <!-- PIE CHART -->
 	      	  	  <div class="cashflow-pie-chart cashflow-float-left">
 	      	  	  	<h3>Distribution</h3>
 	      	  	  	<canvas id="expenseDistributionPieChart"></canvas>
@@ -93,6 +95,31 @@
 	      	  	  	<canvas id="expenseDistributionBarChart"></canvas>
 	      	  	  </div>
 	      	  </div>
+
+	        </div>
+
+	        <div v-show="navigation.currentPage == Navigation.RecordedExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+	          <table class="cashflow-table cashflow-recorded-expenses-table">
+			    <thead>
+			      <tr>
+			        <th>Date</th>
+			        <th>Type</th>
+			        <th>Amount</th>
+			        <th>Location</th>
+			        <th>Tag</th>
+			      </tr>
+			    </thead>
+			    <tbody>
+			      <tr v-for="entry in recordedExpenses">
+			        <td>{{entry.expense_date}}</td>
+			        <td>{{entry.type}}</td>
+			        <td>{{entry.expense_value}}</td>
+			        <td>{{entry.location}}</td>
+			        <td>{{entry.tag}}</td>
+			      </tr>
+			    </tbody>
+			  </table>
 
 	        </div>
 

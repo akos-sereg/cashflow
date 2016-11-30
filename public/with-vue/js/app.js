@@ -2,6 +2,7 @@ var app = new Vue({
   el: '#app',
   data: {
     expenseGraphData: null,
+    recordedExpenses: null,
     navigation: {
     	currentPage: Navigation.ExpensesPage
     }
@@ -13,13 +14,17 @@ var app = new Vue({
       	
     },
 
-    loadGraph: function() {
+    refresh: function() {
     	ExpensesPage.loadGraph();
       ExpensesPage.loadPieChart();
       ExpensesPage.loadBarChart();
-    }
+
+      RecordedExpensesPage.loadTable();
+    },
+
   }
 });
 
 ExpensesPage.initialize();
+RecordedExpensesPage.initialize();
 
