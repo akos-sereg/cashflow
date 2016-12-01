@@ -162,7 +162,7 @@
 		        	</tr>
 		        	<tr>
 		        		<td>Amount: </td>
-		        		<td><input type="text" id="savingsAmount" onKeyUp="$('#savingsAmount').val(Utils.formatAmount($('#savingsAmount').val().replaceAll(' ', '').replaceAll('.', '')))"></td>
+		        		<td><input type="text" id="savingsAmount" onKeyUp="RecordedExpensesPage.savingsAmountKeyUp()"></td>
 		        	</tr>
 		        </table>
 		      </div>

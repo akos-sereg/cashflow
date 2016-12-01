@@ -49,6 +49,17 @@ var RecordedExpensesPage = {
 
     },
 
+    savingsAmountKeyUp: function() {
+      var number =this.components.recordSavings.amount.val().replaceAll(' ', '').replaceAll('.', '');
+      if (!isNaN(number)) {
+        this.components.recordSavings.amount.val(Utils.formatAmount(number));
+      }
+      else {
+        this.components.recordSavings.amount.val(''); 
+      }
+      
+    },
+
     loadTable: function() {
     	$.ajax({
             type: 'GET',
