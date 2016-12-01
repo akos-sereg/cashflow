@@ -148,6 +148,24 @@ router.route('/getAggregatedExpenses')
      });
 
 // Expense Data
+router.route('/recordSavings')
+
+    .post(function(req, res) {
+
+        connection.query('INSERT INTO cashflow.expense (type, expense_date, transactionId, expense_value, location, comment, '
+               + 'expense_currency, insert_date, user_comment, account_id, modified_date) '
+               + 'VALUES ("Atutalas", ?, CONCAT("manual", NOW()), ?, "Location", null, "HUF", NOW(), null, ?, null) ',
+             [
+                 req.body['savingsDate'],
+                 req.body['savingsAmount'],
+                 ACCOUNT_ID_FOR_SAVINGS
+             ],
+             function(err, result, fields) {
+
+                 res.send([err, result, fields]);
+             });
+     });
+
 router.route('/getExpenses')
 
     .get(function(req, res) {

@@ -53,6 +53,22 @@ div.ui-datepicker{
   font-size: 8pt;
 }
 
+.cashflow-recorded-expenses-table td {
+  width: 200px;
+  font-size: 9pt;
+  padding: 2px;
+}
+
+.container {
+  overflow-y: scroll;
+  height: 500px;
+  float: left;
+}
+
+.cashflow-table-fixheader {
+  border-bottom: 1px solid #DDDDDD;
+}
+
 /*
  * Base structure
  */

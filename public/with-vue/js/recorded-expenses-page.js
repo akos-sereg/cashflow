@@ -5,6 +5,8 @@ var RecordedExpensesPage = {
 	initialize: function() {
 		this.readComponents();
 
+        this.components.recordSavings.date.datepicker({ dateFormat: 'yy-mm-dd' });
+
 		this.loadTable();
 	},
 
@@ -14,8 +16,37 @@ var RecordedExpensesPage = {
                 startDate: $('#startDate'),
                 endDate: $('#endDate'),
             },
-            
+            recordSavingsModal: $('#recordSavingModal'),
+            recordSavings: {
+                date: $('#savingsTransferredDate'),
+                amount: $('#savingsAmount'),
+            }
         };
+    },
+
+    showRecordSavingsModal: function() {
+        this.components.recordSavings.date.val('');
+        this.components.recordSavings.amount.val('');
+		this.components.recordSavingsModal.modal();
+    },
+
+    recordSavings: function() {
+
+        var self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/recordSavings',
+            data: JSON.stringify({ 
+                savingsAmount: self.components.recordSavings.amount.val().replaceAll(' ', '').replaceAll('.', ''), 
+                savingsDate: self.components.recordSavings.date.val()
+            }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                self.components.recordSavingsModal.modal('hide');
+            },
+        });
+
     },
 
     loadTable: function() {

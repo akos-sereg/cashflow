@@ -100,26 +100,35 @@
 
 	        <div v-show="navigation.currentPage == Navigation.RecordedExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-	          <table class="cashflow-table cashflow-recorded-expenses-table">
-			    <thead>
-			      <tr>
-			        <th>Date</th>
-			        <th>Type</th>
-			        <th>Amount</th>
-			        <th>Location</th>
-			        <th>Tag</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			      <tr v-for="entry in recordedExpenses">
-			        <td>{{entry.expense_date}}</td>
-			        <td>{{entry.type}}</td>
-			        <td>{{entry.expense_value}}</td>
-			        <td>{{entry.location}}</td>
-			        <td>{{entry.tag}}</td>
-			      </tr>
-			    </tbody>
-			  </table>
+	        	<button class="btn btn-primary btn-sm" v-on:click="refresh">Upload Expenses</button>
+	        	<button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
+	        	<br/><br/>
+
+	        	<table class="cashflow-recorded-expenses-table">
+				    <thead>
+				      <tr class="cashflow-table-fixheader">
+				      	<th width="20">&nbsp;</th>
+				        <th width="190">Date</th>
+				        <th width="210">Type</th>
+				        <th width="190">Amount</th>
+				        <th width="220">Location</th>
+				        <th width="180">Tag</th>
+				      </tr>
+				    </thead>
+				</table>
+		        <div class="container">
+				  <table class="cashflow-recorded-expenses-table">
+				    <tbody>
+				      <tr v-for="entry in recordedExpenses">
+				        <td width="150">{{entry.expense_date}}</td>
+				        <td width="200">{{entry.type}}</td>
+				        <td width="200">{{entry.expense_value}}</td>
+				        <td width="200">{{entry.location}}</td>
+				        <td width="200">{{entry.tag}}</td>
+				      </tr>
+				    </tbody>
+				  </table>
+				</div>
 
 	        </div>
 
@@ -135,7 +144,37 @@
 
 	      </div>
 	    </div>
+
+	    <!-- Modals -->
+
+		<div class="modal fade" id="recordSavingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Record Savings</h4>
+		      </div>
+		      <div class="modal-body">
+		        <table width="100%" class="cashflow-table">
+		        	<tr>
+		        		<td width="200">Savings transferred at: </td>
+		        		<td><input type="text" id="savingsTransferredDate" class="cashflow-date-picker"></td>
+		        	</tr>
+		        	<tr>
+		        		<td>Amount: </td>
+		        		<td><input type="text" id="savingsAmount" onKeyUp="$('#savingsAmount').val(Utils.formatAmount($('#savingsAmount').val().replaceAll(' ', '').replaceAll('.', '')))"></td>
+		        	</tr>
+		        </table>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" v-on:click="recordSavings">Save</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 	</div>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

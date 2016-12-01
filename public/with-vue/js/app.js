@@ -22,6 +22,14 @@ var app = new Vue({
       RecordedExpensesPage.loadTable();
     },
 
+    showRecordSavingsModal: function() {
+      RecordedExpensesPage.showRecordSavingsModal();
+    },
+
+    recordSavings: function() {
+      RecordedExpensesPage.recordSavings();
+    }
+
   }
 });
 
