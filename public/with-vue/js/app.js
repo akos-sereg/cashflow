@@ -3,6 +3,7 @@ var app = new Vue({
   data: {
     expenseGraphData: null,
     recordedExpenses: null,
+    expensesFromBank: null, // import CSV from bank
     navigation: {
     	currentPage: Navigation.ExpensesPage
     }
@@ -26,8 +27,16 @@ var app = new Vue({
       RecordedExpensesPage.showRecordSavingsModal();
     },
 
+    showRecordExpensesFromBank: function() {
+      RecordedExpensesPage.showRecordExpensesFromBank();
+    },
+
     recordSavings: function() {
       RecordedExpensesPage.recordSavings();
+    },
+
+    storeExpenses: function() {
+      RecordedExpensesPage.storeExpenses();
     }
 
   }

@@ -59,6 +59,12 @@ div.ui-datepicker{
   padding: 2px;
 }
 
+.cashflow-server-message {
+  overflow-y: scroll;
+  height: 400px;
+  width: 100%;
+}
+
 .container {
   overflow-y: scroll;
   height: 500px;
@@ -67,6 +73,10 @@ div.ui-datepicker{
 
 .cashflow-table-fixheader {
   border-bottom: 1px solid #DDDDDD;
+}
+
+.cashflow-div-maxwidth {
+  width: 100%;
 }
 
 /*

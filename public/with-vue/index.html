@@ -12,15 +12,23 @@
 	<script src="bower_components/d3/d3.min.js"></script>
 	<script src="bower_components/rickshaw/rickshaw.min.js"></script>
 	<script src="bower_components/chart.js/dist/Chart.js"></script>
+	<script src="bower_components/cryptojslib/rollups/md5.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js"></script>
 	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
 	<link href="bower_components/rickshaw/rickshaw.min.css" rel="stylesheet">
+	<link href="bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css" rel="stylesheet">
 
 	<link href="css/dashboard.css" rel="stylesheet">
 	<script src="js/utils.js"></script>
 	<script src="js/navigation.js"></script>
 	<script src="js/expenses-page.js"></script>
 	<script src="js/recorded-expenses-page.js"></script>
+	<script src="../resources/js/model/ExpenseItem.js"></script>
+	<script src="../resources/js/model/OtpExpenseContentConfiguration.js"></script>
+    <script src="../resources/js/model/RaiffeisenExpenseContentConfiguration.js"></script>
+	<script src="../resources/js/controller/ExpenseParser.js"></script>
 </head>
 <body>
 	<div id="app">
@@ -64,7 +72,7 @@
 	        </div>
 
         
-			<div v-show="navigation.currentPage == Navigation.ExpensesPage || navigation.currentPage == Navigation.RecordedExpensesPage" class="panel panel-default" style="position: relative; left: 350px; top: 20px;">
+			<div v-show="navigation.currentPage == Navigation.ExpensesPage || navigation.currentPage == Navigation.RecordedExpensesPage" class="panel panel-default" style="position: relative; left: 350px; top: 20px; width: 1200px;">
 			  	<div class="cashflow-panel">
 				  	<span>Start Date: </span>
 				  	<input type="text" id="startDate" class="cashflow-date-picker">
@@ -100,7 +108,7 @@
 
 	        <div v-show="navigation.currentPage == Navigation.RecordedExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-	        	<button class="btn btn-primary btn-sm" v-on:click="refresh">Upload Expenses</button>
+	        	<button class="btn btn-primary btn-sm" v-on:click="showRecordExpensesFromBank">Upload Expenses</button>
 	        	<button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
 	        	<br/><br/>
 
@@ -173,12 +181,53 @@
 		    </div>
 		  </div>
 		</div>
+
+		<div class="modal fade" id="recordExpensesFromBankModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Record Expenses from Bank</h4>
+		      </div>
+		      <div class="modal-body">
+
+		      	<div class="cashflow-div-maxwidth">
+		      		<div class="cashflow-float-left" style="width: 30%">
+						<input type="radio" checked="checked" name="bankName" id="otp" value="otp" /> <label for="otp"><img src="images/otp.png" /> OTP Bank</label><br/>
+	      				<input type="radio" name="bankName" id="raiffeisen" value="raiffeisen" /> <label for="raiffeisen"><img src="images/raiffeisen.ico" /> Raiffeisen</label>
+		      		</div>
+	      			<div class="cashflow-float-left" style="width: 70%;">
+	      				<i style="font-size: 8pt;">paste csv content here:</i>
+	      				<textarea id="importedCsvContent" style="width: 100%; height: 60px;"></textarea>
+	      			</div>
+	      		</div>
+	      		<br/>
+
+				<div class="modal-header" style="width: 570px; overflow-y: scroll; height: 400px;">
+			        <table class="cashflow-table" style="width: 100%; sfont-size: 7pt;">
+			        	<tr v-for="entry in expensesFromBank">
+			        		<td style="width: 120px; font-size: 8pt; font-family: Consolas;">{{entry.Date.Display}}</td>
+			        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Title}}</td>
+			        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Amount.Display}}</td>
+			        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Location}}</td>
+			        	</tr>
+			        </table>
+		    	</div>
+		    	<br/>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" v-on:click="storeExpenses">Store</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 	</div>
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
 	<script src="js/app.js"></script>
 </body>

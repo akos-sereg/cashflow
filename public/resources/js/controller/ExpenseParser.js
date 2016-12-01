@@ -4,12 +4,14 @@ function ExpenseParser() {
 
 // Takes CSV content, produces an array of expense items where each item looks like
 // this: { Date { Value, Display }, Title, Amount { Display, Value }, Location, TransactionId }
-ExpenseParser.prototype.Parse = function(content) {
+ExpenseParser.prototype.Parse = function(content, logConfiguration) {
 
     var data = [];
 
-    // Raiffeisen CSV Configuration
-    var logConfiguration = new OtpExpenseContentConfiguration();
+    // Default is OTP CSV Configuration
+    if (!logConfiguration) {
+       logConfiguration = new OtpExpenseContentConfiguration();   
+    }
 
     // Go through Content
     var contentLines = content.match(/[^\r\n]+/g);
