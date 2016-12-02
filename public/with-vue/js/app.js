@@ -4,6 +4,7 @@ var app = new Vue({
     expenseGraphData: null,
     recordedExpenses: null,
     expensesFromBank: null, // import CSV from bank
+    tags: null, // user-defined tags
     navigation: {
     	currentPage: Navigation.ExpensesPage
     }

@@ -45,6 +45,18 @@ var Utils = {
 		else {
 			return 'cashflow-text-green-bg';
 		}
+	},
+
+	getTagKey: function(tag) {
+
+		var tagId = null;
+		app.tags.forEach(function(entry) {
+			if (entry.label == tag) {
+				tagId = entry.id;
+			}
+		});
+
+		return tagId;
 	}
 }
 

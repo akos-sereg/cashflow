@@ -11,7 +11,7 @@ var RecordedExpensesPage = {
             self.importCsv();
         });
 		
-        this.loadTable();
+        this.loadTags(this.loadTable);
 	},
 
 	readComponents: function() {
@@ -28,6 +28,54 @@ var RecordedExpensesPage = {
             recordExpensesFromBankModal: $('#recordExpensesFromBankModal'),
             importedCsvContent: $('#importedCsvContent'),
         };
+    },
+
+    setTag: function(component) {
+
+        var transactionId = component.attributes['data-transaction-id'].value;
+        var selectedText = component.selectedOptions[0].text;
+        var selectedId = Utils.getTagKey(selectedText);
+
+        if (!selectedText || selectedId == null) {
+             BootstrapDialog.alert({
+                    type: BootstrapDialog.TYPE_DANGER,
+                    title: 'Set Tag',
+                    message: 'Tag has not been set, unknown tag selected'
+             });
+
+            return;
+        }
+
+        var formData = {
+            tagLabel: selectedText,
+            transactionId: transactionId
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/setTag',
+            data: formData,
+            success: function(data) {
+                BootstrapDialog.alert({
+                    title: 'Set Tag',
+                    message: 'Tag has been set successfully'
+                });
+                
+            },
+            contentType: 'application/x-www-form-urlencoded'
+        });
+    },
+
+    loadTags: function(onSuccess) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/getTags',
+            success: function(data) {
+                app.tags = data;
+                onSuccess();
+            },
+            contentType: 'application/json; charset=utf-8'
+        });
     },
 
     importCsv: function() {
@@ -131,7 +179,7 @@ var RecordedExpensesPage = {
     loadTable: function() {
     	$.ajax({
             type: 'GET',
-            url: '/api/getExpenses?startDate=' + this.components.dateRangeSelector.startDate.val() + '&endDate=' + this.components.dateRangeSelector.endDate.val(),
+            url: '/api/getExpenses?startDate=' + RecordedExpensesPage.components.dateRangeSelector.startDate.val() + '&endDate=' + RecordedExpensesPage.components.dateRangeSelector.endDate.val(),
             success: function(data) {
 
                 app.recordedExpenses = data;

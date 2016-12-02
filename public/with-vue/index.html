@@ -112,7 +112,7 @@
 	        	<button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
 	        	<br/><br/>
 
-		        <div class="container" style="width: 800px;">
+		        <div class="container" style="width: 1200px;">
 				  <table class="cashflow-recorded-expenses-table" style="width: 100%;">
 				    <tbody>
 				    	<!--
@@ -129,11 +129,21 @@
 				        	<td>
 				        		<table width="100%">
 				        			<tr>
-				        				<td><span v-bind:class="[Utils.getClassForAmount(entry.expense_value)]" style="font-weight: bold; font-size: 12pt;">{{Utils.formatAmount(entry.expense_value)}}</span></td>
+				        				<td width="30%"><span v-bind:class="[Utils.getClassForAmount(entry.expense_value)]" style="font-weight: bold; font-size: 12pt;">{{Utils.formatAmount(entry.expense_value)}}</span></td>
+				        				<td width="30%">
+				        					<select 
+				        						v-model="entry.tag" 
+				        						v-bind:data-transaction-id="entry.transactionId"
+				        						onChange="RecordedExpensesPage.setTag(this)">
+				        						<option 
+				        							v-for="entry in tags"
+				        							v-bind:value="entry.label">{{entry.label}}</option>
+				        					</select>
+				        				</td>
 				        				<td style="float: right">{{entry.expense_date}}</td>
 				        			</tr>
 				        			<tr>
-				        				<td colspan="2">
+				        				<td colspan="3">
 				        					<span style="font-family: Consolas; font-size: 8pt;">{{entry.type}}</span><br/>
 				        					<span style="font-family: Consolas; font-size: 8pt;">{{entry.location}}</span>
 				        				</td>
