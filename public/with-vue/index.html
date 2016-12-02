@@ -112,28 +112,35 @@
 	        	<button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
 	        	<br/><br/>
 
-	        	<table class="cashflow-recorded-expenses-table">
-				    <thead>
-				      <tr class="cashflow-table-fixheader">
-				      	<th width="20">&nbsp;</th>
-				        <th width="190">Date</th>
-				        <th width="210">Type</th>
-				        <th width="190">Amount</th>
-				        <th width="220">Location</th>
-				        <th width="180">Tag</th>
-				      </tr>
-				    </thead>
-				</table>
-		        <div class="container">
-				  <table class="cashflow-recorded-expenses-table">
+		        <div class="container" style="width: 800px;">
+				  <table class="cashflow-recorded-expenses-table" style="width: 100%;">
 				    <tbody>
-				      <tr v-for="entry in recordedExpenses">
+				    	<!--
+				      <tr v-for="entry in recordedExpenses" style="font-size: 9pt; font-family: Tahoma;">
 				        <td width="150">{{entry.expense_date}}</td>
 				        <td width="200">{{entry.type}}</td>
 				        <td width="200">{{entry.expense_value}}</td>
 				        <td width="200">{{entry.location}}</td>
-				        <td width="200">{{entry.tag}}</td>
-				      </tr>
+				        <td width="200">
+				        	{{entry.tag}}
+				        </td>
+				       </tr>-->
+				        <tr v-bind:class="[Utils.getBackgroundClassForAmount(entry.expense_value)]" v-for="entry in recordedExpenses" style="border-top: dotted 1px #dddddd; margin-bottom: 5px;" height="70">
+				        	<td>
+				        		<table width="100%">
+				        			<tr>
+				        				<td><span v-bind:class="[Utils.getClassForAmount(entry.expense_value)]" style="font-weight: bold; font-size: 12pt;">{{Utils.formatAmount(entry.expense_value)}}</span></td>
+				        				<td style="float: right">{{entry.expense_date}}</td>
+				        			</tr>
+				        			<tr>
+				        				<td colspan="2">
+				        					<span style="font-family: Consolas; font-size: 8pt;">{{entry.type}}</span><br/>
+				        					<span style="font-family: Consolas; font-size: 8pt;">{{entry.location}}</span>
+				        				</td>
+				        			</tr>
+				        		</table>
+				        	</td>
+				        </tr>
 				    </tbody>
 				  </table>
 				</div>

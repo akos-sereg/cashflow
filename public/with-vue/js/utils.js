@@ -26,6 +26,25 @@ var Utils = {
 	        }
 	    }
 	    return null;
+	},
+
+	getClassForAmount: function(amount) {
+
+		if (amount < 0) {
+			return 'cashflow-text-black';
+		}
+		else {
+			return 'cashflow-text-green';
+		}
+	},
+
+	getBackgroundClassForAmount: function(amount) {
+		if (amount < 0) {
+			return 'cashflow-text-white-bg';
+		}
+		else {
+			return 'cashflow-text-green-bg';
+		}
 	}
 }
 
