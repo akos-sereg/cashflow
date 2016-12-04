@@ -154,9 +154,10 @@ router.route('/recordSavings')
 
         connection.query('INSERT INTO cashflow.expense (type, expense_date, transactionId, expense_value, location, comment, '
                + 'expense_currency, insert_date, user_comment, account_id, modified_date) '
-               + 'VALUES ("Atutalas", ?, CONCAT("manual", NOW()), ?, "Location", null, "HUF", NOW(), null, ?, null) ',
+               + 'VALUES ("Atutalas", ?, CONCAT("manual", NOW()), ?, ?, null, "HUF", NOW(), null, ?, null) ',
              [
                  req.body['savingsDate'],
+                 req.body['savingsComment'],
                  req.body['savingsAmount'],
                  ACCOUNT_ID_FOR_SAVINGS
              ],

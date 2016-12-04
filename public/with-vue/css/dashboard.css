@@ -95,6 +95,77 @@ div.ui-datepicker{
   width: 100%;
 }
 
+.cashflow-upcoming-expense-row {
+  height: 50px;
+}
+
+.cashflow-upcoming-expense-header {
+  padding: 10px;
+}
+
+.cashflow-upcoming-expense-cell {
+  border-top: solid 1px #eeeeee;
+  border-right: solid 1px #eeeeee;
+  padding: 10px;
+  font-family: Tahoma;
+  font-size: 8pt;
+  text-align: left;
+  width: 200px;
+}
+
+.cashflow-upcoming-expense-item-green {
+  float: left; 
+  margin: 3px; 
+  cursor: pointer; 
+  color: #ffffff; 
+  border-radius: 50px; 
+  padding-top: 2px; 
+  padding-bottom: 2px; 
+  padding-right: 15px; 
+  padding-left: 15px; 
+  background-color: #07A800;
+}
+
+.cashflow-upcoming-expense-item-yellow {
+  float: left; 
+  margin: 3px; 
+  cursor: pointer; 
+  color: #ffffff; 
+  border-radius: 50px; 
+  padding-top: 2px; 
+  padding-bottom: 2px; 
+  padding-right: 15px; 
+  padding-left: 15px; 
+  background-color: #FF9800;
+}
+
+.cashflow-upcoming-expense-item-normal {
+  float: left; 
+  margin: 3px; 
+  cursor: pointer; 
+  color: #000000; 
+  border-radius: 50px; 
+  padding-top: 2px; 
+  padding-bottom: 2px; 
+  padding-right: 15px; 
+  padding-left: 15px; 
+  background-color: #EAEAEA;
+}
+
+
+.cashflow-upcoming-expense-item-red {
+  float: left; 
+  margin: 3px; 
+  cursor: pointer; 
+  color: #000000; 
+  border-radius: 50px; 
+  padding-top: 2px; 
+  padding-bottom: 2px; 
+  padding-right: 15px; 
+  padding-left: 15px; 
+  background-color: #ff0000;
+}
+
 /*
  * Base structure
  */

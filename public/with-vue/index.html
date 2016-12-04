@@ -15,16 +15,19 @@
 	<script src="bower_components/cryptojslib/rollups/md5.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js"></script>
+    <script src="bower_components/bootstrap-toggle/js/bootstrap2-toggle.min.js"></script>
 	<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
 	<link href="bower_components/rickshaw/rickshaw.min.css" rel="stylesheet">
 	<link href="bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css" rel="stylesheet">
+	<link href="bower_components/bootstrap-toggle/css/bootstrap2-toggle.min.css" rel="stylesheet">
 
 	<link href="css/dashboard.css" rel="stylesheet">
 	<script src="js/utils.js"></script>
 	<script src="js/navigation.js"></script>
 	<script src="js/expenses-page.js"></script>
 	<script src="js/recorded-expenses-page.js"></script>
+	<script src="js/expected-expenses-page.js"></script>
 	<script src="../resources/js/model/ExpenseItem.js"></script>
 	<script src="../resources/js/model/OtpExpenseContentConfiguration.js"></script>
     <script src="../resources/js/model/RaiffeisenExpenseContentConfiguration.js"></script>
@@ -87,7 +90,18 @@
 
 	        <div v-show="navigation.currentPage == Navigation.ExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	          
-	          <h3>Burndown chart</h3>
+	          <table width="1200">
+	          	<tr>
+	          		<td><h3>Burndown chart</h3></td>
+	          		<td align="right">
+	          			<input style="height: 80px;" data-toggle="toggle" type="checkbox" checked="checked" name="selectedAccountMain" id="selectedAccount_Main" />
+	          			&nbsp;<span style="font-size: 9pt; font-family: Consolas">Main</span>
+	          			&nbsp;&nbsp;&nbsp;<input data-toggle="toggle" checked="checked" type="checkbox" name="selectedAccountSavings" id="selectedAccount_Savings" />
+	          			&nbsp;<span style="font-size: 9pt; font-family: Consolas">Savings</span>
+	          		</td>
+	          	</tr>
+	          </table>
+
 	          <div>
 		          <div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>
 		          <div id="chart" style="position: relative; left: 5px; width: 635px; height: 280px;"></div>
@@ -112,19 +126,11 @@
 	        	<button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
 	        	<br/><br/>
 
+	        	<div class="cashflow-float-left" style="text-align: right; font-family: Consolas; font-size: 8pt; width: 1200px;" v-if="recordedExpenses != null">Fetched {{recordedExpenses.length}} transactions</div>
+	        	<br/>
 		        <div class="container" style="width: 1200px;">
 				  <table class="cashflow-recorded-expenses-table" style="width: 100%;">
 				    <tbody>
-				    	<!--
-				      <tr v-for="entry in recordedExpenses" style="font-size: 9pt; font-family: Tahoma;">
-				        <td width="150">{{entry.expense_date}}</td>
-				        <td width="200">{{entry.type}}</td>
-				        <td width="200">{{entry.expense_value}}</td>
-				        <td width="200">{{entry.location}}</td>
-				        <td width="200">
-				        	{{entry.tag}}
-				        </td>
-				       </tr>-->
 				        <tr v-bind:class="[Utils.getBackgroundClassForAmount(entry.expense_value)]" v-for="entry in recordedExpenses" style="border-top: dotted 1px #dddddd; margin-bottom: 5px;" height="70">
 				        	<td>
 				        		<table width="100%">
@@ -163,7 +169,33 @@
 	        </div>
 
 	        <div v-show="navigation.currentPage == Navigation.UpcomingExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	          <h1 class="page-header">Upcoming Expenses</h1>
+	          
+	        	<table width="1200">
+	        		<thead>
+	        			<tr>
+	        				<th class="cashflow-upcoming-expense-header">Effective Date</th>
+	        				<th class="cashflow-upcoming-expense-header">Cell Phone</th>
+	        				<th class="cashflow-upcoming-expense-header">Flat</th>
+	        				<th class="cashflow-upcoming-expense-header">Car</th>
+	        				<th class="cashflow-upcoming-expense-header">RSU Tax</th>
+	        				<th class="cashflow-upcoming-expense-header">Savings</th>
+	        				<th><button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button></th>
+	        			</tr>
+	        		</thead>
+	        		<tbody>
+	        			<tr v-for="entry in upcomingExpenses" class="cashflow-upcoming-expense-row">
+	        				<td class="cashflow-upcoming-expense-cell">{{entry.effective_date}}<br/><span class="cashflow-float-right">{{entry.total_amount}} Ft</span></td>
+	        				<td class="cashflow-upcoming-expense-cell" v-for="type in upcomingExpenseTypes">
+	        					<span v-bind:class="[Utils.getClassForUpcomingExpenseItem(item)]" v-for="item in entry['expected_id_'+type]">{{item.name}}</span>
+	        				</td>
+	        			</tr>
+	        			<tr>
+	        				<td colspan="6"></td>
+	        				<td><button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button></td>
+	        			</tr>
+	        		</tbody>
+	        	</table>
+
 
 	        </div>
 
@@ -188,6 +220,10 @@
 		        	<tr>
 		        		<td>Amount: </td>
 		        		<td><input type="text" id="savingsAmount" onKeyUp="RecordedExpensesPage.savingsAmountKeyUp()"></td>
+		        	</tr>
+		        	<tr>
+		        		<td>Comment: </td>
+		        		<td><input type="text" id="savingsComment"></td>
 		        	</tr>
 		        </table>
 		      </div>

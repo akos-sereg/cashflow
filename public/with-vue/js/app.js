@@ -5,6 +5,7 @@ var app = new Vue({
     recordedExpenses: null,
     expensesFromBank: null, // import CSV from bank
     tags: null, // user-defined tags
+    upcomingExpenses: null,
     navigation: {
     	currentPage: Navigation.ExpensesPage
     }
@@ -45,4 +46,5 @@ var app = new Vue({
 
 ExpensesPage.initialize();
 RecordedExpensesPage.initialize();
+ExpectedExpensesPage.initialize();
 

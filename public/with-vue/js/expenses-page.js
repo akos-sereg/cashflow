@@ -30,6 +30,10 @@ var ExpensesPage = {
             },
             pieChart: $('#expenseDistributionPieChart'),
             barChart: $('#expenseDistributionBarChart'),
+            filters: {
+                mainAccountFilter: $('#selectedAccount_Main'),
+                savingsAccountFilter: $('#selectedAccount_Savings')
+            }
         };
     },
 
@@ -48,7 +52,17 @@ var ExpensesPage = {
             type: 'GET',
             url: '/api/getAggregatedExpenses?startDate=' + $('#startDate').val() + '&endDate=' + $('#endDate').val(),
             contentType: 'application/json; charset=utf-8',
-            success: function(data) {
+            success: function(rawData) {
+
+                // Filtering
+                var data = rawData;
+                if (!self.components.filters.mainAccountFilter.is(':checked')) {
+                    data[0].data = [];
+                }
+
+                if (!self.components.filters.savingsAccountFilter.is(':checked')) {
+                    data[1].data = [];
+                }
 
                 app.expenseGraphData = data;
 
@@ -66,11 +80,13 @@ var ExpensesPage = {
                     width: 1150,
                     min: 'auto',
                     interpolation: 'linear',
-                    series: [{
+                    series: [{ 
+                            // Expenses
                             data: data[0].data,
                             color: data[0].color
                     },
                     {
+                            // Savings
                             data: data[1].data,
                             color: data[1].color
                     }]

@@ -6,6 +6,10 @@ var Utils = {
 	    return parts.join(".");
 	},
 
+	formatDate: function(date) {
+		return $.datepicker.formatDate( "yy-mm-d", new Date(date));
+	},
+
 	setCookie: function(cname, cvalue, exdays) {
 	    var d = new Date();
 	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -57,6 +61,29 @@ var Utils = {
 		});
 
 		return tagId;
+	},
+
+	getClassForUpcomingExpenseItem: function(upcomingExpense) {
+		if (upcomingExpense.paid) {
+			return 'cashflow-upcoming-expense-item-green';
+		}
+
+		daysDiff = this.epochDays(Date.parse(upcomingExpense.effective_date)) - this.epochDays(new Date().getTime());
+		console.log('Days diff between ' + this.epochDays(Date.parse(upcomingExpense.effective_date)) + ' and ' + new Date().getTime() + ' is ' + daysDiff);
+
+		if (daysDiff > 10) {
+			return 'cashflow-upcoming-expense-item-normal';
+		}
+		else if (daysDiff < 0) {
+			return 'cashflow-upcoming-expense-item-red';
+		}
+		else {
+			return 'cashflow-upcoming-expense-item-yellow';
+		}
+	},
+
+	epochDays: function(date) {
+		return date / 1000 / 60 / 60 / 24;
 	}
 }
 

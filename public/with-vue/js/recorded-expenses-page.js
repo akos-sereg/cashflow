@@ -10,7 +10,10 @@ var RecordedExpensesPage = {
         this.components.importedCsvContent.bind('input propertychange', function() {
             self.importCsv();
         });
-		
+
+        $('#selectedAccount_Main').bootstrapToggle({ on: '', off: '' });
+        $('#selectedAccount_Savings').bootstrapToggle({ on: '', off: '' });
+
         this.loadTags(this.loadTable);
 	},
 
@@ -24,6 +27,7 @@ var RecordedExpensesPage = {
             recordSavings: {
                 date: $('#savingsTransferredDate'),
                 amount: $('#savingsAmount'),
+                comment: $('#savingsComment')
             },
             recordExpensesFromBankModal: $('#recordExpensesFromBankModal'),
             importedCsvContent: $('#importedCsvContent'),
@@ -150,7 +154,8 @@ var RecordedExpensesPage = {
             url: '/api/recordSavings',
             data: JSON.stringify({ 
                 savingsAmount: self.components.recordSavings.amount.val().replaceAll(' ', '').replaceAll('.', ''), 
-                savingsDate: self.components.recordSavings.date.val()
+                savingsDate: self.components.recordSavings.date.val(),
+                savingsComment: self.components.recordSavings.comment.val()
             }),
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
