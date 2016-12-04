@@ -173,25 +173,30 @@
 	        	<table width="1200">
 	        		<thead>
 	        			<tr>
+	        				<th>
+	        					<button v-on:click="upcomingExpensesMoveDateRange(-30)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button><br/>
+	        					<button v-on:click="upcomingExpensesMoveDateRange(30)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true">
+	        				</th>
 	        				<th class="cashflow-upcoming-expense-header">Effective Date</th>
 	        				<th class="cashflow-upcoming-expense-header">Cell Phone</th>
 	        				<th class="cashflow-upcoming-expense-header">Flat</th>
 	        				<th class="cashflow-upcoming-expense-header">Car</th>
 	        				<th class="cashflow-upcoming-expense-header">RSU Tax</th>
 	        				<th class="cashflow-upcoming-expense-header">Savings</th>
-	        				<th><button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button></th>
 	        			</tr>
 	        		</thead>
 	        		<tbody>
 	        			<tr v-for="entry in upcomingExpenses" class="cashflow-upcoming-expense-row">
+	        				<td>&nbsp;</td>
 	        				<td class="cashflow-upcoming-expense-cell">{{entry.effective_date}}<br/><span class="cashflow-float-right">{{entry.total_amount}} Ft</span></td>
 	        				<td class="cashflow-upcoming-expense-cell" v-for="type in upcomingExpenseTypes">
-	        					<span v-bind:class="[Utils.getClassForUpcomingExpenseItem(item)]" v-for="item in entry['expected_id_'+type]">{{item.name}}</span>
+	        					<span 
+	        						data-toggle="tooltip" 
+	        						v-bind:title="Utils.formatAmount(item.amount) + ' Ft'"
+	        						v-bind:class="[Utils.getClassForUpcomingExpenseItem(item)]" 
+	        						v-on:click="showUpcomingExpenseModificationPopup(item)"
+	        						v-for="item in entry['expected_id_'+type]">{{item.name}}</span>
 	        				</td>
-	        			</tr>
-	        			<tr>
-	        				<td colspan="6"></td>
-	        				<td><button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button></td>
 	        			</tr>
 	        		</tbody>
 	        	</table>
@@ -271,6 +276,45 @@
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		        <button type="button" class="btn btn-primary" v-on:click="storeExpenses">Store</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="modifyUpcomingExpense" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Modify Upcoming Expense</h4>
+		      </div>
+		      <div class="modal-body">	
+
+		      	<table class="cashflow-table" width="70%">
+		      		<tr>
+		      			<td>Name: </td>
+		      			<td>{{selectedUpcomingExpense.name}}</td>
+		      		</tr>
+		      		<tr>
+		      			<td>Effective Date: </td>
+		      			<td>{{Utils.formatDate(selectedUpcomingExpense.effective_date)}}</td>
+		      		</tr>
+		      		<tr>
+		      			<td>Amount: </td>
+		      			<td>{{Utils.formatAmount(selectedUpcomingExpense.amount)}} Ft</td>
+		      		</tr>
+		      	</table>
+		      	<span id=""></span>
+
+		      </div>
+		      <div class="modal-footer">
+		      	<div class="cashflow-float-left" style="width: 30%; text-align: left;">
+		      		<button class="btn btn-success" v-on:click="setPaid(selectedUpcomingExpense.id, 1)">Paid</button>
+		      		<button class="btn btn-default" v-on:click="setPaid(selectedUpcomingExpense.id, 0)">Non-paid</button>
+		      	</div>
+		      	<div class="cashflow-float-right">
+		        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		    	</div>
 		      </div>
 		    </div>
 		  </div>

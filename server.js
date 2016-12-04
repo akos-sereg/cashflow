@@ -268,7 +268,7 @@ router.route('/getExpectedExpenses')
                 }
 
                 var data = [];
-                for (var i=0; i!=rows.length; i++) {
+                for (var i=0; i<rows.length; i++) {
                     var row = {};
                     row['effective_date'] = rows[i].effective_date;
                     row['expected_id_' + rows[i].type_id] = rows[i].name;

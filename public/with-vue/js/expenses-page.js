@@ -46,11 +46,18 @@ var ExpensesPage = {
         this.components.expenseGraph.chart.html('');
 
         this.persistDateRangeState();
+
+        if (!this.components.dateRangeSelector.startDate.val() || !this.components.dateRangeSelector.endDate.val() || 
+            this.components.dateRangeSelector.startDate.val() == 'undefined' || this.components.dateRangeSelector.endDate.val() == 'undefined') {
+            console.log('Unable to load graph, start date or end date is not defined');
+            return;
+        }
+
         var self = this;
         
 		$.ajax({
             type: 'GET',
-            url: '/api/getAggregatedExpenses?startDate=' + $('#startDate').val() + '&endDate=' + $('#endDate').val(),
+            url: '/api/getAggregatedExpenses?startDate=' + self.components.dateRangeSelector.startDate.val() + '&endDate=' + self.components.dateRangeSelector.endDate.val(),
             contentType: 'application/json; charset=utf-8',
             success: function(rawData) {
 
@@ -147,6 +154,11 @@ var ExpensesPage = {
 
         if (this.pieChart != null) {
             this.pieChart.destroy();
+        }
+
+        if (!this.components.dateRangeSelector.startDate.val() || !this.components.dateRangeSelector.endDate.val()) {
+            console.log('Unable to load bar chart, start date or end date is not defined');
+            return;
         }
 
         var self = this;

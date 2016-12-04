@@ -1,6 +1,8 @@
 var ExpectedExpensesPage = {
 
-	components: null,
+	components: {
+		modifyUpcomingExpenseModal: null
+	},
 
 	// Hardcoded values of expected expense types
 	expenseTypeIds: [ 1, 2, 3, 4, 5 ],
@@ -10,6 +12,31 @@ var ExpectedExpensesPage = {
 	initialize: function() {
 		app.upcomingExpenseTypes = this.expenseTypeIds;
 		this.readComponents();
+		this.refresh();
+	},
+
+	readComponents: function() {
+		this.components.modifyUpcomingExpenseModal = $('#modifyUpcomingExpense');
+	},
+
+	setPaid: function(itemId, state) {
+
+		var self = this;
+		
+		$.ajax({
+            type: 'POST',
+            url: '/api/setExpectedExpenseStatus',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({itemId: itemId, status: state}),
+            success: function(rawData) {
+
+                self.refresh();
+                self.components.modifyUpcomingExpenseModal.modal('hide');
+            }
+        });
+	},
+
+	refresh: function() {
 
 		var self = this;
 
@@ -20,12 +47,12 @@ var ExpectedExpensesPage = {
             success: function(rawData) {
 
                 app.upcomingExpenses = self.getMonthlyExpectedExpenses(rawData);
+                
+                setTimeout(function(){ 
+                	$('[data-toggle="tooltip"]').tooltip();
+                }, 300);
             }
         });
-	},
-
-	readComponents: function() {
-
 	},
 
 	getMonthlyExpectedExpenses: function(rawData) {

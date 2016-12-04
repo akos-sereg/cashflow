@@ -6,6 +6,7 @@ var app = new Vue({
     expensesFromBank: null, // import CSV from bank
     tags: null, // user-defined tags
     upcomingExpenses: null,
+    selectedUpcomingExpense: {},
     navigation: {
     	currentPage: Navigation.ExpensesPage
     }
@@ -39,6 +40,20 @@ var app = new Vue({
 
     storeExpenses: function() {
       RecordedExpensesPage.storeExpenses();
+    },
+
+    upcomingExpensesMoveDateRange: function(days) {
+      ExpectedExpensesPage.currentDate = ExpectedExpensesPage.currentDate.addDays(days);
+      ExpectedExpensesPage.refresh();
+    },
+
+    showUpcomingExpenseModificationPopup: function(upcomingExpense) {
+      this.selectedUpcomingExpense = upcomingExpense;
+      $('#modifyUpcomingExpense').modal();
+    },
+
+    setPaid: function(itemId, state) {
+      ExpectedExpensesPage.setPaid(itemId, state);
     }
 
   }
