@@ -69,7 +69,6 @@ var Utils = {
 		}
 
 		daysDiff = this.epochDays(Date.parse(upcomingExpense.effective_date)) - this.epochDays(new Date().getTime());
-		console.log('Days diff between ' + this.epochDays(Date.parse(upcomingExpense.effective_date)) + ' and ' + new Date().getTime() + ' is ' + daysDiff);
 
 		if (daysDiff > 10) {
 			return 'cashflow-upcoming-expense-item-normal';
