@@ -69,7 +69,6 @@
 	            <li v-bind:class="{ active: navigation.currentPage == Navigation.RecordedExpensesPage }">
 	            	<a href="#" v-on:click="changePage(Navigation.RecordedExpensesPage)">Recorded Expenses</a>
 	            </li>
-	            <li v-bind:class="{ active: navigation.currentPage == Navigation.TagsPage }"><a href="#" v-on:click="changePage(Navigation.TagsPage)">Tags</a></li>
 	            <li v-bind:class="{ active: navigation.currentPage == Navigation.UpcomingExpensesPage }"><a href="#" v-on:click="changePage(Navigation.UpcomingExpensesPage)">Upcoming Expenses</a></li>
 	          </ul>
 	        </div>
@@ -160,11 +159,6 @@
 				    </tbody>
 				  </table>
 				</div>
-
-	        </div>
-
-			<div v-show="navigation.currentPage == Navigation.TagsPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	          <h1 class="page-header">Tags</h1>
 
 	        </div>
 
