@@ -10,17 +10,7 @@ var ExpensesPage = {
 
     loadHtmlParts: function(initContext, next) {
 
-        var htmlPartsLoader = new HtmlPartsLoader(this.htmlParts);
-        var initChain = new InitChain();
-        
-        ExpensesPage.htmlParts.forEach(function(htmlPart) {
-            initChain.add(function(context, doNext) { 
-                htmlPartsLoader.loadHtmlPart(htmlPart, context, doNext);
-            });
-        });
-
-        initChain.run(function() { next(initContext) });
-
+        new HtmlPartsLoader(ExpensesPage.htmlParts).load(initContext, next);
     },
 
 	initialize: function() {

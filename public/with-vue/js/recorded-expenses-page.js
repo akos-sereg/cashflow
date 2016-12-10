@@ -10,31 +10,7 @@ var RecordedExpensesPage = {
 
     loadHtmlParts: function(initContext, next) {
 
-        console.log('Load HTML Parts stage II');
-
-        var htmlPartsLoader = new HtmlPartsLoader();
-        var initChain = new InitChain();
-        
-        RecordedExpensesPage.htmlParts.forEach(function(htmlPart) {
-            initChain.add(function(context, doNext) { 
-                htmlPartsLoader.loadHtmlPart(htmlPart, context, doNext);
-            });
-        });
-
-        initChain.run(function() { next(initContext) });
-
-    },
-
-    loadHtmlPart: function(htmlPart, context, next) {
-        console.log('Load HTML Part ' + htmlPart.path);
-        
-        var target = $('#' + htmlPart.target);
-        if (htmlPart.append) {
-            target = $("<div></div>");
-            target.appendTo('#' + htmlPart.target);
-        }
-        
-        target.load(htmlPart.path, function() { next(context) }); 
+        new HtmlPartsLoader(RecordedExpensesPage.htmlParts).load(initContext, next);
     },
 
 	initialize: function() {

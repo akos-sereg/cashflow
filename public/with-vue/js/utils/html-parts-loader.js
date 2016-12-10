@@ -2,7 +2,7 @@ function HtmlPartsLoader(htmlParts) {
 	this.htmlParts = htmlParts;
 }
 
-HtmlPartsLoader.prototype.load = function() {
+HtmlPartsLoader.prototype.load = function(initContext, next) {
 	
 	var self = this;
 	var initChain = new InitChain();
