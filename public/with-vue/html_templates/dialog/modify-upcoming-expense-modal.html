@@ -1,0 +1,38 @@
+<div class="modal fade" id="modifyUpcomingExpense" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modify Upcoming Expense</h4>
+      </div>
+      <div class="modal-body">	
+
+      	<table class="cashflow-table" width="70%">
+      		<tr>
+      			<td>Name: </td>
+      			<td>{{selectedUpcomingExpense.name}}</td>
+      		</tr>
+      		<tr>
+      			<td>Effective Date: </td>
+      			<td>{{Utils.formatDate(selectedUpcomingExpense.effective_date)}}</td>
+      		</tr>
+      		<tr>
+      			<td>Amount: </td>
+      			<td>{{Utils.formatAmount(selectedUpcomingExpense.amount)}} Ft</td>
+      		</tr>
+      	</table>
+
+      </div>
+      <div class="modal-footer">
+      	<div class="cashflow-float-left" style="width: 40%; text-align: left;">
+      		<button class="btn btn-success" v-on:click="setPaid(selectedUpcomingExpense.id, 1)">Paid</button>
+      		<button class="btn btn-default" v-on:click="setPaid(selectedUpcomingExpense.id, 0)">Non-paid</button>
+      		<button class="btn btn-danger" v-on:click="deleteUpcomingExpense(selectedUpcomingExpense.id)">Delete</button>
+      	</div>
+      	<div class="cashflow-float-right">
+        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    	</div>
+      </div>
+    </div>
+  </div>
+</div>

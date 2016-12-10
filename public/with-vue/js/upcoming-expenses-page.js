@@ -10,6 +10,11 @@ var ExpectedExpensesPage = {
 		}
 	},
 
+    htmlParts: [ 
+        'html_templates/dialog/add-upcoming-expense-modal.html', 
+        'html_templates/dialog/modify-upcoming-expense-modal.html' 
+    ],
+
 	// Hardcoded values of expected expense types
 	expenseTypes: [ 
 		{ id: 1, name: 'Cell Phone' }, 
@@ -19,6 +24,27 @@ var ExpectedExpensesPage = {
 		{ id: 5, name: 'Savings' }
 	],
 
+    loadHtmlParts: function(initContext, next) {
+
+        console.log('Load HTML Parts stage III');
+        var initChain = new InitChain();
+
+        ExpectedExpensesPage.htmlParts.forEach(function(htmlPart) {
+            initChain.add(function(context, doNext) { 
+                ExpectedExpensesPage.loadHtmlPart(htmlPart, context, doNext);
+            } );
+        });
+        
+        initChain.run(function() { next(initContext) });
+    },
+
+    loadHtmlPart: function(htmlPart, context, next) {
+        console.log('Load HTML Part ' + htmlPart);
+        var target = $("<div></div>");
+        target.appendTo("#modal-container");
+        target.load(htmlPart, function() { next(context) }); 
+    },
+    
 	currentDate: new Date(),
 
 	initialize: function() {

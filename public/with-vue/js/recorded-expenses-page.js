@@ -2,6 +2,34 @@ var RecordedExpensesPage = {
 
 	components: null,
 
+    htmlParts: [ 
+        'html_templates/dialog/import-expenses-modal.html', 
+        'html_templates/dialog/record-saving-modal.html' 
+    ],
+
+    loadHtmlParts: function(initContext, next) {
+
+        console.log('Load HTML Parts stage II');
+
+        var initChain = new InitChain();
+        
+        RecordedExpensesPage.htmlParts.forEach(function(htmlPart) {
+            initChain.add(function(context, doNext) { 
+                RecordedExpensesPage.loadHtmlPart(htmlPart, context, doNext);
+            });
+        });
+
+        initChain.run(function() { next(initContext) });
+
+    },
+
+    loadHtmlPart: function(htmlPart, context, next) {
+        console.log('Load HTML Part ' + htmlPart);
+        var target = $("<div></div>");
+        target.appendTo("#modal-container");
+        target.load(htmlPart, function() { next(context) }); 
+    },
+
 	initialize: function() {
 		this.readComponents();
 

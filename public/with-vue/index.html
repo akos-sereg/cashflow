@@ -23,11 +23,12 @@
 	<link href="bower_components/bootstrap-toggle/css/bootstrap2-toggle.min.css" rel="stylesheet">
 
 	<link href="css/dashboard.css" rel="stylesheet">
+	<script src="js/utils/init-chain.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/navigation.js"></script>
 	<script src="js/expenses-page.js"></script>
 	<script src="js/recorded-expenses-page.js"></script>
-	<script src="js/expected-expenses-page.js"></script>
+	<script src="js/upcoming-expenses-page.js"></script>
 	<script src="../resources/js/model/ExpenseItem.js"></script>
 	<script src="../resources/js/model/OtpExpenseContentConfiguration.js"></script>
     <script src="../resources/js/model/RaiffeisenExpenseContentConfiguration.js"></script>
@@ -199,155 +200,8 @@
 	      </div>
 	    </div>
 
-	    <!-- Modals -->
-
-		<div class="modal fade" id="recordSavingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Record Savings</h4>
-		      </div>
-		      <div class="modal-body">
-		        <table width="100%" class="cashflow-table">
-		        	<tr>
-		        		<td width="200">Savings transferred at: </td>
-		        		<td><input type="text" id="savingsTransferredDate" class="cashflow-date-picker"></td>
-		        	</tr>
-		        	<tr>
-		        		<td>Amount: </td>
-		        		<td><input type="text" id="savingsAmount" onKeyUp="RecordedExpensesPage.savingsAmountKeyUp()"></td>
-		        	</tr>
-		        	<tr>
-		        		<td>Comment: </td>
-		        		<td><input type="text" id="savingsComment"></td>
-		        	</tr>
-		        </table>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary" v-on:click="recordSavings">Save</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
-		<div class="modal fade" id="recordExpensesFromBankModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Record Expenses from Bank</h4>
-		      </div>
-		      <div class="modal-body">
-
-		      	<div class="cashflow-div-maxwidth">
-		      		<div class="cashflow-float-left" style="width: 30%">
-						<input type="radio" checked="checked" name="bankName" id="otp" value="otp" /> <label for="otp"><img src="images/otp.png" /> OTP Bank</label><br/>
-	      				<input type="radio" name="bankName" id="raiffeisen" value="raiffeisen" /> <label for="raiffeisen"><img src="images/raiffeisen.ico" /> Raiffeisen</label>
-		      		</div>
-	      			<div class="cashflow-float-left" style="width: 70%;">
-	      				<i style="font-size: 8pt;">paste csv content here:</i>
-	      				<textarea id="importedCsvContent" style="width: 100%; height: 60px;"></textarea>
-	      			</div>
-	      		</div>
-	      		<br/>
-
-				<div class="modal-header" style="width: 570px; overflow-y: scroll; height: 400px;">
-			        <table class="cashflow-table" style="width: 100%; sfont-size: 7pt;">
-			        	<tr v-for="entry in expensesFromBank">
-			        		<td style="width: 120px; font-size: 8pt; font-family: Consolas;">{{entry.Date.Display}}</td>
-			        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Title}}</td>
-			        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Amount.Display}}</td>
-			        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Location}}</td>
-			        	</tr>
-			        </table>
-		    	</div>
-		    	<br/>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary" v-on:click="storeExpenses">Store</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
-		<div class="modal fade" id="modifyUpcomingExpense" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Modify Upcoming Expense</h4>
-		      </div>
-		      <div class="modal-body">	
-
-		      	<table class="cashflow-table" width="70%">
-		      		<tr>
-		      			<td>Name: </td>
-		      			<td>{{selectedUpcomingExpense.name}}</td>
-		      		</tr>
-		      		<tr>
-		      			<td>Effective Date: </td>
-		      			<td>{{Utils.formatDate(selectedUpcomingExpense.effective_date)}}</td>
-		      		</tr>
-		      		<tr>
-		      			<td>Amount: </td>
-		      			<td>{{Utils.formatAmount(selectedUpcomingExpense.amount)}} Ft</td>
-		      		</tr>
-		      	</table>
-
-		      </div>
-		      <div class="modal-footer">
-		      	<div class="cashflow-float-left" style="width: 40%; text-align: left;">
-		      		<button class="btn btn-success" v-on:click="setPaid(selectedUpcomingExpense.id, 1)">Paid</button>
-		      		<button class="btn btn-default" v-on:click="setPaid(selectedUpcomingExpense.id, 0)">Non-paid</button>
-		      		<button class="btn btn-danger" v-on:click="deleteUpcomingExpense(selectedUpcomingExpense.id)">Delete</button>
-		      	</div>
-		      	<div class="cashflow-float-right">
-		        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		    	</div>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
-		<div class="modal fade" id="addUpcomingExpenseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">New Upcoming Expense</h4>
-		      </div>
-		      <div class="modal-body">	
-
-		      	<table class="cashflow-table" width="70%">
-		      		<tr>
-		      			<td>Type: </td>
-		      			<td>{{newUpcomingExpenseType}}</td>
-		      		</tr>
-		      		<tr>
-		      			<td>Name: </td>
-		      			<td><input type="text" id="upcomingExpenseName" /></td>
-		      		</tr>
-		      		<tr>
-		      			<td>Effective Date: </td>
-		      			<td><input type="text" id="upcomingExpenseDate" /></td>
-		      		</tr>
-		      		<tr>
-		      			<td>Amount: </td>
-		      			<td><input type="text" id="upcomingExpenseAmount" /></td>
-		      		</tr>
-		      	</table>
-
-		      </div>
-		      <div class="modal-footer">
-		      	<button type="button" class="btn btn-primary" v-on:click="saveUpcomingExpense">Save</button>
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>		    	
-		      </div>
-		    </div>
-		  </div>
-		</div>
+	    <div id="modal-container">
+	    </div>
 
 	</div>
 

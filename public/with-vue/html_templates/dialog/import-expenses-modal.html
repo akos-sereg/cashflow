@@ -1,0 +1,40 @@
+<div class="modal fade" id="recordExpensesFromBankModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Record Expenses from Bank</h4>
+      </div>
+      <div class="modal-body">
+
+      	<div class="cashflow-div-maxwidth">
+      		<div class="cashflow-float-left" style="width: 30%">
+				<input type="radio" checked="checked" name="bankName" id="otp" value="otp" /> <label for="otp"><img src="images/otp.png" /> OTP Bank</label><br/>
+  				<input type="radio" name="bankName" id="raiffeisen" value="raiffeisen" /> <label for="raiffeisen"><img src="images/raiffeisen.ico" /> Raiffeisen</label>
+      		</div>
+  			<div class="cashflow-float-left" style="width: 70%;">
+  				<i style="font-size: 8pt;">paste csv content here:</i>
+  				<textarea id="importedCsvContent" style="width: 100%; height: 60px;"></textarea>
+  			</div>
+  		</div>
+  		<br/>
+
+		<div class="modal-header" style="width: 570px; overflow-y: scroll; height: 400px;">
+	        <table class="cashflow-table" style="width: 100%; sfont-size: 7pt;">
+	        	<tr v-for="entry in expensesFromBank">
+	        		<td style="width: 120px; font-size: 8pt; font-family: Consolas;">{{entry.Date.Display}}</td>
+	        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Title}}</td>
+	        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Amount.Display}}</td>
+	        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Location}}</td>
+	        	</tr>
+	        </table>
+    	</div>
+    	<br/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" v-on:click="storeExpenses">Store</button>
+      </div>
+    </div>
+  </div>
+</div>
