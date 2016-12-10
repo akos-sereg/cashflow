@@ -23,6 +23,7 @@
 	<link href="bower_components/bootstrap-toggle/css/bootstrap2-toggle.min.css" rel="stylesheet">
 
 	<link href="css/dashboard.css" rel="stylesheet">
+	<script src="js/utils/html-parts-loader.js"></script>
 	<script src="js/utils/init-chain.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/navigation.js"></script>
@@ -88,114 +89,9 @@
 	        </div>
 	        
 
-	        <div v-show="navigation.currentPage == Navigation.ExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	          
-	          <table width="1200">
-	          	<tr>
-	          		<td><h3>Burndown chart</h3></td>
-	          		<td align="right">
-	          			<input style="height: 80px;" data-toggle="toggle" type="checkbox" checked="checked" name="selectedAccountMain" id="selectedAccount_Main" />
-	          			&nbsp;<span style="font-size: 9pt; font-family: Consolas">Main</span>
-	          			&nbsp;&nbsp;&nbsp;<input data-toggle="toggle" checked="checked" type="checkbox" name="selectedAccountSavings" id="selectedAccount_Savings" />
-	          			&nbsp;<span style="font-size: 9pt; font-family: Consolas">Savings</span>
-	          		</td>
-	          	</tr>
-	          </table>
-
-	          <div>
-		          <div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>
-		          <div id="chart" style="position: relative; left: 5px; width: 635px; height: 280px;"></div>
-	      	  </div>
-	      	  <div>
-	      	  	  <div class="cashflow-pie-chart cashflow-float-left">
-	      	  	  	<h3>Distribution</h3>
-	      	  	  	<canvas id="expenseDistributionPieChart"></canvas>
-	      	  	  </div>
-
-	      	  	  <div class="cashflow-bar-chart cashflow-float-left cashflow-left-padding-80">
-	      	  	  	<h3>Amount Spent</h3>
-	      	  	  	<canvas id="expenseDistributionBarChart"></canvas>
-	      	  	  </div>
-	      	  </div>
-
-	        </div>
-
-	        <div v-show="navigation.currentPage == Navigation.RecordedExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-	        	<button class="btn btn-primary btn-sm" v-on:click="showRecordExpensesFromBank">Upload Expenses</button>
-	        	<button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
-	        	<br/><br/>
-
-	        	<div class="cashflow-float-left" style="text-align: right; font-family: Consolas; font-size: 8pt; width: 1200px;" v-if="recordedExpenses != null">Fetched {{recordedExpenses.length}} transactions</div>
-	        	<br/>
-		        <div class="container" style="width: 1200px;">
-				  <table class="cashflow-recorded-expenses-table" style="width: 100%;">
-				    <tbody>
-				        <tr v-bind:class="[Utils.getBackgroundClassForAmount(entry.expense_value)]" v-for="entry in recordedExpenses" style="border-top: dotted 1px #dddddd; margin-bottom: 5px;" height="70">
-				        	<td>
-				        		<table width="100%">
-				        			<tr>
-				        				<td width="30%"><span v-bind:class="[Utils.getClassForAmount(entry.expense_value)]" style="font-weight: bold; font-size: 12pt;">{{Utils.formatAmount(entry.expense_value)}}</span></td>
-				        				<td width="30%">
-				        					<select 
-				        						v-model="entry.tag" 
-				        						v-bind:data-transaction-id="entry.transactionId"
-				        						onChange="RecordedExpensesPage.setTag(this)">
-				        						<option 
-				        							v-for="entry in tags"
-				        							v-bind:value="entry.label">{{entry.label}}</option>
-				        					</select>
-				        				</td>
-				        				<td style="float: right">{{entry.expense_date}}</td>
-				        			</tr>
-				        			<tr>
-				        				<td colspan="3">
-				        					<span style="font-family: Consolas; font-size: 8pt;">{{entry.type}}</span><br/>
-				        					<span style="font-family: Consolas; font-size: 8pt;">{{entry.location}}</span>
-				        				</td>
-				        			</tr>
-				        		</table>
-				        	</td>
-				        </tr>
-				    </tbody>
-				  </table>
-				</div>
-
-	        </div>
-
-	        <div v-show="navigation.currentPage == Navigation.UpcomingExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	          
-	        	<table width="1200">
-	        		<thead>
-	        			<tr>
-	        				<th>
-	        					<button v-on:click="upcomingExpensesMoveDateRange(-30)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button><br/>
-	        					<button v-on:click="upcomingExpensesMoveDateRange(30)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true">
-	        				</th>
-	        				<th class="cashflow-upcoming-expense-header">Effective Date</th>
-	        				<th class="cashflow-upcoming-expense-header" 
-	        					v-for="type in upcomingExpenseTypes">{{type.name}} <button v-on:click="showAddUpcomingExpenseModal(type.id)" class="btn btn-default btn-xs">new</button></th>
-	        			</tr>
-	        		</thead>
-	        		<tbody>
-	        			<tr v-for="entry in upcomingExpenses" class="cashflow-upcoming-expense-row">
-	        				<td>&nbsp;</td>
-	        				<td class="cashflow-upcoming-expense-cell">{{entry.effective_date}}<br/><span class="cashflow-float-right">{{entry.total_amount}} Ft</span></td>
-	        				<td class="cashflow-upcoming-expense-cell" v-for="type in upcomingExpenseTypes">
-	        					<span 
-	        						data-toggle="tooltip" 
-	        						v-bind:title="Utils.formatAmount(item.amount) + ' Ft'"
-	        						v-bind:class="[Utils.getClassForUpcomingExpenseItem(item)]" 
-	        						v-on:click="showUpcomingExpenseModificationPopup(item)"
-	        						v-for="item in entry['expected_id_'+type.id]">{{item.name}}</span>
-
-	        				</td>
-	        			</tr>
-	        		</tbody>
-	        	</table>
-
-
-	        </div>
+	        <div id="expense-page" v-show="navigation.currentPage == Navigation.ExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
+	        <div id="recorded-page" v-show="navigation.currentPage == Navigation.RecordedExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
+	        <div id="upcoming-page" v-show="navigation.currentPage == Navigation.UpcomingExpensesPage" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
 
 	      </div>
 	    </div>

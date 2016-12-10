@@ -3,19 +3,21 @@ var RecordedExpensesPage = {
 	components: null,
 
     htmlParts: [ 
-        'html_templates/dialog/import-expenses-modal.html', 
-        'html_templates/dialog/record-saving-modal.html' 
+        { target: 'recorded-page', path: 'html_templates/recorded-expenses-page.html', append: false },
+        { target: 'modal-container', path: 'html_templates/dialog/import-expenses-modal.html', append: true }, 
+        { target: 'modal-container', path: 'html_templates/dialog/record-saving-modal.html', append: true }
     ],
 
     loadHtmlParts: function(initContext, next) {
 
         console.log('Load HTML Parts stage II');
 
+        var htmlPartsLoader = new HtmlPartsLoader();
         var initChain = new InitChain();
         
         RecordedExpensesPage.htmlParts.forEach(function(htmlPart) {
             initChain.add(function(context, doNext) { 
-                RecordedExpensesPage.loadHtmlPart(htmlPart, context, doNext);
+                htmlPartsLoader.loadHtmlPart(htmlPart, context, doNext);
             });
         });
 
@@ -24,10 +26,15 @@ var RecordedExpensesPage = {
     },
 
     loadHtmlPart: function(htmlPart, context, next) {
-        console.log('Load HTML Part ' + htmlPart);
-        var target = $("<div></div>");
-        target.appendTo("#modal-container");
-        target.load(htmlPart, function() { next(context) }); 
+        console.log('Load HTML Part ' + htmlPart.path);
+        
+        var target = $('#' + htmlPart.target);
+        if (htmlPart.append) {
+            target = $("<div></div>");
+            target.appendTo('#' + htmlPart.target);
+        }
+        
+        target.load(htmlPart.path, function() { next(context) }); 
     },
 
 	initialize: function() {

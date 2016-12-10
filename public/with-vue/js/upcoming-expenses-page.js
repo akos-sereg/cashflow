@@ -11,8 +11,9 @@ var ExpectedExpensesPage = {
 	},
 
     htmlParts: [ 
-        'html_templates/dialog/add-upcoming-expense-modal.html', 
-        'html_templates/dialog/modify-upcoming-expense-modal.html' 
+        { target: 'upcoming-page', path: 'html_templates/upcoming-expenses-page.html', append: false },
+        { target: 'modal-container', path: 'html_templates/dialog/add-upcoming-expense-modal.html', append: true }, 
+        { target: 'modal-container', path: 'html_templates/dialog/modify-upcoming-expense-modal.html', append: true }
     ],
 
 	// Hardcoded values of expected expense types
@@ -26,12 +27,12 @@ var ExpectedExpensesPage = {
 
     loadHtmlParts: function(initContext, next) {
 
-        console.log('Load HTML Parts stage III');
+        var htmlPartsLoader = new HtmlPartsLoader();
         var initChain = new InitChain();
 
         ExpectedExpensesPage.htmlParts.forEach(function(htmlPart) {
             initChain.add(function(context, doNext) { 
-                ExpectedExpensesPage.loadHtmlPart(htmlPart, context, doNext);
+                htmlPartsLoader.loadHtmlPart(htmlPart, context, doNext);
             } );
         });
         
@@ -39,12 +40,17 @@ var ExpectedExpensesPage = {
     },
 
     loadHtmlPart: function(htmlPart, context, next) {
-        console.log('Load HTML Part ' + htmlPart);
-        var target = $("<div></div>");
-        target.appendTo("#modal-container");
-        target.load(htmlPart, function() { next(context) }); 
+        console.log('Load HTML Part ' + htmlPart.path);
+        
+        var target = $('#' + htmlPart.target);
+        if (htmlPart.append) {
+            target = $("<div></div>");
+            target.appendTo('#' + htmlPart.target);
+        }
+        
+        target.load(htmlPart.path, function() { next(context) }); 
     },
-    
+
 	currentDate: new Date(),
 
 	initialize: function() {

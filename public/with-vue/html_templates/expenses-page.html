@@ -1,0 +1,28 @@
+<table width="1200">
+	<tr>
+		<td><h3>Burndown chart</h3></td>
+		<td align="right">
+			<input style="height: 80px;" data-toggle="toggle" type="checkbox" checked="checked" name="selectedAccountMain" id="selectedAccount_Main" />
+			&nbsp;<span style="font-size: 9pt; font-family: Consolas">Main</span>
+			&nbsp;&nbsp;&nbsp;<input data-toggle="toggle" checked="checked" type="checkbox" name="selectedAccountSavings" id="selectedAccount_Savings" />
+			&nbsp;<span style="font-size: 9pt; font-family: Consolas">Savings</span>
+		</td>
+	</tr>
+</table>
+
+<div>
+  <div id="y_axis" style="position: absolute; top: 0; bottom: 0; width: 40px;"></div>
+  <div id="chart" style="position: relative; left: 5px; width: 635px; height: 280px;"></div>
+</div>
+<div>
+	  <div class="cashflow-pie-chart cashflow-float-left">
+	  	<h3>Distribution</h3>
+	  	<canvas id="expenseDistributionPieChart"></canvas>
+	  </div>
+
+	  <div class="cashflow-bar-chart cashflow-float-left cashflow-left-padding-80">
+	  	<h3>Amount Spent</h3>
+	  	<canvas id="expenseDistributionBarChart"></canvas>
+	  </div>
+</div>
+

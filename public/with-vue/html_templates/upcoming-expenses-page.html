@@ -1,0 +1,28 @@
+<table width="1200">
+	<thead>
+		<tr>
+			<th>
+				<button v-on:click="upcomingExpensesMoveDateRange(-30)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button><br/>
+				<button v-on:click="upcomingExpensesMoveDateRange(30)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true">
+			</th>
+			<th class="cashflow-upcoming-expense-header">Effective Date</th>
+			<th class="cashflow-upcoming-expense-header" 
+				v-for="type in upcomingExpenseTypes">{{type.name}} <button v-on:click="showAddUpcomingExpenseModal(type.id)" class="btn btn-default btn-xs">new</button></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr v-for="entry in upcomingExpenses" class="cashflow-upcoming-expense-row">
+			<td>&nbsp;</td>
+			<td class="cashflow-upcoming-expense-cell">{{entry.effective_date}}<br/><span class="cashflow-float-right">{{entry.total_amount}} Ft</span></td>
+			<td class="cashflow-upcoming-expense-cell" v-for="type in upcomingExpenseTypes">
+				<span 
+					data-toggle="tooltip" 
+					v-bind:title="Utils.formatAmount(item.amount) + ' Ft'"
+					v-bind:class="[Utils.getClassForUpcomingExpenseItem(item)]" 
+					v-on:click="showUpcomingExpenseModificationPopup(item)"
+					v-for="item in entry['expected_id_'+type.id]">{{item.name}}</span>
+
+			</td>
+		</tr>
+	</tbody>
+</table>

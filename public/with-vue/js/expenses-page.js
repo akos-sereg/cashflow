@@ -2,13 +2,25 @@ var ExpensesPage = {
 
     components: null,
 
-    htmlParts: [ ],
+    htmlParts: [ 
+        { target: 'expense-page', path: 'html_templates/expenses-page.html', append: false } 
+    ],
 
     chartColors: [ '#FFD475', '#F7BA36', '#B77F05', '#FFB570', '#F99334', '#D66700', '#FFB093', '#FF723F', '#FF4300' ],
 
     loadHtmlParts: function(initContext, next) {
-        console.log('Load HTML Parts stage I');
-        next(initContext);
+
+        var htmlPartsLoader = new HtmlPartsLoader(this.htmlParts);
+        var initChain = new InitChain();
+        
+        ExpensesPage.htmlParts.forEach(function(htmlPart) {
+            initChain.add(function(context, doNext) { 
+                htmlPartsLoader.loadHtmlPart(htmlPart, context, doNext);
+            });
+        });
+
+        initChain.run(function() { next(initContext) });
+
     },
 
 	initialize: function() {
