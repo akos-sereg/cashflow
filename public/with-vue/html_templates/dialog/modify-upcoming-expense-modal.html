@@ -25,9 +25,9 @@
       </div>
       <div class="modal-footer">
       	<div class="cashflow-float-left" style="width: 40%; text-align: left;">
-      		<button class="btn btn-success" v-on:click="setPaid(selectedUpcomingExpense.id, 1)">Paid</button>
-      		<button class="btn btn-default" v-on:click="setPaid(selectedUpcomingExpense.id, 0)">Non-paid</button>
-      		<button class="btn btn-danger" v-on:click="deleteUpcomingExpense(selectedUpcomingExpense.id)">Delete</button>
+      		<button class="btn btn-success" v-on:click="setPaid(upcomingExpensesPage.selectedUpcomingExpense.id, 1)">Paid</button>
+      		<button class="btn btn-default" v-on:click="setPaid(upcomingExpensesPage.selectedUpcomingExpense.id, 0)">Non-paid</button>
+      		<button class="btn btn-danger" v-on:click="deleteUpcomingExpense(upcomingExpensesPage.selectedUpcomingExpense.id)">Delete</button>
       	</div>
       	<div class="cashflow-float-right">
         	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

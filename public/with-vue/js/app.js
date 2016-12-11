@@ -1,4 +1,4 @@
-function initVue() {
+function initVueApp() {
   var app = new Vue({
     el: '#app',
     data: {
@@ -22,12 +22,16 @@ function initVue() {
       }
     },
     methods: {
+      // Navigation
+      // --------------------------------------------------
       changePage: function (newPage) {
         	
         	this.navigation.currentPage = newPage;
         	
       },
 
+      // Recorded Expenses page
+      // --------------------------------------------------
       showRecordSavingsModal: function() {
         RecordedExpensesPage.showRecordSavingsModal();
       },
@@ -44,6 +48,8 @@ function initVue() {
         RecordedExpensesPage.storeExpenses();
       },
 
+      // Expected Expenses page
+      // --------------------------------------------------
       upcomingExpensesMoveDateRange: function(days) {
         ExpectedExpensesPage.currentDate = ExpectedExpensesPage.currentDate.addDays(days);
         ExpectedExpensesPage.refresh();
@@ -84,7 +90,8 @@ initChain.run(function() {
 
   var Cashflow = {};
   Cashflow.UI = {};
-  Cashflow.App = initVue();
+  Cashflow.Service = new CashflowService();
+  Cashflow.App = initVueApp();
 
   Cashflow.UI.DateRangePicker = new DateRangePicker('cashflow-date-range-picker', 'startDate', 'endDate');
   Cashflow.UI.DateRangePicker.create(function() {

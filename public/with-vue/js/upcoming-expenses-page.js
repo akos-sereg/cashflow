@@ -55,17 +55,10 @@ var ExpectedExpensesPage = {
 	deleteUpcomingExpense: function(itemId) {
 
 		var self = this;
-		
-		$.ajax({
-            type: 'POST',
-            url: '/api/deleteExpectedExpense',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({ id: itemId }),
-            success: function(rawData) {
 
-                self.refresh();
-                self.components.modifyUpcomingExpenseModal.modal('hide');
-            }
+		Cashflow.Service.deleteExpectedExpense(itemId, function() {
+            self.refresh();
+            self.components.modifyUpcomingExpenseModal.modal('hide');
         });
 	},
 
@@ -73,38 +66,24 @@ var ExpectedExpensesPage = {
 
 		var self = this;
 		
-		$.ajax({
-            type: 'POST',
-            url: '/api/createExpectedExpense',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({
-            	name: self.components.newUpcomingExpense.name.val(),
-            	typeId: Cashflow.App.upcomingExpensesPage.newUpcomingExpenseTypeId,
-            	effectiveDate: this.components.newUpcomingExpense.date.val(),
-            	amount: this.components.newUpcomingExpense.amount.val()
-            }),
-            success: function(rawData) {
-
+        Cashflow.Service.createExpectedExpense({
+                name: self.components.newUpcomingExpense.name.val(),
+                typeId: Cashflow.App.upcomingExpensesPage.newUpcomingExpenseTypeId,
+                effectiveDate: this.components.newUpcomingExpense.date.val(),
+                amount: this.components.newUpcomingExpense.amount.val()
+            }, function() {
                 self.refresh();
                 self.components.addUpcomingExpenseModal.modal('hide');
-            }
-        });
+            });
 	},
 
 	setPaid: function(itemId, state) {
 
 		var self = this;
 		
-		$.ajax({
-            type: 'POST',
-            url: '/api/setExpectedExpenseStatus',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({itemId: itemId, status: state}),
-            success: function(rawData) {
-
-                self.refresh();
-                self.components.modifyUpcomingExpenseModal.modal('hide');
-            }
+        Cashflow.Service.setExpectedExpenseStatus(itemId, state, function() {
+            self.refresh();
+            self.components.modifyUpcomingExpenseModal.modal('hide');
         });
 	},
 
@@ -130,18 +109,12 @@ var ExpectedExpensesPage = {
 
 		var self = this;
 
-		$.ajax({
-            type: 'GET',
-            url: '/api/getExpectedExpenses?date=' + Utils.formatDate(self.currentDate),
-            contentType: 'application/json; charset=utf-8',
-            success: function(rawData) {
-
-                Cashflow.App.upcomingExpensesPage.upcomingExpenses = self.getMonthlyExpectedExpenses(rawData);
+        Cashflow.Service.getExpectedExpenses(Utils.formatDate(self.currentDate), function(rawData) {
+            Cashflow.App.upcomingExpensesPage.upcomingExpenses = self.getMonthlyExpectedExpenses(rawData);
                 
-                setTimeout(function(){ 
-                	$('[data-toggle="tooltip"]').tooltip();
-                }, 300);
-            }
+            setTimeout(function(){ 
+                $('[data-toggle="tooltip"]').tooltip();
+            }, 300);
         });
 	},
 

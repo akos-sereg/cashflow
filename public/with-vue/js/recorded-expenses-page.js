@@ -57,35 +57,19 @@ var RecordedExpensesPage = {
             return;
         }
 
-        var formData = {
-            tagLabel: selectedText,
-            transactionId: transactionId
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: '/api/setTag',
-            data: formData,
-            success: function(data) {
-                BootstrapDialog.alert({
-                    title: 'Set Tag',
-                    message: 'Tag has been set successfully'
-                });
-                
-            },
-            contentType: 'application/x-www-form-urlencoded'
+        Cashflow.Service.setTag({ tagLabel: selectedText, transactionId: transactionId }, function(data) {
+            BootstrapDialog.alert({
+                title: 'Set Tag',
+                message: 'Tag has been set successfully'
+            });
         });
     },
 
     loadTags: function(onSuccess) {
-        $.ajax({
-            type: 'GET',
-            url: '/api/getTags',
-            success: function(data) {
-                Cashflow.App.recordedExpensesPage.tags = data;
-                onSuccess();
-            },
-            contentType: 'application/json; charset=utf-8'
+
+        Cashflow.Service.loadTags(function(tags) {
+            Cashflow.App.recordedExpensesPage.tags = tags;
+            onSuccess();
         });
     },
 
@@ -117,26 +101,19 @@ var RecordedExpensesPage = {
 
         var self = this;
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/storeExpenses',
-            data: JSON.stringify(data),
-            success: function(data) {
+        Cashflow.Service.storeExpenses(data, function(result) {
+            var message = '';
+            for (var i=0; i!=result.length; i++) {
+                message += result[i] + '<br/>';
+            }
 
-                var message = '';
-                for (var i=0; i!=data.length; i++) {
-                    message += data[i] + '<br/>';
-                }
+            self.components.recordExpensesFromBankModal.modal('hide');
 
-                self.components.recordExpensesFromBankModal.modal('hide');
-
-                BootstrapDialog.alert({
-                    title: 'Store expenses',
-                    message: '<div class="cashflow-server-message">The following expenses have been stored: <br/><br/>'
-                        + '<span style="font-family: Consolas; font-size: 8pt;">' + message + '</span></div>'
-                });
-            },
-            contentType: 'application/json; charset=utf-8'
+            BootstrapDialog.alert({
+                title: 'Store expenses',
+                message: '<div class="cashflow-server-message">The following expenses have been stored: <br/><br/>'
+                    + '<span style="font-family: Consolas; font-size: 8pt;">' + message + '</span></div>'
+            });
         });
     },
 
@@ -156,25 +133,18 @@ var RecordedExpensesPage = {
 
         var self = this;
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/recordSavings',
-            data: JSON.stringify({ 
+        Cashflow.Service.recordSavings({ 
                 savingsAmount: self.components.recordSavings.amount.val().replaceAll(' ', '').replaceAll('.', ''), 
                 savingsDate: self.components.recordSavings.date.val(),
                 savingsComment: self.components.recordSavings.comment.val()
-            }),
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
+            }, function(data) {
                 self.components.recordSavingsModal.modal('hide');
 
                 BootstrapDialog.alert({
                     title: 'Record Savings',
                     message: 'Successfully stored.'
                 });
-            },
-        });
-
+            });
     },
 
     savingsAmountKeyUp: function() {
@@ -189,15 +159,11 @@ var RecordedExpensesPage = {
     },
 
     loadTable: function() {
-    	$.ajax({
-            type: 'GET',
-            url: '/api/getExpenses?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
-            success: function(data) {
-
+        Cashflow.Service.getExpenses(
+            Cashflow.UI.DateRangePicker.vue.getStartDate(), 
+            Cashflow.UI.DateRangePicker.vue.getEndDate(), 
+            function(data) {
                 Cashflow.App.recordedExpensesPage.recordedExpenses = data;
-            },
-            contentType: 'application/json; charset=utf-8'
-        });
+            });
     }
-
 }

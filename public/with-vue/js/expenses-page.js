@@ -53,14 +53,13 @@ var ExpensesPage = {
         }
 
         var self = this;
-        
-		$.ajax({
-            type: 'GET',
-            url: '/api/getAggregatedExpenses?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
-            contentType: 'application/json; charset=utf-8',
-            success: function(rawData) {
 
-                // Filtering
+        Cashflow.Service.getAggregatedExpenses(
+            Cashflow.UI.DateRangePicker.vue.getStartDate(), 
+            Cashflow.UI.DateRangePicker.vue.getEndDate(), 
+            function(rawData) {
+                
+                // Client side filtering
                 var data = rawData;
                 if (!self.components.filters.mainAccountFilter.is(':checked')) {
                     data[0].data = [];
@@ -69,8 +68,6 @@ var ExpensesPage = {
                 if (!self.components.filters.savingsAccountFilter.is(':checked')) {
                     data[1].data = [];
                 }
-
-                //Cashflow.App.expensesPage.expenseGraphData = data;
 
                 // Clear Graph
                 // ---------------------------------------------------------------------------------
@@ -118,8 +115,7 @@ var ExpensesPage = {
                     return title;
                 } });
 
-            }
-        });
+            });
 	},
 
     /********************************************************************************
@@ -140,12 +136,10 @@ var ExpensesPage = {
 
         var self = this;
 
-        $.ajax({
-            type: 'GET',
-            url: '/api/getAggregatedExpensesByTags?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-
+        Cashflow.Service.getAggregatedExpensesByTags(
+            Cashflow.UI.DateRangePicker.vue.getStartDate(),
+            Cashflow.UI.DateRangePicker.vue.getEndDate(),
+            function(data) {
                 // Aggregate
                 var sum = 0;
                 for (var i=0; i!=data.length; i++) {
@@ -199,8 +193,7 @@ var ExpensesPage = {
                     },
                     options: null
                 });
-            }
-        });
+            });
     },
 
     /********************************************************************************
@@ -216,12 +209,10 @@ var ExpensesPage = {
 
         var self = this;
 
-        $.ajax({
-            type: 'GET',
-            url: '/api/getAggregatedExpensesByTags?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-
+        Cashflow.Service.getAggregatedExpensesByTags(
+            Cashflow.UI.DateRangePicker.vue.getStartDate(), 
+            Cashflow.UI.DateRangePicker.vue.getEndDate(),
+            function(data) {
                 var pieData = [];
                 var pieColors = [];
                 var pieLabels = [];
@@ -248,7 +239,6 @@ var ExpensesPage = {
                     },
                     options: null
                 });
-            }
-        });
+            });
     }
 }
