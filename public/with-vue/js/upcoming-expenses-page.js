@@ -34,7 +34,7 @@ var ExpectedExpensesPage = {
 
 	initialize: function() {
 
-		app.upcomingExpenseTypes = this.expenseTypes;
+		Cashflow.App.upcomingExpenseTypes = this.expenseTypes;
 
 		this.readComponents();
 
@@ -79,7 +79,7 @@ var ExpectedExpensesPage = {
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
             	name: self.components.newUpcomingExpense.name.val(),
-            	typeId: app.newUpcomingExpenseTypeId,
+            	typeId: Cashflow.App.newUpcomingExpenseTypeId,
             	effectiveDate: this.components.newUpcomingExpense.date.val(),
             	amount: this.components.newUpcomingExpense.amount.val()
             }),
@@ -109,8 +109,8 @@ var ExpectedExpensesPage = {
 	},
 
 	showAddUpcomingExpenseModal: function(typeId) {
-		app.newUpcomingExpenseType = this.findUpcomingExpenseTypeName(typeId);
-		app.newUpcomingExpenseTypeId = typeId;
+		Cashflow.App.newUpcomingExpenseType = this.findUpcomingExpenseTypeName(typeId);
+		Cashflow.App.newUpcomingExpenseTypeId = typeId;
 		this.components.addUpcomingExpenseModal.modal();
 	},
 
@@ -136,7 +136,7 @@ var ExpectedExpensesPage = {
             contentType: 'application/json; charset=utf-8',
             success: function(rawData) {
 
-                app.upcomingExpenses = self.getMonthlyExpectedExpenses(rawData);
+                Cashflow.App.upcomingExpenses = self.getMonthlyExpectedExpenses(rawData);
                 
                 setTimeout(function(){ 
                 	$('[data-toggle="tooltip"]').tooltip();

@@ -30,10 +30,6 @@ var RecordedExpensesPage = {
 
 	readComponents: function() {
         this.components = {
-            dateRangeSelector: {
-                startDate: $('#startDate'),
-                endDate: $('#endDate'),
-            },
             recordSavingsModal: $('#recordSavingModal'),
             recordSavings: {
                 date: $('#savingsTransferredDate'),
@@ -86,7 +82,7 @@ var RecordedExpensesPage = {
             type: 'GET',
             url: '/api/getTags',
             success: function(data) {
-                app.tags = data;
+                Cashflow.App.tags = data;
                 onSuccess();
             },
             contentType: 'application/json; charset=utf-8'
@@ -109,12 +105,12 @@ var RecordedExpensesPage = {
                 break;
         }
 
-        app.expensesFromBank = new ExpenseParser().Parse(this.components.importedCsvContent.val(), logConfiguration);
+        Cashflow.App.expensesFromBank = new ExpenseParser().Parse(this.components.importedCsvContent.val(), logConfiguration);
     },
 
     storeExpenses: function() {
 
-        var data = app.expensesFromBank;
+        var data = Cashflow.App.expensesFromBank;
         data.forEach(function(item) {
             item.Hash = item.GetHash().toString();
         });
@@ -152,7 +148,7 @@ var RecordedExpensesPage = {
 
     showRecordExpensesFromBank: function() {
         this.components.importedCsvContent.val('');
-        app.expensesFromBank = null;
+        Cashflow.App.expensesFromBank = null;
         this.components.recordExpensesFromBankModal.modal();  
     },
 
@@ -195,10 +191,10 @@ var RecordedExpensesPage = {
     loadTable: function() {
     	$.ajax({
             type: 'GET',
-            url: '/api/getExpenses?startDate=' + RecordedExpensesPage.components.dateRangeSelector.startDate.val() + '&endDate=' + RecordedExpensesPage.components.dateRangeSelector.endDate.val(),
+            url: '/api/getExpenses?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
             success: function(data) {
 
-                app.recordedExpenses = data;
+                Cashflow.App.recordedExpenses = data;
             },
             contentType: 'application/json; charset=utf-8'
         });

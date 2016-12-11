@@ -30,6 +30,7 @@
 	<script src="js/expenses-page.js"></script>
 	<script src="js/recorded-expenses-page.js"></script>
 	<script src="js/upcoming-expenses-page.js"></script>
+	<script src="js/vue/date-range-picker.js"></script>
 	<script src="../resources/js/model/ExpenseItem.js"></script>
 	<script src="../resources/js/model/OtpExpenseContentConfiguration.js"></script>
     <script src="../resources/js/model/RaiffeisenExpenseContentConfiguration.js"></script>
@@ -77,15 +78,7 @@
 
         
 			<div v-show="navigation.currentPage == Navigation.ExpensesPage || navigation.currentPage == Navigation.RecordedExpensesPage" class="panel panel-default" style="position: relative; left: 350px; top: 20px; width: 1200px;">
-			  	<div class="cashflow-panel">
-				  	<span>Start Date: </span>
-				  	<input type="text" id="startDate" class="cashflow-date-picker">
-
-				  	<span>End Date: </span>
-				  	<input type="text" id="endDate" class="cashflow-date-picker">
-
-				  	<button class="btn btn-default btn-sm" v-on:click="refresh">Refresh</button>
-				 </div>
+			  	<div id="cashflow-date-range-picker"></div>
 	        </div>
 	        
 

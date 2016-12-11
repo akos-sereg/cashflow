@@ -22,14 +22,6 @@ function initVue() {
         	
       },
 
-      refresh: function() {
-      	ExpensesPage.loadGraph();
-        ExpensesPage.loadPieChart();
-        ExpensesPage.loadBarChart();
-
-        RecordedExpensesPage.loadTable();
-      },
-
       showRecordSavingsModal: function() {
         RecordedExpensesPage.showRecordSavingsModal();
       },
@@ -75,7 +67,7 @@ function initVue() {
     }
   });
 
-  window.app = app;
+  return app;
 }
 
 var initChain = new InitChain();
@@ -84,11 +76,20 @@ initChain.add(RecordedExpensesPage.loadHtmlParts);
 initChain.add(ExpectedExpensesPage.loadHtmlParts);
 initChain.run(function() {
 
-  initVue();
+  var Cashflow = {};
+  Cashflow.UI = {};
+  Cashflow.App = initVue();
 
-  ExpensesPage.initialize();
-  RecordedExpensesPage.initialize();
-  ExpectedExpensesPage.initialize();
+  Cashflow.UI.DateRangePicker = new DateRangePicker('cashflow-date-range-picker', 'startDate', 'endDate');
+  Cashflow.UI.DateRangePicker.create(function() {
+      window.Cashflow = Cashflow;
+
+      ExpensesPage.initialize();
+      RecordedExpensesPage.initialize();
+      ExpectedExpensesPage.initialize();
+  });
+
+
 });
 
 

@@ -17,6 +17,7 @@ HtmlPartsLoader.prototype.load = function(initContext, next) {
 }
 
 HtmlPartsLoader.prototype.loadHtmlPart = function(htmlPart, context, next) {
+	console.log('Loading ' + htmlPart.path + ' into ' + htmlPart.target);
 	var target = $('#' + htmlPart.target);
     if (htmlPart.append) {
         target = $("<div></div>");

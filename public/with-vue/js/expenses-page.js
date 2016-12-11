@@ -16,12 +16,6 @@ var ExpensesPage = {
 	initialize: function() {
 
         this.readComponents();
-
-		this.components.dateRangeSelector.startDate.datepicker({ dateFormat: 'yy-mm-dd' });
-		this.components.dateRangeSelector.endDate.datepicker({ dateFormat: 'yy-mm-dd' });
-        
-        this.restoreDateRangeState();
-        
         this.loadGraph();
         this.loadPieChart();
         this.loadBarChart();
@@ -29,10 +23,6 @@ var ExpensesPage = {
 
     readComponents: function() {
         this.components = {
-            dateRangeSelector: {
-                startDate: $('#startDate'),
-                endDate: $('#endDate'),
-            },
             expenseGraph: {
                 yAxis: $('#y_axis'),
                 chart: $('#chart')
@@ -54,10 +44,10 @@ var ExpensesPage = {
 		this.components.expenseGraph.yAxis.html('');
         this.components.expenseGraph.chart.html('');
 
-        this.persistDateRangeState();
+        Cashflow.UI.DateRangePicker.vue.persistDateRangeState();
 
-        if (!this.components.dateRangeSelector.startDate.val() || !this.components.dateRangeSelector.endDate.val() || 
-            this.components.dateRangeSelector.startDate.val() == 'undefined' || this.components.dateRangeSelector.endDate.val() == 'undefined') {
+        if (!Cashflow.UI.DateRangePicker.vue.getStartDate()  || !Cashflow.UI.DateRangePicker.vue.getEndDate() || 
+            Cashflow.UI.DateRangePicker.vue.getStartDate() == 'undefined' || Cashflow.UI.DateRangePicker.vue.getEndDate() == 'undefined') {
             console.log('Unable to load graph, start date or end date is not defined');
             return;
         }
@@ -66,7 +56,7 @@ var ExpensesPage = {
         
 		$.ajax({
             type: 'GET',
-            url: '/api/getAggregatedExpenses?startDate=' + self.components.dateRangeSelector.startDate.val() + '&endDate=' + self.components.dateRangeSelector.endDate.val(),
+            url: '/api/getAggregatedExpenses?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
             contentType: 'application/json; charset=utf-8',
             success: function(rawData) {
 
@@ -80,7 +70,7 @@ var ExpensesPage = {
                     data[1].data = [];
                 }
 
-                app.expenseGraphData = data;
+                Cashflow.App.expenseGraphData = data;
 
                 // Clear Graph
                 // ---------------------------------------------------------------------------------
@@ -132,28 +122,6 @@ var ExpensesPage = {
         });
 	},
 
-    persistDateRangeState: function() {
-        Utils.setCookie('cashflow_StartDate', this.components.dateRangeSelector.startDate.val(), 365);
-    },
-
-    restoreDateRangeState: function() {
-        var startDate = Utils.getCookie('cashflow_StartDate');
-        var endDate = Utils.getCookie('cashflow_EndDate');
-
-        if (startDate != null) {
-            this.components.dateRangeSelector.startDate.val(startDate);
-        }
-        else {
-            var dateOffset = (24*60*60*1000) * 30; // 30 days
-            var myDate = new Date();
-            myDate.setTime(myDate.getTime() - dateOffset);
-
-            this.components.dateRangeSelector.startDate.datepicker("setDate", myDate);
-        }
-
-        this.components.dateRangeSelector.endDate.datepicker("setDate", new Date());
-    },
-
     /********************************************************************************
       Expense Distribution PieChart
     ********************************************************************************/
@@ -165,7 +133,7 @@ var ExpensesPage = {
             this.pieChart.destroy();
         }
 
-        if (!this.components.dateRangeSelector.startDate.val() || !this.components.dateRangeSelector.endDate.val()) {
+        if (!Cashflow.UI.DateRangePicker.vue.getStartDate() || !Cashflow.UI.DateRangePicker.vue.getEndDate()) {
             console.log('Unable to load bar chart, start date or end date is not defined');
             return;
         }
@@ -174,7 +142,7 @@ var ExpensesPage = {
 
         $.ajax({
             type: 'GET',
-            url: '/api/getAggregatedExpensesByTags?startDate=' + this.components.dateRangeSelector.startDate.val() + '&endDate=' + this.components.dateRangeSelector.endDate.val(),
+            url: '/api/getAggregatedExpensesByTags?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
 
@@ -250,7 +218,7 @@ var ExpensesPage = {
 
         $.ajax({
             type: 'GET',
-            url: '/api/getAggregatedExpensesByTags?startDate=' + this.components.dateRangeSelector.startDate.val() + '&endDate=' + this.components.dateRangeSelector.endDate.val(),
+            url: '/api/getAggregatedExpensesByTags?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
 
