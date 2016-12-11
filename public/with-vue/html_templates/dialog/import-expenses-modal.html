@@ -21,7 +21,7 @@
 
 		<div class="modal-header" style="width: 570px; overflow-y: scroll; height: 400px;">
 	        <table class="cashflow-table" style="width: 100%; sfont-size: 7pt;">
-	        	<tr v-for="entry in expensesFromBank">
+	        	<tr v-for="entry in recordedExpensesPage.expensesFromBank">
 	        		<td style="width: 120px; font-size: 8pt; font-family: Consolas;">{{entry.Date.Display}}</td>
 	        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Title}}</td>
 	        		<td style="font-size: 8pt; font-family: Consolas;">{{entry.Amount.Display}}</td>

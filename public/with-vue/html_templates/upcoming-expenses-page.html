@@ -7,14 +7,14 @@
 			</th>
 			<th class="cashflow-upcoming-expense-header">Effective Date</th>
 			<th class="cashflow-upcoming-expense-header" 
-				v-for="type in upcomingExpenseTypes">{{type.name}} <button v-on:click="showAddUpcomingExpenseModal(type.id)" class="btn btn-default btn-xs">new</button></th>
+				v-for="type in upcomingExpensesPage.upcomingExpenseTypes">{{type.name}} <button v-on:click="showAddUpcomingExpenseModal(type.id)" class="btn btn-default btn-xs">new</button></th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr v-for="entry in upcomingExpenses" class="cashflow-upcoming-expense-row">
+		<tr v-for="entry in upcomingExpensesPage.upcomingExpenses" class="cashflow-upcoming-expense-row">
 			<td>&nbsp;</td>
 			<td class="cashflow-upcoming-expense-cell">{{entry.effective_date}}<br/><span class="cashflow-float-right">{{entry.total_amount}} Ft</span></td>
-			<td class="cashflow-upcoming-expense-cell" v-for="type in upcomingExpenseTypes">
+			<td class="cashflow-upcoming-expense-cell" v-for="type in upcomingExpensesPage.upcomingExpenseTypes">
 				<span 
 					data-toggle="tooltip" 
 					v-bind:title="Utils.formatAmount(item.amount) + ' Ft'"

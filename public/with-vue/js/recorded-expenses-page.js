@@ -82,7 +82,7 @@ var RecordedExpensesPage = {
             type: 'GET',
             url: '/api/getTags',
             success: function(data) {
-                Cashflow.App.tags = data;
+                Cashflow.App.recordedExpensesPage.tags = data;
                 onSuccess();
             },
             contentType: 'application/json; charset=utf-8'
@@ -105,12 +105,12 @@ var RecordedExpensesPage = {
                 break;
         }
 
-        Cashflow.App.expensesFromBank = new ExpenseParser().Parse(this.components.importedCsvContent.val(), logConfiguration);
+        Cashflow.App.recordedExpensesPage.expensesFromBank = new ExpenseParser().Parse(this.components.importedCsvContent.val(), logConfiguration);
     },
 
     storeExpenses: function() {
 
-        var data = Cashflow.App.expensesFromBank;
+        var data = Cashflow.App.recordedExpensesPage.expensesFromBank;
         data.forEach(function(item) {
             item.Hash = item.GetHash().toString();
         });
@@ -148,7 +148,7 @@ var RecordedExpensesPage = {
 
     showRecordExpensesFromBank: function() {
         this.components.importedCsvContent.val('');
-        Cashflow.App.expensesFromBank = null;
+        Cashflow.App.recordedExpensesPage.expensesFromBank = null;
         this.components.recordExpensesFromBankModal.modal();  
     },
 
@@ -194,7 +194,7 @@ var RecordedExpensesPage = {
             url: '/api/getExpenses?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
             success: function(data) {
 
-                Cashflow.App.recordedExpenses = data;
+                Cashflow.App.recordedExpensesPage.recordedExpenses = data;
             },
             contentType: 'application/json; charset=utf-8'
         });

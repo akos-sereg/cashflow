@@ -2,12 +2,12 @@
 <button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
 <br/><br/>
 
-<div class="cashflow-float-left" style="text-align: right; font-family: Consolas; font-size: 8pt; width: 1200px;" v-if="recordedExpenses != null">Fetched {{recordedExpenses.length}} transactions</div>
+<div class="cashflow-float-left" style="text-align: right; font-family: Consolas; font-size: 8pt; width: 1200px;" v-if="recordedExpensesPage.recordedExpenses != null">Fetched {{recordedExpensesPage.recordedExpenses.length}} transactions</div>
 <br/>
 <div class="container" style="width: 1200px;">
 	  <table class="cashflow-recorded-expenses-table" style="width: 100%;">
 	    <tbody>
-	        <tr v-bind:class="[Utils.getBackgroundClassForAmount(entry.expense_value)]" v-for="entry in recordedExpenses" style="border-top: dotted 1px #dddddd; margin-bottom: 5px;" height="70">
+	        <tr v-bind:class="[Utils.getBackgroundClassForAmount(entry.expense_value)]" v-for="entry in recordedExpensesPage.recordedExpenses" style="border-top: dotted 1px #dddddd; margin-bottom: 5px;" height="70">
 	        	<td>
 	        		<table width="100%">
 	        			<tr>
@@ -18,7 +18,7 @@
 	        						v-bind:data-transaction-id="entry.transactionId"
 	        						onChange="RecordedExpensesPage.setTag(this)">
 	        						<option 
-	        							v-for="entry in tags"
+	        							v-for="entry in recordedExpensesPage.tags"
 	        							v-bind:value="entry.label">{{entry.label}}</option>
 	        					</select>
 	        				</td>

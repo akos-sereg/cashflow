@@ -2,15 +2,21 @@ function initVue() {
   var app = new Vue({
     el: '#app',
     data: {
-      expenseGraphData: null,
-      recordedExpenses: null,
-      expensesFromBank: null, // import CSV from bank
-      tags: null, // user-defined tags
-      upcomingExpenses: null,
-      newUpcomingExpenseType: null,
-      upcomingExpenseTypes: null,
-      newUpcomingExpenseTypeId: null,
-      selectedUpcomingExpense: {},
+      expensesPage: {
+
+      },
+      recordedExpensesPage: {
+        recordedExpenses:         null,
+        expensesFromBank:         null, // import CSV from bank
+        tags:                     null, // user-defined tags
+      },
+      upcomingExpensesPage: {
+        upcomingExpenses:         null,
+        newUpcomingExpenseType:   null,
+        upcomingExpenseTypes:     null,
+        newUpcomingExpenseTypeId: null,
+        selectedUpcomingExpense:  {},
+      },
       navigation: {
       	currentPage: Navigation.ExpensesPage
       }
@@ -44,7 +50,7 @@ function initVue() {
       },
 
       showUpcomingExpenseModificationPopup: function(upcomingExpense) {
-        this.selectedUpcomingExpense = upcomingExpense;
+        this.upcomingExpensesPage.selectedUpcomingExpense = upcomingExpense;
         $('#modifyUpcomingExpense').modal();
       },
 

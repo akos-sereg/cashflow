@@ -70,7 +70,7 @@ var ExpensesPage = {
                     data[1].data = [];
                 }
 
-                Cashflow.App.expenseGraphData = data;
+                //Cashflow.App.expensesPage.expenseGraphData = data;
 
                 // Clear Graph
                 // ---------------------------------------------------------------------------------
