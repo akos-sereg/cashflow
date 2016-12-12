@@ -92,7 +92,7 @@ CashflowService.prototype.getExpenses = function(startDate, endDate, onSuccess) 
     });
 }
 
-CashflowService.prototype.deleteExpectedExpense = function(itemId, onSuccess) {
+CashflowService.prototype.deleteUpcomingExpense = function(itemId, onSuccess) {
 
 	$.ajax({
         type: 'POST',
@@ -106,7 +106,7 @@ CashflowService.prototype.deleteExpectedExpense = function(itemId, onSuccess) {
 
 }
 
-CashflowService.prototype.createExpectedExpense = function(upcomingExpenseDetails, onSuccess) {
+CashflowService.prototype.createUpcomingExpense = function(upcomingExpenseDetails, onSuccess) {
 
 	$.ajax({
         type: 'POST',
@@ -120,7 +120,7 @@ CashflowService.prototype.createExpectedExpense = function(upcomingExpenseDetail
 
 }
 
-CashflowService.prototype.setExpectedExpenseStatus = function(itemId, state, onSuccess) {
+CashflowService.prototype.setUpcomingExpenseStatus = function(itemId, state, onSuccess) {
 
 	$.ajax({
         type: 'POST',
@@ -134,7 +134,7 @@ CashflowService.prototype.setExpectedExpenseStatus = function(itemId, state, onS
 
 }
 
-CashflowService.prototype.getExpectedExpenses = function(startDate, onSuccess) {
+CashflowService.prototype.getUpcomingExpenses = function(startDate, onSuccess) {
 	$.ajax({
         type: 'GET',
         url: '/api/getExpectedExpenses?date=' + startDate,

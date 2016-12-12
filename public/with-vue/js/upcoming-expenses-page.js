@@ -56,7 +56,7 @@ var ExpectedExpensesPage = {
 
 		var self = this;
 
-		Cashflow.Service.deleteExpectedExpense(itemId, function() {
+		Cashflow.Service.deleteUpcomingExpense(itemId, function() {
             self.refresh();
             self.components.modifyUpcomingExpenseModal.modal('hide');
         });
@@ -66,7 +66,7 @@ var ExpectedExpensesPage = {
 
 		var self = this;
 		
-        Cashflow.Service.createExpectedExpense({
+        Cashflow.Service.createUpcomingExpense({
                 name: self.components.newUpcomingExpense.name.val(),
                 typeId: Cashflow.App.upcomingExpensesPage.newUpcomingExpenseTypeId,
                 effectiveDate: this.components.newUpcomingExpense.date.val(),
@@ -81,7 +81,7 @@ var ExpectedExpensesPage = {
 
 		var self = this;
 		
-        Cashflow.Service.setExpectedExpenseStatus(itemId, state, function() {
+        Cashflow.Service.setUpcomingExpenseStatus(itemId, state, function() {
             self.refresh();
             self.components.modifyUpcomingExpenseModal.modal('hide');
         });
@@ -109,7 +109,7 @@ var ExpectedExpensesPage = {
 
 		var self = this;
 
-        Cashflow.Service.getExpectedExpenses(Utils.formatDate(self.currentDate), function(rawData) {
+        Cashflow.Service.getUpcomingExpenses(Utils.formatDate(self.currentDate), function(rawData) {
             Cashflow.App.upcomingExpensesPage.upcomingExpenses = self.getMonthlyExpectedExpenses(rawData);
                 
             setTimeout(function(){ 
