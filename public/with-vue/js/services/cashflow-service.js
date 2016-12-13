@@ -6,8 +6,8 @@ function CashflowService() {
 CashflowService.prototype.getAggregatedExpenses = function(startDate, endDate, onSuccess) {
 
 	$.ajax({
-        type: 'GET',
-        url: '/api/getAggregatedExpenses?startDate=' + startDate + '&endDate=' + endDate,
+        type: CashflowServiceApi.getAggregatedExpenses.method,
+        url: CashflowServiceApi.getAggregatedExpenses.url.replace('{startDate}', startDate).replace('{endDate}', endDate),
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
         	onSuccess(data);
@@ -19,8 +19,8 @@ CashflowService.prototype.getAggregatedExpenses = function(startDate, endDate, o
 // eg. getAggregatedExpenses('2016-01-01', '2016-12-31', function)
 CashflowService.prototype.getAggregatedExpensesByTags = function(startDate, endDate, onSuccess) {
 	$.ajax({
-        type: 'GET',
-        url: '/api/getAggregatedExpensesByTags?startDate=' + Cashflow.UI.DateRangePicker.vue.getStartDate() + '&endDate=' + Cashflow.UI.DateRangePicker.vue.getEndDate(),
+        type: CashflowServiceApi.getAggregatedExpenses.method,
+        url: CashflowServiceApi.getAggregatedExpensesByTags.url.replace('{startDate}', startDate).replace('{endDate}', endDate),
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
         	onSuccess(data);
@@ -33,8 +33,8 @@ CashflowService.prototype.getAggregatedExpensesByTags = function(startDate, endD
 CashflowService.prototype.setTag = function(tagDetails, onSuccess) {
 
 	$.ajax({
-        type: 'POST',
-        url: '/api/setTag',
+        type: CashflowServiceApi.setTag.method,
+        url: CashflowServiceApi.setTag.url,
         data: tagDetails,
         contentType: 'application/x-www-form-urlencoded',
         success: function(data) {
@@ -47,8 +47,8 @@ CashflowService.prototype.setTag = function(tagDetails, onSuccess) {
 
 CashflowService.prototype.loadTags = function(onSuccess) {
 	$.ajax({
-        type: 'GET',
-        url: '/api/getTags',
+        type: CashflowServiceApi.loadTags.method,
+        url: CashflowServiceApi.loadTags.url,
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             onSuccess(data);
@@ -58,8 +58,8 @@ CashflowService.prototype.loadTags = function(onSuccess) {
 
 CashflowService.prototype.storeExpenses = function(importedData, onSuccess) {
 	$.ajax({
-        type: 'POST',
-        url: '/api/storeExpenses',
+        type: CashflowServiceApi.storeExpenses.method,
+        url: CashflowServiceApi.storeExpenses.url,
         data: JSON.stringify(importedData),
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
@@ -71,8 +71,8 @@ CashflowService.prototype.storeExpenses = function(importedData, onSuccess) {
 
 CashflowService.prototype.recordSavings = function(savingsData, onSuccess) {
 	$.ajax({
-        type: 'POST',
-        url: '/api/recordSavings',
+        type: CashflowServiceApi.recordSavings.method,
+        url: CashflowServiceApi.recordSavings.url,
         data: JSON.stringify(savingsData),
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
@@ -83,8 +83,8 @@ CashflowService.prototype.recordSavings = function(savingsData, onSuccess) {
 
 CashflowService.prototype.getExpenses = function(startDate, endDate, onSuccess) {
 	$.ajax({
-        type: 'GET',
-        url: '/api/getExpenses?startDate=' + startDate + '&endDate=' + endDate,
+        type: CashflowServiceApi.getExpenses.method,
+        url: CashflowServiceApi.getExpenses.url.replace('{startDate}', startDate).replace('{endDate}', endDate),
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             onSuccess(data);
@@ -95,8 +95,8 @@ CashflowService.prototype.getExpenses = function(startDate, endDate, onSuccess) 
 CashflowService.prototype.deleteUpcomingExpense = function(itemId, onSuccess) {
 
 	$.ajax({
-        type: 'POST',
-        url: '/api/deleteExpectedExpense',
+        type: CashflowServiceApi.deleteUpcomingExpense.method,
+        url: CashflowServiceApi.deleteUpcomingExpense.url,
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ id: itemId }),
         success: function(rawData) {
@@ -109,8 +109,8 @@ CashflowService.prototype.deleteUpcomingExpense = function(itemId, onSuccess) {
 CashflowService.prototype.createUpcomingExpense = function(upcomingExpenseDetails, onSuccess) {
 
 	$.ajax({
-        type: 'POST',
-        url: '/api/createExpectedExpense',
+        type: CashflowServiceApi.createUpcomingExpense.method,
+        url: CashflowServiceApi.createUpcomingExpense.url,
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(upcomingExpenseDetails),
         success: function(rawData) {
@@ -123,8 +123,8 @@ CashflowService.prototype.createUpcomingExpense = function(upcomingExpenseDetail
 CashflowService.prototype.setUpcomingExpenseStatus = function(itemId, state, onSuccess) {
 
 	$.ajax({
-        type: 'POST',
-        url: '/api/setExpectedExpenseStatus',
+        type: CashflowServiceApi.setUpcomingExpenseStatus.method,
+        url: CashflowServiceApi.setUpcomingExpenseStatus.url,
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({itemId: itemId, status: state}),
         success: function(rawData) {
@@ -136,8 +136,8 @@ CashflowService.prototype.setUpcomingExpenseStatus = function(itemId, state, onS
 
 CashflowService.prototype.getUpcomingExpenses = function(startDate, onSuccess) {
 	$.ajax({
-        type: 'GET',
-        url: '/api/getExpectedExpenses?date=' + startDate,
+        type: CashflowServiceApi.getUpcomingExpenses.method,
+        url: CashflowServiceApi.getUpcomingExpenses.url.replace('{startDate}', startDate),
         contentType: 'application/json; charset=utf-8',
         success: function(rawData) {
             onSuccess(rawData);

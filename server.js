@@ -126,11 +126,12 @@ router.route('/getAggregatedExpenses')
                         return;
                     }
 
+                    var savingsColor = '#54A6FE';
                     var savingsAggregator = new aggregator(rows);
-                    var result = savingsAggregator.Aggregate('#BBE0FF', 'Savings');
+                    var result = savingsAggregator.Aggregate(savingsColor, 'Savings');
 
                     if (rows.length == 0) {
-                        result = { color: '#BBE0FF', data: [], name: 'Savings' };
+                        result = { color: savingsColor, data: [], name: 'Savings' };
                     }
 
                     savingsResults = result;
