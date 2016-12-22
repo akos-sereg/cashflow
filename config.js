@@ -1,5 +1,11 @@
 module.exports = {
 
+	// Expenses will be considered in this currency - this is just for displaying purposes
+	currency: 'HUF',
+
+	// Database engine
+	databaseEngine: 'mysql', // <sqlite3|mysql>
+
 	// MySQL configuration
 	mysql: { 
 		host: 'localhost', 
@@ -7,6 +13,11 @@ module.exports = {
 		password: '******'
 	},
 
+	// SQLite3 configuration
+	sqlite3: { 
+		path: './db/database.sqlite3',
+	},
+
 	// Request authorization
-	allowedIpRange: null
+	allowedIpRange: '::ffff:192.168.1.*'
 }

@@ -14,15 +14,17 @@ var aggregator  = require('./controller/ExpenseAggregator');
 var config      = require('./config');
 var sqlTemplate = require('./controller/SqlTemplate.js');
 var sqlTemplateList = require('./sql-template-list.js');
-//var expenseDao = require('./dao/ExpenseDao.js');
 
+// Below constants are common in mysql and sqlite databases
 var ACCOUNT_ID_FOR_EXPENSES = 1;
 var ACCOUNT_ID_FOR_SAVINGS = 3;
 
+sqlTemplate.use(config);
+sqlTemplateList.load(sqlTemplate);
+
+// For legacy MySQL calls
 var connection = mysql.createConnection(config.mysql);
 connection.connect();
-sqlTemplate.use(connection);
-sqlTemplateList.load(sqlTemplate);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -226,8 +228,9 @@ router.route('/getTags')
 
     .get(function(req, res) {
 
-        connection.query('SELECT tag.id, tag.label FROM cashflow.tag ORDER BY label ASC', [ ],
-            function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('GetTags')
+            .execute(function(err, rows, fields) {
 
                 if (err) {
                     console.log(err);
@@ -242,8 +245,9 @@ router.route('/getExpectedExpenseTypes')
 
     .get(function(req, res) {
 
-        connection.query('SELECT expected_expense_type.id, expected_expense_type.name FROM cashflow.expected_expense_type ORDER BY name ASC', [ ],
-            function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('GetExpectedExpenseTypes')
+            .execute(function(err, rows, fields) {
 
                 if (err) {
                     console.log(err);
@@ -451,8 +455,10 @@ function processExpenseItem(expenseItem, callback) {
     console.log('Executing... ' + expenseItem.Location);
 
     // Process one expense record item
-    connection.query('SELECT transactionId FROM cashflow.expense WHERE transactionId = ?', [ expenseItem.Hash ],
-        (function(expenseItem){
+    sqlTemplate
+        .getTemplate('GetTransaction')
+        .fill([expenseItem.Hash])
+        .execute((function(expenseItem){
             return function(err, rows, fields) {
 
                 if (err) {
@@ -510,6 +516,8 @@ process.on('SIGINT', function() {
     console.log('About to exit, closing MySQL Connection');
     connection.end();
     console.log('MySQL Connection closed.');
+
+    sqlTemplate.dispose();
 
     process.exit();
 });

@@ -52,7 +52,7 @@ var CashflowServiceApi = {
 	},
 
 	getUpcomingExpenses: { 
-		url: '/api/getExpectedExpenses', 
+		url: '/api/getExpectedExpenses?date={startDate}', 
 		method: 'GET' 
 	}
 }
