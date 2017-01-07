@@ -4,7 +4,7 @@ module.exports = {
 	currency: 'HUF',
 
 	// Database engine
-	databaseEngine: 'mysql', // <sqlite3|mysql>
+	databaseEngine: 'sqlite3', // <sqlite3|mysql>
 
 	// MySQL configuration
 	mysql: { 

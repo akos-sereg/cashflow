@@ -22,10 +22,6 @@ var ACCOUNT_ID_FOR_SAVINGS = 3;
 sqlTemplate.use(config);
 sqlTemplateList.load(sqlTemplate);
 
-// For legacy MySQL calls
-var connection = mysql.createConnection(config.mysql);
-connection.connect();
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(blacklist.blockRequests('blacklist.txt'));
@@ -155,19 +151,23 @@ router.route('/recordSavings')
 
     .post(function(req, res) {
 
-        connection.query('INSERT INTO cashflow.expense (type, expense_date, transactionId, expense_value, location, comment, '
-               + 'expense_currency, insert_date, user_comment, account_id, modified_date) '
-               + 'VALUES ("Atutalas", ?, CONCAT("manual", NOW()), ?, ?, null, "HUF", NOW(), null, ?, null) ',
-             [
+        sqlTemplate
+            .getTemplate('RecordSavings')
+            .fill([
                  req.body['savingsDate'],
-                 req.body['savingsComment'],
                  req.body['savingsAmount'],
+                 req.body['savingsComment'],
                  ACCOUNT_ID_FOR_SAVINGS
-             ],
-             function(err, result, fields) {
+            ])
+            .execute(function(err, rows, fields) {
 
-                 res.send([err, result, fields]);
-             });
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                res.send([err, rows, fields]);
+            });
      });
 
 router.route('/getExpenses')
@@ -184,6 +184,7 @@ router.route('/getExpenses')
                     return;
                 }
 
+                res.set({ 'content-type': 'application/json; charset=utf-8' });
                 res.send(rows);
             });
      });
@@ -192,35 +193,30 @@ router.route('/removeTransaction')
 
      .post(function(req, res) {
 
-         // Delete expense tag for record (if any)
-         connection.query('DELETE FROM cashflow.expense_tag WHERE transactionId = ?',
-             [
-                 req.body['transactionId'],
-             ],
-             function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('RemoveTransactionTags')
+            .fill([req.body['transactionId']])
+            .execute(function(err, rows, fields) {
 
-                 if (err) {
+                if (err) {
                      console.log(err);
                      return;
-                 }
+                }
 
-                 // Delete expense record as well
-                 connection.query('DELETE FROM cashflow.expense WHERE transactionId = ?',
-                 [
-                    req.body['transactionId'],
-                 ],
-                 function(err, rows, fields) {
+                // Delete expense record as well
+                sqlTemplate
+                    .getTemplate('RemoveTransaction')
+                    .fill([req.body['transactionId']])
+                    .execute(function(err, rows, fields) {
 
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
 
-                    res.send(rows);
-                 });
-
-                 res.send(rows);
-             });
+                        res.send(rows);
+                    });
+            });
       });
 
 // Tags
@@ -228,9 +224,9 @@ router.route('/getTags')
 
     .get(function(req, res) {
 
-        sqlTemplate
-            .getTemplate('GetTags')
-            .execute(function(err, rows, fields) {
+        var template = sqlTemplate.getTemplate('GetTags');
+
+        template.execute(function(err, rows, fields) {
 
                 if (err) {
                     console.log(err);
@@ -293,39 +289,44 @@ router.route('/createExpectedExpense')
 
      .post(function(req, res) {
 
-         connection.query('INSERT INTO cashflow.expected_expense (id, expected_expense_type_id, name, amount, effective_date, paid) VALUES (default, ?, ?, ?, ?, 0) ',
-             [
+        sqlTemplate
+            .getTemplate('CreateExpectedExpense')
+            .fill([
                  req.body['typeId'],
                  req.body['name'],
                  req.body['amount'],
                  req.body['effectiveDate']
-             ],
-             function(err, result, fields) {
+            ])
+            .execute(function(err, rows, fields) {
 
-                 res.send([err, result, fields]);
-             });
+                res.send([err, rows, fields]);
+            });
       });
 
 router.route('/deleteExpectedExpense')
 
      .post(function(req, res) {
 
-         connection.query('DELETE FROM cashflow.expected_expense WHERE id = ?',
-             [ req.body['id'] ],
-             function(err, result, fields) {
-                 res.send([err, result, fields]);
-             });
+        sqlTemplate
+            .getTemplate('DeleteExpectedExpense')
+            .fill([req.body['id']])
+            .execute(function(err, rows, fields) {
+
+                res.send([err, rows, fields]);
+            });
       });
 
 router.route('/setExpectedExpenseStatus')
 
     .post(function(req, res) {
 
-        connection.query('UPDATE cashflow.expected_expense SET paid = ? WHERE id = ?', [ req.body['status'], req.body['itemId'] ],
-            function(err, rows, fields) {
-                res.send([ err, rows, fields ]);
-            }
-        );
+        sqlTemplate
+            .getTemplate('SetExpectedExpenseStatus')
+            .fill([ req.body['status'], req.body['itemId'] ])
+            .execute(function(err, rows, fields) {
+
+                res.send([err, rows, fields]);
+            });
     });
 
 
@@ -333,28 +334,33 @@ router.route('/setTag')
 
     .post(function(req, res) {
 
-        connection.query('DELETE FROM cashflow.expense_tag WHERE transactionId = ?', [ req.body['transactionId'] ],
-            function(err, rows, fields) {
+        sqlTemplate
+            .getTemplate('DeleteTransactionTag')
+            .fill([ req.body['transactionId'] ])
+            .execute(function(err, rows, fields) {
 
                 if (err) {
                     console.log(err);
                     return;
                 }
 
-                connection.query('INSERT INTO cashflow.expense_tag (transactionId, tag_id) VALUES(?, (SELECT id FROM cashflow.tag WHERE label = ?))',
-                [
-                    req.body['transactionId'],
-                    req.body['tagLabel']
-                ],
-                    function(err, result, fields) {
+                sqlTemplate
+                    .getTemplate('CreateTransactionTag')
+                    .fill([
+                        req.body['transactionId'],
+                        req.body['tagLabel']
+                    ])
+                    .execute(function(err, rows, fields) {
 
                         if (err) {
                             console.log(err);
                             return;
                         }
 
-                        res.send(result);
+                        res.send(rows);
                     });
+
+
             });
      });
 
@@ -364,7 +370,7 @@ router.route('/getTagAssociations')
      .get(function(req, res) {
 
         sqlTemplate
-            .getTemplate('GetTagAssociations').fill([])
+            .getTemplate('GetTagAssociations')
             .execute(function(err, rows, fields) {
 
                  if (err) {
@@ -385,9 +391,10 @@ router.route('/addTagAssociation')
             return;
          }
 
-         connection.query('INSERT INTO cashflow.tag_rule (rule_id, name, pattern, tag_id) VALUES (DEFAULT, ?, ?, (SELECT id FROM cashflow.tag WHERE label = ?))',
-             [ req.body['ruleName'], req.body['pattern'], req.body['tagLabel'] ],
-             function(err, rows, fields) {
+         sqlTemplate
+            .getTemplate('CreateTagRule')
+            .fill([ req.body['ruleName'], req.body['pattern'], req.body['tagLabel'] ])
+            .execute(function(err, rows, fields) {
 
                  if (err) {
                      console.log(err);
@@ -397,6 +404,7 @@ router.route('/addTagAssociation')
 
                  res.send({isSuccess: true, errorMessage: null});
              });
+
       });
 
 router.route('/removeTagAssociation')
@@ -408,9 +416,10 @@ router.route('/removeTagAssociation')
             return;
          }
 
-         connection.query('DELETE FROM cashflow.tag_rule WHERE rule_id = ?',
-             [ req.body['ruleId'] ],
-             function(err, rows, fields) {
+         sqlTemplate
+            .getTemplate('RemoveTagRule')
+            .fill([ req.body['ruleId'] ])
+            .execute(function(err, rows, fields) {
 
                  if (err) {
                      console.log(err);
@@ -420,6 +429,7 @@ router.route('/removeTagAssociation')
 
                  res.send({isSuccess: true, errorMessage: null});
              });
+
       });
 
 // Get aggregated expenses by tag (for Bar Chart)
@@ -479,27 +489,37 @@ function processExpenseItem(expenseItem, callback) {
                         comment: '',
                         expense_currency: 'HUF',
                         user_comment: '',
-                        account_id: 1
+                        account_id: ACCOUNT_ID_FOR_EXPENSES
                     };
 
-                    connection.query('INSERT INTO cashflow.expense SET insert_date = NOW(), modified_date = NOW(), ?', post, function(err, result) {
-                        if(err) {
-                            console.log(err);
-                        }
-                        else {
-                            console.log('Inserted.');
-                        }
-                    });
+                    sqlTemplate
+                        .getTemplate('CreateTransaction')
+                        .fill(post)
+                        .execute(function(err, rows, fields) {
+
+                            if(err) {
+                                console.log(err);
+                            }
+                            else {
+                                console.log('Inserted.');
+                            }
+                        });
+
                 }
                 else {
-                    connection.query('UPDATE cashflow.expense SET modified_date = NOW(), location = ? WHERE transactionId = ?', [ expenseItem.Location, expenseItem.Hash ], function(err, result) {
-                        if(err) {
-                            console.log(err);
-                        }
-                        else {
-                            console.log('Row updated: TransactionID = ' + expenseItem.Hash);
-                        }
-                    });
+
+                    sqlTemplate
+                        .getTemplate('UpdateTransaction')
+                        .fill([ expenseItem.Location, expenseItem.Hash ])
+                        .execute(function(err, rows, fields) {
+
+                            if(err) {
+                                console.log(err);
+                            }
+                            else {
+                                console.log('Row updated: TransactionID = ' + expenseItem.Hash);
+                            }
+                        });
 
                     msg = 'Updating [' + expenseItem.Date.Display + '] ' + expenseItem.Amount.Display + ' @ ' + expenseItem.Location;
                 }
@@ -513,19 +533,14 @@ function processExpenseItem(expenseItem, callback) {
 // ON TERMINATION
 // =============================================================================
 process.on('SIGINT', function() {
-    console.log('About to exit, closing MySQL Connection');
-    connection.end();
-    console.log('MySQL Connection closed.');
-
     sqlTemplate.dispose();
-
     process.exit();
 });
 
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log('Cashflow server listening on port ' + port);
+console.log('Cashflow server listening on port ' + port + ' using ' + chalk.green(config.databaseEngine) + ' database');
 console.log('Started at ' + ip.address());
 if (config.allowedIpRange != null) {
     console.log('Allowed IP Range: ' + config.allowedIpRange);

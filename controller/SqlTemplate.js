@@ -1,4 +1,5 @@
 var sqlite3     = require('sqlite3').verbose();
+var mysql       = require('mysql');
 
 module.exports = {
 
@@ -39,7 +40,9 @@ module.exports = {
 	dispose: function() {
 		switch(this.dataProvider) {
 			case 'mysql':
+				console.log('About to exit, closing MySQL Connection');
 				this.database.mysql.connection.end();
+    			console.log('MySQL Connection closed.');
 				break;
 		}
 	},
@@ -61,15 +64,31 @@ module.exports = {
 		}
 		
 		this.template = tpl;
+		this.params = [];
 		return self;
 	},
 
 	fill: function(params) {
-		this.params = params;
+
+		if (Object.prototype.toString.call(params) === '[object Array]') {
+			this.params = params;
+		}
+		else if (Object.prototype.toString.call(params) === '[object Object]') {
+			this.params = [];
+			for(var k in params) {
+				console.log('Adding value: ' + params[k]);
+				this.params.push(params[k]);
+			}
+		}
+		
 		return this;
 	},
 
 	execute: function(handler) {
+
+		if (this.params == null) {
+			this.params = [];
+		}
 		
 		switch(this.dataProvider) {
 			case 'mysql': 

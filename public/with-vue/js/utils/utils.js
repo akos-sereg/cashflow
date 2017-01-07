@@ -7,7 +7,7 @@ var Utils = {
 	},
 
 	formatDate: function(date) {
-		return $.datepicker.formatDate( "yy-mm-d", new Date(date));
+		return $.datepicker.formatDate( "yy-mm-dd", new Date(date));
 	},
 
 	setCookie: function(cname, cvalue, exdays) {
@@ -54,7 +54,7 @@ var Utils = {
 	getTagKey: function(tag) {
 
 		var tagId = null;
-		app.tags.forEach(function(entry) {
+		Cashflow.App.recordedExpensesPage.tags.forEach(function(entry) {
 			if (entry.label == tag) {
 				tagId = entry.id;
 			}

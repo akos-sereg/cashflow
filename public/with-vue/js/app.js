@@ -1,7 +1,6 @@
 var Cashflow = {};
 Cashflow.UI = {};  
 Cashflow.Service = new CashflowService();
-//Cashflow.Service = new CashflowServiceMock();
 
 var initChain = new InitChain();
 initChain.add(ExpensesPage.loadHtmlParts);

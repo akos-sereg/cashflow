@@ -108,7 +108,7 @@ var ExpectedExpensesPage = {
 	refresh: function() {
 
 		var self = this;
-
+        
         Cashflow.Service.getUpcomingExpenses(Utils.formatDate(self.currentDate), function(rawData) {
             Cashflow.App.upcomingExpensesPage.upcomingExpenses = self.getMonthlyExpectedExpenses(rawData);
                 

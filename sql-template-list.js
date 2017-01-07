@@ -59,7 +59,7 @@ module.exports = {
 		            + 'FROM cashflow.expected_expense ee '
 		            + '  JOIN cashflow.expected_expense_type eet ON (eet.id = ee.expected_expense_type_id) '
 		            + 'WHERE ee.effective_date > date(?, "-3 month") '
-		            + '  AND ee.effective_date < date(?, "+1 month") ' 
+		            + '  AND ee.effective_date < date(?, "+12 month") ' 
 		    });
 
 		sqlTemplate.templates.push(
@@ -107,7 +107,7 @@ module.exports = {
 		    { 
 		    	name: 'GetTags', 
 		      	mysql:  'SELECT tag.id, tag.label FROM cashflow.tag ORDER BY label ASC',
-		        sqlite:  'SELECT tag.id, tag.label FROM cashflow.tag ORDER BY label ASC' 
+		        sqlite:  'SELECT id, label FROM tag ORDER BY label ASC' 
 		    });
 
 		sqlTemplate.templates.push(
@@ -125,7 +125,88 @@ module.exports = {
 	               + 'VALUES ("Atutalas", ?, CONCAT("manual", NOW()), ?, ?, null, "HUF", NOW(), null, ?, null) ',
 		        sqlite:  'INSERT INTO cashflow.expense (type, expense_date, transactionId, expense_value, location, comment, '
 	               + 'expense_currency, insert_date, user_comment, account_id, modified_date) '
-	               + 'VALUES ("Atutalas", ?, CONCAT("manual", NOW()), ?, ?, null, "HUF", NOW(), null, ?, null) ' 
+	               + 'VALUES ("Atutalas", ?, "manual" || datetime("now"), ?, ?, null, "HUF", date("now"), null, ?, null) ' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'RemoveTransactionTags', 
+		      	mysql:  'DELETE FROM cashflow.expense_tag WHERE transactionId = ?',
+		        sqlite:  'DELETE FROM cashflow.expense_tag WHERE transactionId = ?' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'RemoveTransaction', 
+		      	mysql:  'DELETE FROM cashflow.expense WHERE transactionId = ?',
+		        sqlite:  'DELETE FROM cashflow.expense WHERE transactionId = ?' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'CreateExpectedExpense', 
+		      	mysql:  'INSERT INTO cashflow.expected_expense (id, expected_expense_type_id, name, amount, effective_date, paid) VALUES (default, ?, ?, ?, ?, 0) ',
+		        sqlite:  'INSERT INTO cashflow.expected_expense (expected_expense_type_id, name, amount, effective_date, paid) VALUES (?, ?, ?, ?, 0) ' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'DeleteExpectedExpense', 
+		      	mysql:  'DELETE FROM cashflow.expected_expense WHERE id = ?',
+		        sqlite:  'DELETE FROM cashflow.expected_expense WHERE id = ?' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'SetExpectedExpenseStatus', 
+		      	mysql:  'UPDATE cashflow.expected_expense SET paid = ? WHERE id = ?',
+		        sqlite:  'UPDATE cashflow.expected_expense SET paid = ? WHERE id = ?' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'DeleteTransactionTag', 
+		      	mysql:  'DELETE FROM cashflow.expense_tag WHERE transactionId = ?',
+		        sqlite:  'DELETE FROM cashflow.expense_tag WHERE transactionId = ?' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'CreateTransactionTag', 
+		      	mysql:  'INSERT INTO cashflow.expense_tag (transactionId, tag_id) VALUES(?, (SELECT id FROM cashflow.tag WHERE label = ?))',
+		        sqlite:  'INSERT INTO cashflow.expense_tag (transactionId, tag_id) VALUES(?, (SELECT id FROM cashflow.tag WHERE label = ?))' 
+		    });
+
+		// Deprecated
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'CreateTagRule', 
+		      	mysql:  'INSERT INTO cashflow.tag_rule (rule_id, name, pattern, tag_id) VALUES (DEFAULT, ?, ?, (SELECT id FROM cashflow.tag WHERE label = ?))',
+		        sqlite:  'INSERT INTO cashflow.tag_rule (rule_id, name, pattern, tag_id) VALUES (DEFAULT, ?, ?, (SELECT id FROM cashflow.tag WHERE label = ?))' 
+		    });
+
+		// Deprecated
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'RemoveTagRule', 
+		      	mysql:  'DELETE FROM cashflow.tag_rule WHERE rule_id = ?',
+		        sqlite:  'DELETE FROM cashflow.tag_rule WHERE rule_id = ?' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'CreateTransaction', 
+		      	mysql:  'INSERT INTO cashflow.expense SET insert_date = NOW(), modified_date = NOW(), ?',
+		        sqlite:  'INSERT INTO cashflow.expense (type, expense_date, transactionId, expense_value, location, comment, ' 
+		        	+ 'expense_currency, insert_date, user_comment, account_id, modified_date) ' 
+					+ ' VALUES(?, ?, ?, ?, ?, ?, ?, date("now"), ?, ?, date("now"))' 
+		    });
+
+		sqlTemplate.templates.push(
+		    { 
+		    	name: 'UpdateTransaction', 
+		      	mysql:  'UPDATE cashflow.expense SET modified_date = NOW(), location = ? WHERE transactionId = ?',
+		        sqlite:  'UPDATE cashflow.expense SET modified_date = NOW(), location = ? WHERE transactionId = ?' 
 		    });
 	}
 }
