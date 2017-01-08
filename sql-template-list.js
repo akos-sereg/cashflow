@@ -13,7 +13,7 @@ module.exports = {
 		            + '  LEFT JOIN cashflow.tag ON (expense_tag.tag_id = tag.id) '
 		            + 'WHERE expense_date BETWEEN ? AND ? '
 		            + '  AND account_id = ? '
-		            + 'ORDER BY expense_date ASC',
+		            + 'ORDER BY expense_date DESC',
 
 		      	sqlite: 'SELECT expense.type, expense.expense_date as expense_date, expense.transactionId, expense.expense_value, expense.location, '
 		            + '  expense.comment, expense.expense_currency, expense.insert_date, expense.user_comment, expense.account_id, expense.modified_date, tag.label as tag '
@@ -22,7 +22,7 @@ module.exports = {
 		            + '  LEFT JOIN cashflow.tag ON (expense_tag.tag_id = tag.id) '
 		            + 'WHERE expense_date BETWEEN ? AND ? '
 		            + '  AND account_id = ? '
-		            + 'ORDER BY expense_date ASC'
+		            + 'ORDER BY expense_date DESC'
 		    });
 
 		sqlTemplate.templates.push(

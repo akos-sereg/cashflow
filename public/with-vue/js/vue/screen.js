@@ -11,6 +11,7 @@ Screen.prototype.create = function() {
 	      },
 	      recordedExpensesPage: {
 	        recordedExpenses:         null,
+	        recordedExpensesFiltered: null,
 	        expensesFromBank:         null, // import CSV from bank
 	        tags:                     null, // user-defined tags
 	      },

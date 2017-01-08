@@ -1,6 +1,11 @@
 var Cashflow = {};
 Cashflow.UI = {};  
 Cashflow.Service = new CashflowService();
+Cashflow.Controllers = {
+	ExpensesPage: ExpensesPage,
+	RecordedExpensesPage: RecordedExpensesPage,
+	ExpectedExpensesPage: ExpectedExpensesPage
+};
 
 var initChain = new InitChain();
 initChain.add(ExpensesPage.loadHtmlParts);

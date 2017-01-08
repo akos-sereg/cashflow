@@ -2,6 +2,8 @@ var RecordedExpensesPage = {
 
 	components: null,
 
+    tagFilter: null,
+
     htmlParts: [ 
         { target: 'recorded-page', path: 'html_templates/recorded-expenses-page.html', append: false },
         { target: 'modal-container', path: 'html_templates/dialog/import-expenses-modal.html', append: true }, 
@@ -62,6 +64,33 @@ var RecordedExpensesPage = {
                 title: 'Set Tag',
                 message: 'Tag has been set successfully'
             });
+        });
+    },
+
+    setTagFilter: function(component) {
+        var selectedText = component.selectedOptions[0].text;
+
+        this.tagFilter = { text: selectedText, id: Utils.getTagKey(selectedText) };
+        if (this.tagFilter.id == null) {
+            this.tagFilter = null;
+        }
+
+        this.applyFilter();
+    },
+
+    applyFilter: function() {
+        var self = Cashflow.Controllers.RecordedExpensesPage;
+
+        if (self.tagFilter == null) {
+            Cashflow.App.recordedExpensesPage.recordedExpensesFiltered = Cashflow.App.recordedExpensesPage.recordedExpenses;
+            return;
+        }
+
+        Cashflow.App.recordedExpensesPage.recordedExpensesFiltered = [];
+        Cashflow.App.recordedExpensesPage.recordedExpenses.forEach(function(item) {
+            if (item.tag == self.tagFilter.text) {
+                Cashflow.App.recordedExpensesPage.recordedExpensesFiltered.push(item);
+            }
         });
     },
 
@@ -162,11 +191,13 @@ var RecordedExpensesPage = {
     },
 
     loadTable: function() {
+        var self = this;
         Cashflow.Service.getExpenses(
             Cashflow.UI.DateRangePicker.vue.getStartDate(), 
             Cashflow.UI.DateRangePicker.vue.getEndDate(), 
             function(data) {
                 Cashflow.App.recordedExpensesPage.recordedExpenses = data;
+                Cashflow.Controllers.RecordedExpensesPage.applyFilter();
             });
     }
 }

@@ -487,7 +487,7 @@ function processExpenseItem(expenseItem, callback) {
                         expense_value: expenseItem.Amount.Value,
                         location: expenseItem.Location,
                         comment: '',
-                        expense_currency: 'HUF',
+                        expense_currency: config.currency,
                         user_comment: '',
                         account_id: ACCOUNT_ID_FOR_EXPENSES
                     };

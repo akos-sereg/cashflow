@@ -1,13 +1,31 @@
-<button class="btn btn-primary btn-sm" v-on:click="showRecordExpensesFromBank">Upload Expenses</button>
-<button class="btn btn-success btn-sm" v-on:click="showRecordSavingsModal">Record Savings</button>
+<div style="position: float; width: 1200;">
+	<div class="input-group" style="float: left; width: 400px;">
+	  <span class="input-group-addon" id="basic-addon1">Filter</span>
+	  <select 
+	  		class="form-control" style="width: 300px;"
+			onChange="RecordedExpensesPage.setTagFilter(this)">
+			<option value="all">-- All --</option>
+			<option 
+				v-for="entry in recordedExpensesPage.tags"
+				v-bind:value="entry.label">{{entry.label}}</option>
+	  </select>
+	</div>
+
+	<button class="btn btn-primary btn-sm" style="float: right; margin-left: 10px;" v-on:click="showRecordExpensesFromBank">Upload Expenses</button>
+	<button class="btn btn-success btn-sm" style="float: right; margin-left: 10px;" v-on:click="showRecordSavingsModal">Record Savings</button>
+
+</div>
 <br/><br/>
 
-<div class="cashflow-float-left" style="text-align: right; font-family: Consolas; font-size: 8pt; width: 1200px;" v-if="recordedExpensesPage.recordedExpenses != null">Fetched {{recordedExpensesPage.recordedExpenses.length}} transactions</div>
+<div 
+	class="cashflow-float-left" 
+	style="text-align: right; font-family: Consolas; font-size: 8pt; width: 1200px;" 
+	v-if="recordedExpensesPage.recordedExpenses != null">Fetched {{recordedExpensesPage.recordedExpenses.length}} transactions, {{recordedExpensesPage.recordedExpensesFiltered.length}} visible</div>
 <br/>
 <div class="container" style="width: 1200px;">
 	  <table class="cashflow-recorded-expenses-table" style="width: 100%;">
 	    <tbody>
-	        <tr v-bind:class="[Utils.getBackgroundClassForAmount(entry.expense_value)]" v-for="entry in recordedExpensesPage.recordedExpenses" style="border-top: dotted 1px #dddddd; margin-bottom: 5px;" height="70">
+	        <tr v-bind:class="[Utils.getBackgroundClassForAmount(entry.expense_value)]" v-for="entry in recordedExpensesPage.recordedExpensesFiltered" style="border-top: dotted 1px #dddddd; margin-bottom: 5px;" height="70">
 	        	<td>
 	        		<table width="100%">
 	        			<tr>
