@@ -74,10 +74,16 @@ module.exports = {
 			this.params = params;
 		}
 		else if (Object.prototype.toString.call(params) === '[object Object]') {
-			this.params = [];
-			for(var k in params) {
-				console.log('Adding value: ' + params[k]);
-				this.params.push(params[k]);
+
+			if (this.dataProvider == 'mysql') {
+				this.params = params;
+			}
+			else if (this.dataProvider == 'sqlite3') {
+				// SQLite does not support data mapping, so we have to extract the input object to an array
+				this.params = [];
+				for(var k in params) {
+					this.params.push(params[k]);
+				}
 			}
 		}
 		
