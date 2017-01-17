@@ -30,9 +30,7 @@ DateRangePicker.prototype.create = function(onComplete) {
 		    	},
 
 		    	refresh: function() {
-			      	ExpensesPage.loadGraph();
-			        ExpensesPage.loadPieChart();
-			        ExpensesPage.loadBarChart();
+		    		ExpensesPage.refresh();
 			        RecordedExpensesPage.loadTable();
 			    },
 

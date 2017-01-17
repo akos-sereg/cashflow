@@ -8,6 +8,16 @@ var ExpensesPage = {
 
     chartColors: [ '#FFD475', '#F7BA36', '#B77F05', '#FFB570', '#F99334', '#D66700', '#FFB093', '#FF723F', '#FF4300' ],
 
+    loadedGraphs: {
+        graph: false,
+        pieChart: false,
+        barChart: false
+    },
+
+    isVisible: function() {
+        return Cashflow.App.navigation.currentPage == Navigation.ExpensesPage;
+    },
+
     loadHtmlParts: function(initContext, next) {
 
         new HtmlPartsLoader(ExpensesPage.htmlParts).load(initContext, next);
@@ -16,9 +26,7 @@ var ExpensesPage = {
 	initialize: function() {
 
         this.readComponents();
-        this.loadGraph();
-        this.loadPieChart();
-        this.loadBarChart();
+        this.refresh();
 	},
 
     readComponents: function() {
@@ -40,6 +48,7 @@ var ExpensesPage = {
       Expense Burndown Graph
     ********************************************************************************/
 	loadGraph: function() {
+        this.loadedGraphs.graph = false;
 
 		this.components.expenseGraph.yAxis.html('');
         this.components.expenseGraph.chart.html('');
@@ -115,6 +124,8 @@ var ExpensesPage = {
                     return title;
                 } });
 
+                ExpensesPage.loadedGraphs.graph = true;
+                ExpensesPage.checkProgress();
             });
 	},
 
@@ -124,6 +135,8 @@ var ExpensesPage = {
     pieChart: null,
 
     loadPieChart: function() {
+
+        this.loadedGraphs.pieChart = false;
 
         if (this.pieChart != null) {
             this.pieChart.destroy();
@@ -193,6 +206,9 @@ var ExpensesPage = {
                     },
                     options: null
                 });
+
+                ExpensesPage.loadedGraphs.pieChart = true;
+                ExpensesPage.checkProgress();
             });
     },
 
@@ -202,6 +218,8 @@ var ExpensesPage = {
     barChart: null,
 
     loadBarChart: function() {
+
+        this.loadedGraphs.barChart = false;
 
         if (this.barChart != null) {
             this.barChart.destroy();
@@ -239,6 +257,41 @@ var ExpensesPage = {
                     },
                     options: null
                 });
+
+                ExpensesPage.loadedGraphs.barChart = true;
+                ExpensesPage.checkProgress();
             });
-    }
+    },
+
+    refresh: function() {
+
+        if (this.isVisible()) {
+            waitingDialog.show('Loading charts ...');
+        }
+
+        this.loadGraph();
+        this.loadPieChart();
+        this.loadBarChart();
+        this.checkProgress();
+    },
+
+    checkProgress: function() {
+        
+        if (!this.isVisible()) {
+            return;
+        }
+
+        var loadedCount = 0;
+        loadedCount += ExpensesPage.loadedGraphs.graph ? 1 : 0;
+        loadedCount += ExpensesPage.loadedGraphs.barChart ? 1 : 0;
+        loadedCount += ExpensesPage.loadedGraphs.pieChart ? 1 : 0;
+        var allLoaded = loadedCount == 3;
+
+        if (allLoaded) {
+            waitingDialog.hide();
+        }
+        else {
+            waitingDialog.message('Loading charts ... ('+loadedCount+'/3)');
+        }
+    },
 }
