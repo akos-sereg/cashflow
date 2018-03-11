@@ -7,13 +7,13 @@ function ExpenseAggregator(rows) {
 }
 
 ExpenseAggregator.prototype.Aggregate = function(color, name) {
-    var result = [];
+    
+    var result = { 'color': color, 'name': name, 'data': [ ] };
 
     if (this.rows == null || this.rows.length == 0) {
         return result;
     }
 
-    var result = { 'color': color, 'name': name, 'data': [ ] };
     var self = this;
 
     var data = chartDataProvider
